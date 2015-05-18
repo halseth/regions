@@ -1,0 +1,23 @@
+//
+//  HatRegion.cpp
+//  New_method
+//
+//  Created by Johan Torås Halseth on 14/05/15.
+//  Copyright (c) 2015 Johan Torås Halseth. All rights reserved.
+//
+
+#include "HatRegion.h"
+
+HatRegion::HatRegion(int boundarySize, int endpoint) : BaseRegion(boundarySize){
+    this->endpoint = endpoint;
+}
+
+bool HatRegion::isValid(){
+    bool valid = BaseRegion::isValid();
+    
+    // All internal vertices must be dominated by the endpoint
+    for (int i = getBoundarySize(); i < getSize(); i++) {
+        valid &= isAdjacent(i, endpoint);
+    }
+    return valid;
+}
