@@ -34,6 +34,9 @@ int BaseRegion::addNode(){
 }
 
 void BaseRegion::addEdge(int from, int to){
+    if (from == to) {
+        return;
+    }
     adj[from][to] = true;
     adj[to][from] = true;
 }
@@ -206,12 +209,31 @@ void BaseRegion::getSignature(std::vector<int> &signature){
     }
 }
 
+void BaseRegion::printRegion(){
+    for(int i = 0; i < getSize(); i++){
+        for(int j = i+1; j < getSize(); j++){
+            if (isAdjacent(i, j)) {
+                std::cout << "Edge from " << i << " to " << j << std::endl;
+            }
+        }
+    }
+}
+
 
 bool BaseRegion::isEqual(const BaseRegion &b){
     bool equal = true;
     equal &= this->Boundary == b.Boundary;
+    if (!equal) {
+        std::cout << "Boundary not equal" << std::endl;
+    }
     equal &= this->num_internal_nodes == b.num_internal_nodes;
+    if (!equal) {
+        std::cout << "Internal nodes not equal" << std::endl;
+    }
     equal &= this->adj == b.adj;
+    if (!equal) {
+        std::cout << "Edges not equal" << std::endl;
+    }
     return equal;
 }
 
@@ -226,41 +248,89 @@ void BaseRegion::clearLabels(){
     nodeToLabels.clear();
 }
 
-void BaseRegion::glue(const std::vector<BaseRegion> regions){
-    for(std::vector<BaseRegion>::const_iterator it = regions.begin(); it != regions.end(); it++){
-        
-        BaseRegion region = (BaseRegion) *it;
-        
-        //Find largest used label
-        int label = 0;
-        for(std::map<int, int>::const_iterator it = labelToNode.begin(); it != labelToNode.end(); it++){
-            if(it->first >= label){
-                label = it->first + 1;
-            }
-        }
-        
-        for(std::map<int, int>::const_iterator it = region.labelToNode.begin(); it != region.labelToNode.end(); it++){
-            if(it->first >= label){
-                label = it->first + 1;
-            }
-        }
-        
-        // Nodes not having a label in the region to glue on, or not having a matching label in the target graph, are added to the graph and given a temporary label
-        std::map<int, int> newNodeToLabel;
-        for (int i = 0; i < region.getSize(); i++) {
-            if(region.nodeToLabels.count(i) == 0) {
-                newNodeToLabel[i] = label++;
-            } else {
-                bool foundMatchingLabel = false;
-                for(std::set<int>::const_iterator it = region.nodeToLabels[i].begin(); it != region.nodeToLabels[i].end(); it++){
-                    if(this->labelToNode.count(*it) != 0){
-                        foundMatchingLabel = true;
-                    }
-                }
-                if(!foundMatchingLabel){
-                    newNodeToLabel[i] = label++;
-                }
-            }
+void BaseRegion::glue(BaseRegion &region){
+    
+    using namespace std;
+    
+    //Find smallest free label
+    int free_label = 0;
+    for(std::map<int, int>::const_iterator map_it = labelToNode.begin(); map_it != labelToNode.end(); map_it++){
+        if(map_it->first >= free_label){
+            free_label = map_it->first + 1;
         }
     }
+    
+    for(std::map<int, int>::const_iterator map_it = region.labelToNode.begin(); map_it != region.labelToNode.end(); map_it++){
+        if(map_it->first >= free_label){
+            free_label = map_it->first + 1;
+        }
+    }
+    
+    cout << "free label: " << free_label << endl;
+    
+    // Nodes not having a label in the region to glue on, or not having a matching label in the target graph, are added to the graph and given a temporary label
+    //std::map<int, std::set<int> > temporaryNodeToLabels = this->nodeToLabels;
+    //std::map<int, int> temporaryLabelToNode = this->labelToNode;
+    
+    // Give all nodes in the graph to glue labels
+    for (int i = 0; i < region.getSize(); i++) {
+        
+        // Not having a label
+        if(region.nodeToLabels.count(i) == 0 || region.nodeToLabels[i].size() == 0) {
+            std::set<int> labels;
+            labels.insert(free_label);
+            region.nodeToLabels[i] = labels;
+            region.labelToNode[free_label] = i;
+            cout << "gave node " << i << " label " << free_label << endl;
+            free_label++;
+        }
+    }
+        
+    // Update labels in target graph to be consistent with glue graph. Add necessary nodes to target
+    for (std::map<int, std::set<int> >::const_iterator map_it = region.nodeToLabels.begin(); map_it != region.nodeToLabels.end(); map_it++) {
+        int node = map_it->first;
+        std::set<int> labelSet = map_it->second;
+        
+        // If none of the node's labels exist in target, add a new node
+        bool exist = false;
+        int nodeNum = -1;
+        for(std::set<int>::const_iterator set_it = labelSet.begin(); set_it != labelSet.end(); set_it++){
+            if (this->labelToNode.count(*set_it) > 0) {
+                exist = true;
+                nodeNum = this->labelToNode[*set_it];
+            }
+        }
+        
+            // Add new node and give it all the labels
+        if(!exist){
+            nodeNum = this->addNode();
+            cout << "node " << node << "did not exist so created a new with id " << nodeNum << endl;
+        }
+        
+        // Add missing labels
+        for(std::set<int>::const_iterator set_it = region.nodeToLabels[node].begin(); set_it != region.nodeToLabels[node].end(); set_it++){
+            cout << "added label " << (*set_it) << " to node " << nodeNum << endl;
+            this->addLabelToNode(*set_it, nodeNum);
+        }
+    }
+        
+        
+        // Add edges
+        for (int i = 0; i < region.getSize(); i++) {
+            for(int j = i+1; j < region.getSize(); j++){
+                if(region.isAdjacent(i, j)){
+                    // Find these two nodes in the target
+                    int label1 = *(region.nodeToLabels[i].begin());
+                    int node1 = this->labelToNode[label1];
+                    
+                    int label2 = *(region.nodeToLabels[j].begin());
+                    int node2 = this->labelToNode[label2];
+                    
+                    cout << "found edge betewwn labels ("<< label1 << "," << label2 << ")." << "added edge " << node1 << "," << node2 << ")" << endl;
+                    
+                    //Add the edge between them
+                    this->addEdge(node1, node2);
+                }
+            }
+        }
 }

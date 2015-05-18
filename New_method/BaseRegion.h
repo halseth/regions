@@ -36,12 +36,15 @@ public:
     void getSignature(std::vector<int> &signature);
     int getBoundarySize();
     
+    void printRegion();
+    
     bool isEqual(const BaseRegion &b);
     
     void addLabelToNode(int label, int node);
     void clearLabels();
     
-    void glue(const std::vector<BaseRegion> regions);
+    void glue(BaseRegion &region);
+//void glue(const std::vector<BaseRegion> regions);
 };
 
 

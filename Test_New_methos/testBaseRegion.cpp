@@ -87,10 +87,10 @@ TEST_CASE( "Testing equality", "[BaseRegion]" ) {
 }
 
 TEST_CASE( "Testing gluing", "[BaseRegion]" ) {
-    BaseRegion r(5);
-    r.addLabelToNode(1, 0);
-    r.addLabelToNode(2, 1);
-    r.addLabelToNode(3, 2);
+    BaseRegion r1(5);
+    r1.addLabelToNode(1, 0);
+    r1.addLabelToNode(2, 1);
+    r1.addLabelToNode(3, 2);
     
     BaseRegion b1(4);
     b1.addLabelToNode(1, 0);
@@ -100,12 +100,34 @@ TEST_CASE( "Testing gluing", "[BaseRegion]" ) {
     std::vector<BaseRegion> regions;
     regions.push_back(b1);
     
-    r.glue(regions);
+    r1.glue(b1);
+   // std::cout << "r is:" << std::endl;
+  //  r.printRegion();
     
     BaseRegion shouldEqual(5);
     int node = shouldEqual.addNode();
     shouldEqual.addEdge(0, node);
     shouldEqual.addEdge(2, node);
     
-    REQUIRE( r.isEqual(shouldEqual));
+   // std::cout << "Should be:" << std::endl;
+   // shouldEqual.printRegion();
+    
+    REQUIRE( r1.isEqual(shouldEqual));
+    
+    BaseRegion r2(3);
+    r2.addLabelToNode(1, 0);
+    r2.addLabelToNode(2, 0);
+    
+    BaseRegion b2(3);
+    b2.addLabelToNode(1, 0);
+    b2.addLabelToNode(2, 2);
+    
+    r2.glue(b2);
+    
+    BaseRegion shouldEqual2(3);
+    node = shouldEqual2.addNode();
+    shouldEqual2.addEdge(node, 0);
+    
+    REQUIRE( r2.isEqual(shouldEqual2));
+    
 }
