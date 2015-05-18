@@ -44,7 +44,11 @@ public:
     void clearLabels();
     
     void glue(BaseRegion &region);
-//void glue(const std::vector<BaseRegion> regions);
+    void glue(const std::vector<BaseRegion> regions);
+    std::map<int, int> getLabelToNode();
+    std::map<int, std::set<int> > getNodeToLabels();
+    
+    
 };
 
 

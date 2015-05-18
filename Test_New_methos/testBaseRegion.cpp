@@ -130,4 +130,122 @@ TEST_CASE( "Testing gluing", "[BaseRegion]" ) {
     
     REQUIRE( r2.isEqual(shouldEqual2));
     
+    REQUIRE( r2.getLabelToNode().size() == 2);
+    REQUIRE( r2.getNodeToLabels().size() == 1);
+    
+}
+
+TEST_CASE( "Testing multiple gluing", "[BaseRegion]" ) {
+    BaseRegion r(3);
+    r.addLabelToNode(1, 0);
+    r.addLabelToNode(2, 1);
+    
+    std::vector<BaseRegion> toGlue;
+    
+    BaseRegion b1(2);
+    b1.addLabelToNode(1, 0);
+    b1.addLabelToNode(2, 1);
+    toGlue.push_back(b1);
+    
+    BaseRegion b2(2);
+    b2.addLabelToNode(1, 0);
+    b2.addLabelToNode(2, 1);
+    toGlue.push_back(b2);
+    
+    r.glue(toGlue);
+    
+    BaseRegion shouldEqual(3);
+    shouldEqual.printRegion();
+    
+    REQUIRE( r.isEqual(shouldEqual));
+    
+    BaseRegion r2(3);
+    r2.addLabelToNode(1, 0);
+    r2.addLabelToNode(2, 1);
+    
+    toGlue.clear();
+    
+    BaseRegion b3(2);
+    b3.addLabelToNode(1, 0);
+    toGlue.push_back(b3);
+    
+    BaseRegion b4(2);
+    b4.addLabelToNode(2, 1);
+    toGlue.push_back(b4);
+    
+    r2.glue(toGlue);
+    
+    BaseRegion shouldEqual2(3);
+    int node = shouldEqual2.addNode();
+    shouldEqual2.addEdge(0, node);
+    node = shouldEqual2.addNode();
+    shouldEqual2.addEdge(node, 1);
+    
+    REQUIRE( r2.isEqual(shouldEqual2));
+}
+
+TEST_CASE( "Testing multiple complex gluing", "[BaseRegion]" ) {
+    BaseRegion r(6);
+    for (int i = 0; i < 6; i++) {
+        r.addLabelToNode(i, i);
+    }
+    int node = r.addNode();
+    r.addLabelToNode(6, node);
+    r.addLabelToNode(7, node);
+    for (int i = 0; i < 4; i++) {
+        r.addEdge(node, i);
+    }
+    
+    std::vector<BaseRegion> toGlue;
+    BaseRegion b1(3);
+    node = b1.addNode();
+    for (int i = 0; i < 3; i++) {
+        b1.addEdge(node, i);
+    }
+    b1.addLabelToNode(0, 0);
+    b1.addLabelToNode(1, 1);
+    b1.addLabelToNode(6, 2);
+    toGlue.push_back(b1);
+
+    BaseRegion b2(3);
+    for (int i = 0; i < 3; i++) {
+        node = b2.addNode();
+        b2.addEdge(node, i);
+        b2.addEdge(node, (i+1)%3);
+    }
+    b2.addLabelToNode(2, 0);
+    b2.addLabelToNode(3, 1);
+    b2.addLabelToNode(7, 2);
+    toGlue.push_back(b2);
+    
+    r.glue(toGlue);
+    
+    BaseRegion shouldEqual(6);
+    for (int i = 0; i < 6; i++) {
+        shouldEqual.addLabelToNode(i, i);
+    }
+    node = shouldEqual.addNode();
+    for (int i = 0; i < 4; i++) {
+        shouldEqual.addEdge(node, i);
+    }
+    
+    node = shouldEqual.addNode();
+    shouldEqual.addEdge(node, 0);
+    shouldEqual.addEdge(node, 1);
+    shouldEqual.addEdge(node, 6);
+    
+    node = shouldEqual.addNode();
+    shouldEqual.addEdge(node, 2);
+    shouldEqual.addEdge(node, 3);
+    
+    node = shouldEqual.addNode();
+    shouldEqual.addEdge(node, 3);
+    shouldEqual.addEdge(node, 6);
+    
+    node = shouldEqual.addNode();
+    shouldEqual.addEdge(node, 6);
+    shouldEqual.addEdge(node, 2);
+    
+    REQUIRE( r.isEqual(shouldEqual));
+    
 }
