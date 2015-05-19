@@ -15,7 +15,7 @@ HatBRegion::HatBRegion(int boundarySize, int endpoint, int boundaryDominator) : 
 bool HatBRegion::isValid(){
     bool valid = HatRegion::isValid();
     
-    // The two boundary nodes must dominate all internal
+    // The boundary node must dominate all internal
     for (int i = getBoundarySize(); i < getSize(); i++) {
         valid &= isAdjacent(i, boundaryDominator);
     }

@@ -16,6 +16,9 @@
 		045938361AFB7C7B00C01262 /* 4aregions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938351AFB7C7B00C01262 /* 4aregions.cpp */; };
 		045938381AFB8BB900C01262 /* 4bregions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938371AFB8BB900C01262 /* 4bregions.cpp */; };
 		046A972F1AF7C612002752D1 /* 3regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046A972E1AF7C612002752D1 /* 3regions.cpp */; };
+		04A5AE8F1B0B1BA90057572D /* testHatRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE8E1B0B1BA90057572D /* testHatRegion.cpp */; };
+		04A5AE911B0B1DD90057572D /* testHatARegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE901B0B1DD90057572D /* testHatARegion.cpp */; };
+		04A5AE931B0B21D80057572D /* testHatBRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE921B0B21D80057572D /* testHatBRegion.cpp */; };
 		04F418F91B0349F10064638C /* EmptyRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418F81B0349F10064638C /* EmptyRegion.cpp */; };
 		04F418FD1B04CE120064638C /* BaseRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418FB1B04CE120064638C /* BaseRegion.cpp */; };
 		04F419001B04D3A00064638C /* HatRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418FE1B04D3A00064638C /* HatRegion.cpp */; };
@@ -66,6 +69,9 @@
 		045938371AFB8BB900C01262 /* 4bregions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4bregions.cpp; sourceTree = "<group>"; };
 		046A972B1AF7C612002752D1 /* New_method */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = New_method; sourceTree = BUILT_PRODUCTS_DIR; };
 		046A972E1AF7C612002752D1 /* 3regions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = 3regions.cpp; sourceTree = "<group>"; };
+		04A5AE8E1B0B1BA90057572D /* testHatRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatRegion.cpp; sourceTree = "<group>"; };
+		04A5AE901B0B1DD90057572D /* testHatARegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatARegion.cpp; sourceTree = "<group>"; };
+		04A5AE921B0B21D80057572D /* testHatBRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatBRegion.cpp; sourceTree = "<group>"; };
 		04F418F71B0236030064638C /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		04F418F81B0349F10064638C /* EmptyRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmptyRegion.cpp; sourceTree = "<group>"; };
 		04F418FB1B04CE120064638C /* BaseRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseRegion.cpp; sourceTree = "<group>"; };
@@ -166,6 +172,9 @@
 				04F419211B0645EB0064638C /* catch.hpp */,
 				04F419221B0646870064638C /* main.cpp */,
 				04F4192C1B0648180064638C /* testBaseRegion.cpp */,
+				04A5AE8E1B0B1BA90057572D /* testHatRegion.cpp */,
+				04A5AE901B0B1DD90057572D /* testHatARegion.cpp */,
+				04A5AE921B0B21D80057572D /* testHatBRegion.cpp */,
 			);
 			path = Test_New_methos;
 			sourceTree = "<group>";
@@ -270,6 +279,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				04F4192B1B0647810064638C /* SampleClass.cpp in Sources */,
+				04A5AE911B0B1DD90057572D /* testHatARegion.cpp in Sources */,
+				04A5AE931B0B21D80057572D /* testHatBRegion.cpp in Sources */,
+				04A5AE8F1B0B1BA90057572D /* testHatRegion.cpp in Sources */,
 				04F419331B09F4C40064638C /* HatBRegion.cpp in Sources */,
 				04F419321B09F4C20064638C /* HatARegion.cpp in Sources */,
 				04F4192E1B0648180064638C /* testBaseRegion.cpp in Sources */,
@@ -448,6 +460,7 @@
 				04F4191F1B0644B30064638C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

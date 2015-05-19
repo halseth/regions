@@ -51,7 +51,6 @@ bool BaseRegion::isAdjacent(int a, int b){
 
 bool BaseRegion::isValid(){
     // The region must be planar and connected
-    // TODO: connectivity
     
     lemon::ListGraph g;
     std::vector<lemon::ListGraph::Node> gnodes;
@@ -266,8 +265,6 @@ void BaseRegion::glue(BaseRegion &region){
         }
     }
     
-    cout << "free label: " << free_label << endl;
-    
     // Nodes not having a label in the region to glue on, or not having a matching label in the target graph, are added to the graph and given a temporary label
     
     // Store these for later
@@ -283,7 +280,6 @@ void BaseRegion::glue(BaseRegion &region){
             labels.insert(free_label);
             region.nodeToLabels[i] = labels;
             region.labelToNode[free_label] = i;
-            cout << "gave node " << i << " label " << free_label << endl;
             free_label++;
         }
     }
@@ -306,12 +302,10 @@ void BaseRegion::glue(BaseRegion &region){
             // Add new node and give it all the labels
         if(!exist){
             nodeNum = this->addNode();
-            cout << "node " << node << "did not exist so created a new with id " << nodeNum << endl;
         }
         
         // Add missing labels
         for(std::set<int>::const_iterator set_it = region.nodeToLabels[node].begin(); set_it != region.nodeToLabels[node].end(); set_it++){
-            cout << "added label " << (*set_it) << " to node " << nodeNum << endl;
             this->addLabelToNode(*set_it, nodeNum);
         }
     }
@@ -327,8 +321,6 @@ void BaseRegion::glue(BaseRegion &region){
                 
                 int label2 = *(region.nodeToLabels[j].begin());
                 int node2 = this->labelToNode[label2];
-                
-                cout << "found edge betewwn labels ("<< label1 << "," << label2 << ")." << "added edge " << node1 << "," << node2 << ")" << endl;
                     
                 //Add the edge between them
                 this->addEdge(node1, node2);

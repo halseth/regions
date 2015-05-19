@@ -155,7 +155,6 @@ TEST_CASE( "Testing multiple gluing", "[BaseRegion]" ) {
     r.glue(toGlue);
     
     BaseRegion shouldEqual(3);
-    shouldEqual.printRegion();
     
     REQUIRE( r.isEqual(shouldEqual));
     

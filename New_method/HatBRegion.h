@@ -11,7 +11,7 @@
 
 #include "HatRegion.h"
 
-class HatBRegion : HatRegion {
+class HatBRegion : public HatRegion {
 private:
     int boundaryDominator;
     
