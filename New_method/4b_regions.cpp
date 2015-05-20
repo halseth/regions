@@ -1,10 +1,11 @@
-#include "SmallRegion.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
-extern void store_sign(SmallRegion &R, std::map<vector<int>,SmallRegion > &signature_minimal);
+#include "HatBRegion.h"
+#include "store_sign.h"
 
-void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
+void generate_4b_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
     int counter = 0;
     int v = 0;
     int a = 1;
@@ -19,7 +20,7 @@ void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
                     for(int ab_edge = 0; ab_edge <= max_ab_edge; ab_edge++){
                         int max_vc_edge = edges == 0b11 || ab_edge ? 0 : 1;
                         for(int vc_edge = 0; vc_edge <= max_vc_edge; vc_edge++){
-                            SmallRegion R(4,c,counter++);
+                            HatBRegion R(4, v, c);
                             
                             for(int i = 0; i < nodes_vc; i++){
                                 int node = R.addNode();
@@ -40,6 +41,7 @@ void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
                                 R.addEdge(v, c);
                             }
                             
+                            counter++;
                             store_sign(R, signature_minimal);
                         }
                     }
@@ -61,7 +63,7 @@ void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
                                     
                                     int max_edge_vc = (s_down_edge || under_edge != 0) && (s_up_edge || over_edge != 0) ? 0 : 1;
                                     for(int edge_vc = 0; edge_vc <= max_edge_vc; edge_vc++){
-                                        SmallRegion R(4,c,counter++);
+                                        HatBRegion R(4, v, c);
                                         
                                         int s = R.addNode();
                                         R.addEdge(s, v);
@@ -98,6 +100,8 @@ void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
                                         if(edge_vc){
                                             R.addEdge(v, c);
                                         }
+                                        
+                                        counter++;
                                         store_sign(R, signature_minimal);
                                     }
                                     
@@ -110,7 +114,8 @@ void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
         } else if (s_size == 2){
             for(int s_up_edge = 0; s_up_edge <= 1; s_up_edge++){
                 for(int s_down_edge = 0; s_down_edge <= 1; s_down_edge++){
-                    SmallRegion R(4,c,counter++);
+                    HatBRegion R(4, v, c);
+                    
                     int s1 = R.addNode();
                     int s2 = R.addNode();
                     R.addEdge(v, s1);
@@ -124,11 +129,13 @@ void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
                     if(s_down_edge){
                         R.addEdge(s2, b);
                     }
+                    
+                    counter++;
                     store_sign(R, signature_minimal);
                 }
             }
         }
     }
     
-    cout << "done with 4bregions. Total regions checked: " << counter << endl;
+    cout << "done with 4b_regions. Total regions checked: " << counter << endl;
 }

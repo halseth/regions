@@ -1,18 +1,18 @@
-#include "SmallRegion.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
-extern void store_sign(SmallRegion &R, std::map<vector<int>,SmallRegion > &signature_minimal);
+#include "HatBRegion.h"
+#include "store_sign.h"
 
-void generate3bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
-    int counter = 0;
+void generate_3b_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
     int v = 0;
     int a = 1;
     int b = 2;
    
     for(int deg2 = 0; deg2 <= 1; deg2++){
         for(int deg3 = 0; deg3 <= 1; deg3++){
-            SmallRegion R(3,v,counter++);
+            HatBRegion R(3, v, a);
             if(deg2){
                 int c = R.addNode();
                 R.addEdge(c, v);
@@ -28,5 +28,5 @@ void generate3bregions(std::map<vector<int>,SmallRegion > &signature_minimal){
         }
     }
     
-    cout << "done with 3aregions" << endl;
+    cout << "done with 3b_regions" << endl;
 }

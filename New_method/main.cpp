@@ -6,18 +6,19 @@
 //  Copyright (c) 2015 Johan Torås Halseth. All rights reserved.
 //
 
-#include "SmallRegion.h"
-#include "BoundariedRegion.h"
 #include <vector>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 using namespace std;
 
-extern void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal);
-extern void generate4aregions(std::map<vector<int>,SmallRegion > &signature_minimal);
-extern void generate4bregions(std::map<vector<int>,SmallRegion > &signature_minimal);
-extern void generate3regions(std::map<vector<int>,SmallRegion > &signature_minimal);
-extern void generate3bregions(std::map<vector<int>,SmallRegion > &signature_minimal);
-extern void generateEmptyregions(std::map<vector<int>,SmallRegion > &signature_minimal);
+#include "BaseRegion.h"
+
+#include "EmptyRegion.h"
+#include "3a_regions.h"
+#include "3b_regions.h"
+#include "4a_regions.h"
+#include "4b_regions.h"
 
 
 enum RegionType {
@@ -27,14 +28,13 @@ enum RegionType {
     Type4A
 };
 
-map<vector<int>,SmallRegion > empty_region;
-
-map<vector<int>,SmallRegion > signature_minimal_4aregions;
-map<vector<int>,SmallRegion > signature_minimal_4bregions;
-map<vector<int>,SmallRegion > signature_minimal_4regions;
-map<vector<int>,SmallRegion > signature_minimal_3aregions;
-map<vector<int>,SmallRegion > signature_minimal_3bregions;
-map<vector<int>,SmallRegion > signature_minimal_3regions;
+map<vector<int>, BaseRegion> empty_region;
+map<vector<int>, BaseRegion> signature_minimal_4a_regions;
+map<vector<int>, BaseRegion> signature_minimal_4b_regions;
+map<vector<int>, BaseRegion> signature_minimal_4_regions;
+map<vector<int>, BaseRegion> signature_minimal_3a_regions;
+map<vector<int>, BaseRegion> signature_minimal_3b_regions;
+map<vector<int>, BaseRegion> signature_minimal_3_regions;
 
 string type_to_string(int a){
     switch (a) {
@@ -66,19 +66,19 @@ string type_to_string(int a){
 
 
 
-map<vector<int>,SmallRegion > set_regionmap(RegionType t){
+map<vector<int>, BaseRegion > set_regionmap(RegionType t){
     switch (t) {
         case Empty:
             return empty_region;
             break;
         case Type3B:
-            return signature_minimal_3bregions;
+            return signature_minimal_3b_regions;
             break;
         case Type3A:
-            return signature_minimal_3aregions;
+            return signature_minimal_3a_regions;
             break;
         case Type4A:
-            return signature_minimal_4aregions;
+            return signature_minimal_4a_regions;
             break;
         default:
             cerr << "should not happen" << endl;
@@ -87,21 +87,21 @@ map<vector<int>,SmallRegion > set_regionmap(RegionType t){
     }
 }
 
+ 
 int main(){
     
-    int counter = 0;
-    generate3regions(signature_minimal_3aregions);
-    generate3bregions(signature_minimal_3bregions);
-    generate3regions(signature_minimal_3regions);
-    generate4aregions(signature_minimal_4aregions);
-    generate4bregions(signature_minimal_4bregions);
-    generate4regions(signature_minimal_4regions);
-    generateEmptyregions(empty_region);
+    generate_3a_regions(signature_minimal_3a_regions);
+    generate_3b_regions(signature_minimal_3b_regions);
+    //generate3regions(signature_minimal_3regions);
+    generate_4a_regions(signature_minimal_4a_regions);
+    generate_4b_regions(signature_minimal_4b_regions);
+    //generate4regions(signature_minimal_4regions);
+    generate_Empty_regions(empty_region);
  
-    cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
+    //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
     
     int id = 0;
-    for(std::map<vector<int>, SmallRegion>::iterator it = signature_minimal_4regions.begin() ; it != signature_minimal_4regions.end(); it++){
+    for(std::map<vector<int>, BaseRegion>::iterator it = signature_minimal_3a_regions.begin() ; it != signature_minimal_3a_regions.end(); it++){
         id++;
         ofstream file;
         stringstream ss;
@@ -114,7 +114,7 @@ int main(){
             std::cout << "ERROR opening file "<< std::endl;
         }
         else {
-            file << it->second.getDotFormat();
+            //file << it->second.getDotFormat();
         }
         file.close();
     }

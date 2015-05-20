@@ -26,7 +26,7 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
     // Check if it is valid for it's subclass type
 	if(!R.isValid()){
         cout << "not valid!" << endl;
-		//exit(0);
+		exit(0);
 		return;
 	}
 	

@@ -1,17 +1,12 @@
-#include "SmallRegion.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
-extern void store_sign(SmallRegion &R, std::map<vector<int>,SmallRegion > &signature_minimal);
+#include "BaseRegion.h"
+#include "store_sign.h"
 
-void generateEmptyregions(std::map<vector<int>,SmallRegion > &signature_minimal){
-    int counter = 0;
-    int v = 0;
-    int a = 1;
-    
-    SmallRegion R(2,1,0);
-    
+void generate_Empty_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
+    BaseRegion R(2);
     store_sign(R, signature_minimal);
-    
     cout << "done with empty regions" << endl;
 }
