@@ -18,6 +18,7 @@ private:
 public:
     HatRegion(int boundarySize, int endpoint);
     virtual bool isValid();
+    virtual void test();
 };
 
 #endif /* defined(__New_method__HatRegion__) */

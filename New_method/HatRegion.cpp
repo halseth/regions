@@ -7,6 +7,7 @@
 //
 
 #include "HatRegion.h"
+#include <iostream>
 
 HatRegion::HatRegion(int boundarySize, int endpoint) : BaseRegion(boundarySize){
     this->endpoint = endpoint;
@@ -20,4 +21,8 @@ bool HatRegion::isValid(){
         valid &= isAdjacent(i, endpoint);
     }
     return valid;
+}
+
+void HatRegion::test(){
+    std::cout << "I am hatRegion" << std::endl;
 }

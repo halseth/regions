@@ -7,6 +7,7 @@
 //
 
 #include "HatARegion.h"
+#include <iostream>
 
 HatARegion::HatARegion(int boundarySize, int endpoint, int boundaryDominator1, int boundaryDominator2) : HatRegion(boundarySize, endpoint){
     this->boundaryDominator1 = boundaryDominator1;
@@ -21,4 +22,8 @@ bool HatARegion::isValid(){
         valid &= isAdjacent(i, boundaryDominator1) || isAdjacent(i, boundaryDominator2);
     }
     return valid;
+}
+
+void HatARegion::test(){
+    std::cout << "I am hatAregion" << std::endl;
 }

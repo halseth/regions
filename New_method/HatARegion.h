@@ -19,6 +19,7 @@ private:
 public:
     HatARegion(int boundarySize, int endpoint, int boundaryDominator1, int boundaryDominator2);
     virtual bool isValid();
+    virtual void test();
 };
 
 #endif /* defined(__New_method__HatARegion__) */

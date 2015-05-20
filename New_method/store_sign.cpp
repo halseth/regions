@@ -4,26 +4,29 @@
 #include <map>
 #include "SmallRegion.h"
 #include <vector>
+#include "store_sign.h"
 using namespace std;
 
 
-void print_map(std::map<vector<int>,SmallRegion > *map){
-	std::map<vector<int>,SmallRegion >::iterator it;
-	for(it = map->begin(); it != map->end(); it++){
+void print_map(const std::map<vector<int>,BaseRegion > &map){
+	std::map<vector<int>,BaseRegion >::const_iterator it;
+	for(it = map.begin(); it != map.end(); it++){
 		
 		cout << "Sign: ";
 		for(int i = 0; i < it->first.size(); i++){
 			cout << it->first[i] << " ";
 		}
-		int small = it->second.size();
+		int small = it->second.getSize();
 		cout << " Smallest: " << small << endl;
 	}
 }
 
-void store_sign(SmallRegion &R, std::map<vector<int>,SmallRegion > &signature_minimal){
+void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
+    
+    // Check if it is valid for it's subclass type
 	if(!R.isValid()){
         cout << "not valid!" << endl;
-		exit(0);
+		//exit(0);
 		return;
 	}
 	
@@ -32,13 +35,13 @@ void store_sign(SmallRegion &R, std::map<vector<int>,SmallRegion > &signature_mi
 	if(signature_minimal.count(sign) == 0 )
 	{
 		//cout << "Saving new signature because (signature_minimal.count(sign) == 0)" << endl;
-		signature_minimal.insert(pair<vector<int>, SmallRegion>(sign, R));
+		signature_minimal.insert(pair<vector<int>, BaseRegion>(sign, R));
 	} 
-	else if(signature_minimal.at(sign).size() > R.size())
+	else if( signature_minimal.at(sign).getSize() > R.getSize() )
 	{
 		//cout << "Saving new signature because signature_minimal.at(sign).size() =" << signature_minimal.at(sign).size() << " and R.size()=" << R.size() << endl;
 		signature_minimal.erase(sign);
-		signature_minimal.insert(pair<vector<int>, SmallRegion>(sign, R));
+		signature_minimal.insert(pair<vector<int>, BaseRegion>(sign, R));
 	}
 	else 
 	{
@@ -46,6 +49,6 @@ void store_sign(SmallRegion &R, std::map<vector<int>,SmallRegion > &signature_mi
 	}
 	
 	cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << "):"<< endl;
-	print_map(&signature_minimal);
+	print_map(signature_minimal);
 	cout << endl;
 }

@@ -41,7 +41,7 @@ void BaseRegion::addEdge(int from, int to){
     adj[to][from] = true;
 }
 
-int BaseRegion::getSize(){
+int BaseRegion::getSize() const{
     return Boundary.size() + num_internal_nodes;
 }
 
@@ -216,6 +216,10 @@ void BaseRegion::printRegion(){
             }
         }
     }
+}
+
+void BaseRegion::test(){
+    std::cout << "I am baseclass" << std::endl;
 }
 
 

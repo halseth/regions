@@ -29,7 +29,7 @@ private:
 public:
     BaseRegion(int boundarySize);
     virtual bool isValid();
-    int getSize();
+    int getSize() const;
     int addNode();
     void addEdge(int from, int to);
     bool isAdjacent(int a, int b);
@@ -48,6 +48,7 @@ public:
     std::map<int, int> getLabelToNode();
     std::map<int, std::set<int> > getNodeToLabels();
     
+    virtual void test();
     
 };
 
