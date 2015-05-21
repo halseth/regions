@@ -16,8 +16,8 @@ using namespace std;
 
 #include "EmptyRegion.h"
 #include "3hat_a_regions.h"
-#include "3hat_b_regions.h"
-#include "4hat_a_regions.h"
+#include "3hat_ab_regions.h"
+#include "4hat_ab_regions.h"
 #include "4hat_b_regions.h"
 #include "4hat_regions.h"
 
@@ -30,11 +30,11 @@ enum RegionType {
 };
 
 map<vector<int>, BaseRegion> empty_region;
-map<vector<int>, BaseRegion> signature_minimal_4hat_a_regions;
+map<vector<int>, BaseRegion> signature_minimal_4hat_ab_regions;
 map<vector<int>, BaseRegion> signature_minimal_4hat_b_regions;
 map<vector<int>, BaseRegion> signature_minimal_4hat_regions;
 map<vector<int>, BaseRegion> signature_minimal_3hat_a_regions;
-map<vector<int>, BaseRegion> signature_minimal_3hat_b_regions;
+map<vector<int>, BaseRegion> signature_minimal_3hat_ab_regions;
 map<vector<int>, BaseRegion> signature_minimal_3hat__regions;
 
 string type_to_string(int a){
@@ -65,7 +65,7 @@ string type_to_string(int a){
     }
 }
 
-
+/*
 
 map<vector<int>, BaseRegion > set_regionmap(RegionType t){
     switch (t) {
@@ -86,15 +86,15 @@ map<vector<int>, BaseRegion > set_regionmap(RegionType t){
             exit(0);
             break;
     }
-}
+}*/
 
  
 int main(){
     
     generate_3hat_a_regions(signature_minimal_3hat_a_regions);
-    generate_3hat_b_regions(signature_minimal_3hat_b_regions);
+    generate_3hat_ab_regions(signature_minimal_3hat_ab_regions);
     //generate3regions(signature_minimal_3regions);
-    generate_4hat_a_regions(signature_minimal_4hat_a_regions);
+    generate_4hat_ab_regions(signature_minimal_4hat_ab_regions);
     generate_4hat_b_regions(signature_minimal_4hat_b_regions);
     generate_4hat_regions(signature_minimal_4hat_regions);
     generate_Empty_regions(empty_region);

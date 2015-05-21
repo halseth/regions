@@ -1,5 +1,5 @@
 //
-//  testHatBRegion.cpp
+//  testHatABCRegion.cpp
 //  New_method
 //
 //  Created by Johan Torås Halseth on 19/05/15.
@@ -9,11 +9,17 @@
 
 #include "catch.hpp"
 #include <iostream>
-#include "HatBRegion.h"
+#include "HatABCRegion.h"
 
-TEST_CASE( "Testining HatBRegion", "[HatBRegion]" ) {
+TEST_CASE( "Testing HatABCRegion with 1 boundary dominator", "[HatABCRegion]" ) {
+    int v = 0;
+    int a = 1;
+    int b = 2;
     
-    HatBRegion h(6, 0, 2);
+    std::vector<int> boundaryDominators;
+    boundaryDominators.push_back(b);
+    
+    HatABCRegion h(6, 0, boundaryDominators);
     for (int i = 0; i < 4; i++) {
         int node = h.addNode();
         h.addEdge(node, 0);
@@ -26,7 +32,7 @@ TEST_CASE( "Testining HatBRegion", "[HatBRegion]" ) {
     h.addEdge(node, 2);
     REQUIRE(!h.isValid());
     
-    HatBRegion h1(6, 0, 2);
+    HatABCRegion h1(6, 0, boundaryDominators);
     for (int i = 0; i < 7; i++) {
         node = h1.addNode();
         h1.addEdge(node, 0);

@@ -8,7 +8,7 @@
 
 #include "catch.hpp"
 #include <iostream>
-#include "HatARegion.h"
+#include "HatABCRegion.h"
 #include "store_sign.h"
 
 TEST_CASE( "Testining virtual methods", "[Virtual methods]" ) {
@@ -17,11 +17,15 @@ TEST_CASE( "Testining virtual methods", "[Virtual methods]" ) {
     int a = 1;
     int b = 2;
     
-    HatARegion ha(3, v, a, b);
+    std::vector<int> boundaryDominators;
+    boundaryDominators.push_back(a);
+    boundaryDominators.push_back(b);
+    
+    HatABCRegion ha(3, v, boundaryDominators);
     int node = ha.addNode();
     ha.addEdge(v, node);
     
-    // Should be valid Base- and HatRegion, but not HatARegion
+    // Should be valid Base- and HatRegion, but not HatABCRegion
     REQUIRE(ha.BaseRegion::isValid());
     REQUIRE(ha.HatRegion::isValid());
     REQUIRE(!ha.isValid());
@@ -40,9 +44,13 @@ TEST_CASE( "Testing polymorphism for store_sign method", "[Virtual methods, Stor
     int a = 1;
     int b = 2;
     
+    std::vector<int> boundaryDominators;
+    boundaryDominators.push_back(a);
+    boundaryDominators.push_back(b);
+    
     std::map<std::vector<int>, BaseRegion> sign;
     {
-        HatARegion ha(3, v, a, b);
+        HatABCRegion ha(3, v, boundaryDominators);
         int node = ha.addNode();
         ha.addEdge(v, node);
     

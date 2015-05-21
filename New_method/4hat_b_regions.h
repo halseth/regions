@@ -9,6 +9,7 @@
 #ifndef New_method_generate_4b_regions_h
 #define New_method_generate_4b_regions_h
 
+// Generates 4hat regions where all internal are dominated by b
 void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
 
 #endif

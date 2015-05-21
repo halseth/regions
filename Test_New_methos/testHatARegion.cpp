@@ -1,5 +1,5 @@
 //
-//  testHatARegion.cpp
+//  testHatABCRegion.cpp
 //  New_method
 //
 //  Created by Johan Torås Halseth on 19/05/15.
@@ -8,11 +8,14 @@
 
 #include "catch.hpp"
 #include <iostream>
-#include "HatARegion.h"
+#include "HatABCRegion.h"
 
-TEST_CASE( "Testining HatARegion", "[HatARegion]" ) {
+TEST_CASE( "Testing HatABCRegion with 2 boundary dominators", "[HatABCRegion]" ) {
     
-    HatARegion h(6, 0, 1, 2);
+    std::vector<int> boundaryDominators;
+    boundaryDominators.push_back(1);
+    boundaryDominators.push_back(2);
+    HatABCRegion h(6, 0, boundaryDominators);
     for (int i = 0; i < 4; i++) {
         int node = h.addNode();
         h.addEdge(node, 0);
@@ -25,7 +28,7 @@ TEST_CASE( "Testining HatARegion", "[HatARegion]" ) {
     h.addEdge(node, 2);
     REQUIRE(!h.isValid());
     
-    HatARegion h1(6, 0, 1, 2);
+    HatABCRegion h1(6, 0, boundaryDominators);
     for (int i = 0; i < 7; i++) {
         node = h1.addNode();
         h1.addEdge(node, 0);
@@ -39,7 +42,7 @@ TEST_CASE( "Testining HatARegion", "[HatARegion]" ) {
     REQUIRE(!h1.isValid());
     
     // Check not planar
-    HatARegion h3(6, 0, 1, 2);
+    HatABCRegion h3(6, 0, boundaryDominators);
     node = h3.addNode();
     h3.addEdge(node, 0);
     h3.addEdge(node, 1);

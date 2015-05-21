@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-#include "HatBRegion.h"
+#include "HatABCRegion.h"
 #include "store_sign.h"
 #include "4hat_b_regions.h"
 
@@ -12,6 +12,10 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
     int a = 1;
     int b = 3;
     int c = 2;
+    
+    std::vector<int> boundaryDominators;
+    boundaryDominators.push_back(c); // TODO: Should be b
+    
     for(int s_size = 0; s_size <= 2; s_size++){
         if (s_size == 0) {
             for(int nodes_vc = 0; nodes_vc <= 4; nodes_vc++){
@@ -21,7 +25,7 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
                     for(int ab_edge = 0; ab_edge <= max_ab_edge; ab_edge++){
                         int max_vc_edge = edges == 0b11 || ab_edge ? 0 : 1;
                         for(int vc_edge = 0; vc_edge <= max_vc_edge; vc_edge++){
-                            HatBRegion R(4, v, c);
+                            HatABCRegion R(4, v, boundaryDominators);
                             
                             for(int i = 0; i < nodes_vc; i++){
                                 int node = R.addNode();
@@ -64,7 +68,7 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
                                     
                                     int max_edge_vc = (s_down_edge || under_edge != 0) && (s_up_edge || over_edge != 0) ? 0 : 1;
                                     for(int edge_vc = 0; edge_vc <= max_edge_vc; edge_vc++){
-                                        HatBRegion R(4, v, c);
+                                        HatABCRegion R(4, v, boundaryDominators);
                                         
                                         int s = R.addNode();
                                         R.addEdge(s, v);
@@ -115,7 +119,7 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
         } else if (s_size == 2){
             for(int s_up_edge = 0; s_up_edge <= 1; s_up_edge++){
                 for(int s_down_edge = 0; s_down_edge <= 1; s_down_edge++){
-                    HatBRegion R(4, v, c);
+                    HatABCRegion R(4, v, boundaryDominators);
                     
                     int s1 = R.addNode();
                     int s2 = R.addNode();
