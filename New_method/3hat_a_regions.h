@@ -9,6 +9,6 @@
 #ifndef New_method__a_regions_h
 #define New_method__a_regions_h
 
-void generate_3a_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
+void generate_3hat_a_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
 
 #endif

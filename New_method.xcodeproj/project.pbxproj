@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		041507031AFCF7F8006743CD /* BoundariedRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 041507011AFCF7F8006743CD /* BoundariedRegion.cpp */; };
 		0423A9D91B0C8F9F00449DB6 /* testVirtualMethods.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0423A9D71B0C87D400449DB6 /* testVirtualMethods.cpp */; };
 		0423A9DB1B0CA94700449DB6 /* store_sign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 044319081AF7D5F800E3FC06 /* store_sign.cpp */; };
-		0423A9DD1B0CD5FA00449DB6 /* 3b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938331AFB752600C01262 /* 3b_regions.cpp */; };
+		0423A9DD1B0CD5FA00449DB6 /* 3hat_b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938331AFB752600C01262 /* 3hat_b_regions.cpp */; };
 		0423A9DF1B0CD81F00449DB6 /* EmptyRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418F81B0349F10064638C /* EmptyRegion.cpp */; };
-		0423A9E11B0CDA3700449DB6 /* 4b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938371AFB8BB900C01262 /* 4b_regions.cpp */; };
-		0423A9E61B0CDE9E00449DB6 /* 4a_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938351AFB7C7B00C01262 /* 4a_regions.cpp */; };
+		0423A9E11B0CDA3700449DB6 /* 4hat_b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938371AFB8BB900C01262 /* 4hat_b_regions.cpp */; };
+		0423A9E61B0CDE9E00449DB6 /* 4hat_a_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938351AFB7C7B00C01262 /* 4hat_a_regions.cpp */; };
 		044319091AF7D5F800E3FC06 /* store_sign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 044319081AF7D5F800E3FC06 /* store_sign.cpp */; };
 		0443190B1AF7D65C00E3FC06 /* subsets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0443190A1AF7D65C00E3FC06 /* subsets.cpp */; };
 		045938321AFB709E00C01262 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938311AFB709E00C01262 /* main.cpp */; };
-		046A972F1AF7C612002752D1 /* 3a_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046A972E1AF7C612002752D1 /* 3a_regions.cpp */; };
+		046A972F1AF7C612002752D1 /* 3hat_a_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 046A972E1AF7C612002752D1 /* 3hat_a_regions.cpp */; };
+		049228F91B0DC1790032E4B9 /* 4hat_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0443190C1AF7D77300E3FC06 /* 4hat_regions.cpp */; };
 		04A5AE8F1B0B1BA90057572D /* testHatRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE8E1B0B1BA90057572D /* testHatRegion.cpp */; };
 		04A5AE911B0B1DD90057572D /* testHatARegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE901B0B1DD90057572D /* testHatARegion.cpp */; };
 		04A5AE931B0B21D80057572D /* testHatBRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE921B0B21D80057572D /* testHatBRegion.cpp */; };
@@ -59,32 +59,29 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		041507011AFCF7F8006743CD /* BoundariedRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoundariedRegion.cpp; sourceTree = "<group>"; };
-		041507021AFCF7F8006743CD /* BoundariedRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoundariedRegion.h; sourceTree = "<group>"; };
 		0423A9D71B0C87D400449DB6 /* testVirtualMethods.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testVirtualMethods.cpp; sourceTree = "<group>"; };
 		0423A9DA1B0C958900449DB6 /* store_sign.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = store_sign.h; sourceTree = "<group>"; };
-		0423A9DC1B0CD45C00449DB6 /* 3a_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3a_regions.h; sourceTree = "<group>"; };
-		0423A9DE1B0CD6C700449DB6 /* 3b_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3b_regions.h; sourceTree = "<group>"; };
+		0423A9DC1B0CD45C00449DB6 /* 3hat_a_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3hat_a_regions.h; sourceTree = "<group>"; };
+		0423A9DE1B0CD6C700449DB6 /* 3hat_b_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3hat_b_regions.h; sourceTree = "<group>"; };
 		0423A9E01B0CD8A000449DB6 /* EmptyRegion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyRegion.h; sourceTree = "<group>"; };
-		0423A9E51B0CDD6300449DB6 /* 4b_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4b_regions.h; sourceTree = "<group>"; };
-		0423A9E81B0CE0BA00449DB6 /* 4a_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4a_regions.h; sourceTree = "<group>"; };
-		044319071AF7D2F600E3FC06 /* SmallRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallRegion.h; sourceTree = "<group>"; };
+		0423A9E51B0CDD6300449DB6 /* 4hat_b_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4hat_b_regions.h; sourceTree = "<group>"; };
+		0423A9E81B0CE0BA00449DB6 /* 4hat_a_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4hat_a_regions.h; sourceTree = "<group>"; };
 		044319081AF7D5F800E3FC06 /* store_sign.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = store_sign.cpp; sourceTree = "<group>"; };
 		0443190A1AF7D65C00E3FC06 /* subsets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = subsets.cpp; sourceTree = "<group>"; };
-		0443190C1AF7D77300E3FC06 /* 4regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4regions.cpp; sourceTree = "<group>"; };
+		0443190C1AF7D77300E3FC06 /* 4hat_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4hat_regions.cpp; sourceTree = "<group>"; };
 		045938311AFB709E00C01262 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		045938331AFB752600C01262 /* 3b_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 3b_regions.cpp; sourceTree = "<group>"; };
-		045938351AFB7C7B00C01262 /* 4a_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4a_regions.cpp; sourceTree = "<group>"; };
-		045938371AFB8BB900C01262 /* 4b_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4b_regions.cpp; sourceTree = "<group>"; };
+		045938331AFB752600C01262 /* 3hat_b_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 3hat_b_regions.cpp; sourceTree = "<group>"; };
+		045938351AFB7C7B00C01262 /* 4hat_a_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4hat_a_regions.cpp; sourceTree = "<group>"; };
+		045938371AFB8BB900C01262 /* 4hat_b_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4hat_b_regions.cpp; sourceTree = "<group>"; };
 		046A972B1AF7C612002752D1 /* New_method */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = New_method; sourceTree = BUILT_PRODUCTS_DIR; };
-		046A972E1AF7C612002752D1 /* 3a_regions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = 3a_regions.cpp; sourceTree = "<group>"; };
+		046A972E1AF7C612002752D1 /* 3hat_a_regions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = 3hat_a_regions.cpp; sourceTree = "<group>"; };
+		049228FA1B0DC2650032E4B9 /* 4hat_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4hat_regions.h; sourceTree = "<group>"; };
 		04A5AE8E1B0B1BA90057572D /* testHatRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatRegion.cpp; sourceTree = "<group>"; };
 		04A5AE901B0B1DD90057572D /* testHatARegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatARegion.cpp; sourceTree = "<group>"; };
 		04A5AE921B0B21D80057572D /* testHatBRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatBRegion.cpp; sourceTree = "<group>"; };
 		04A5AE971B0B244E0057572D /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		04A5AE991B0B24D90057572D /* Region.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Region.cpp; sourceTree = "<group>"; };
 		04A5AE9B1B0B25E30057572D /* testRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testRegion.cpp; sourceTree = "<group>"; };
-		04F418F71B0236030064638C /* Old_Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Old_Region.h; sourceTree = "<group>"; };
 		04F418F81B0349F10064638C /* EmptyRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmptyRegion.cpp; sourceTree = "<group>"; };
 		04F418FB1B04CE120064638C /* BaseRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseRegion.cpp; sourceTree = "<group>"; };
 		04F418FC1B04CE120064638C /* BaseRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRegion.h; sourceTree = "<group>"; };
@@ -133,15 +130,16 @@
 		0423A9D61B0C74F500449DB6 /* Generate */ = {
 			isa = PBXGroup;
 			children = (
-				046A972E1AF7C612002752D1 /* 3a_regions.cpp */,
-				0423A9DC1B0CD45C00449DB6 /* 3a_regions.h */,
-				045938331AFB752600C01262 /* 3b_regions.cpp */,
-				0423A9DE1B0CD6C700449DB6 /* 3b_regions.h */,
-				0443190C1AF7D77300E3FC06 /* 4regions.cpp */,
-				045938351AFB7C7B00C01262 /* 4a_regions.cpp */,
-				0423A9E81B0CE0BA00449DB6 /* 4a_regions.h */,
-				045938371AFB8BB900C01262 /* 4b_regions.cpp */,
-				0423A9E51B0CDD6300449DB6 /* 4b_regions.h */,
+				046A972E1AF7C612002752D1 /* 3hat_a_regions.cpp */,
+				0423A9DC1B0CD45C00449DB6 /* 3hat_a_regions.h */,
+				045938331AFB752600C01262 /* 3hat_b_regions.cpp */,
+				0423A9DE1B0CD6C700449DB6 /* 3hat_b_regions.h */,
+				0443190C1AF7D77300E3FC06 /* 4hat_regions.cpp */,
+				049228FA1B0DC2650032E4B9 /* 4hat_regions.h */,
+				045938351AFB7C7B00C01262 /* 4hat_a_regions.cpp */,
+				0423A9E81B0CE0BA00449DB6 /* 4hat_a_regions.h */,
+				045938371AFB8BB900C01262 /* 4hat_b_regions.cpp */,
+				0423A9E51B0CDD6300449DB6 /* 4hat_b_regions.h */,
 				04F418F81B0349F10064638C /* EmptyRegion.cpp */,
 				0423A9E01B0CD8A000449DB6 /* EmptyRegion.h */,
 			);
@@ -172,11 +170,7 @@
 				04F418FA1B04CDE60064638C /* Classes */,
 				0423A9D51B0C749800449DB6 /* Helper_methods */,
 				0423A9D61B0C74F500449DB6 /* Generate */,
-				04F418F71B0236030064638C /* Old_Region.h */,
-				044319071AF7D2F600E3FC06 /* SmallRegion.h */,
 				045938311AFB709E00C01262 /* main.cpp */,
-				041507011AFCF7F8006743CD /* BoundariedRegion.cpp */,
-				041507021AFCF7F8006743CD /* BoundariedRegion.h */,
 			);
 			path = New_method;
 			sourceTree = "<group>";
@@ -292,18 +286,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				044319091AF7D5F800E3FC06 /* store_sign.cpp in Sources */,
-				046A972F1AF7C612002752D1 /* 3a_regions.cpp in Sources */,
+				046A972F1AF7C612002752D1 /* 3hat_a_regions.cpp in Sources */,
 				04F419031B04D4A20064638C /* HatARegion.cpp in Sources */,
 				0423A9DF1B0CD81F00449DB6 /* EmptyRegion.cpp in Sources */,
-				0423A9DD1B0CD5FA00449DB6 /* 3b_regions.cpp in Sources */,
+				0423A9DD1B0CD5FA00449DB6 /* 3hat_b_regions.cpp in Sources */,
 				045938321AFB709E00C01262 /* main.cpp in Sources */,
 				0443190B1AF7D65C00E3FC06 /* subsets.cpp in Sources */,
 				04F419061B04D8120064638C /* HatBRegion.cpp in Sources */,
-				041507031AFCF7F8006743CD /* BoundariedRegion.cpp in Sources */,
-				0423A9E11B0CDA3700449DB6 /* 4b_regions.cpp in Sources */,
+				0423A9E11B0CDA3700449DB6 /* 4hat_b_regions.cpp in Sources */,
 				04F418FD1B04CE120064638C /* BaseRegion.cpp in Sources */,
 				04F419001B04D3A00064638C /* HatRegion.cpp in Sources */,
-				0423A9E61B0CDE9E00449DB6 /* 4a_regions.cpp in Sources */,
+				049228F91B0DC1790032E4B9 /* 4hat_regions.cpp in Sources */,
+				0423A9E61B0CDE9E00449DB6 /* 4hat_a_regions.cpp in Sources */,
 				04A5AE9A1B0B24D90057572D /* Region.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,8 +439,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					TEST,
 					"DEBUG=1",
-					"$(inherited)",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"-I",
@@ -460,6 +454,7 @@
 		04F4191F1B0644B30064638C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = TEST;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-I",
 					/usr/local/include,

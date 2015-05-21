@@ -1,10 +1,12 @@
-#include "SmallRegion.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
-extern void store_sign(SmallRegion &R, std::map<vector<int>,SmallRegion > &signature_minimal);
+#include "store_sign.h"
+#include "HatRegion.h"
+#include "4hat_regions.h"
 
-void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal){
+void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
     int counter = 0;
     int v = 0;
     int a = 1;
@@ -28,7 +30,7 @@ void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal){
                                             int max_a_b_edge = deg2_v_c > 0 || deg3_v_a_c > 0 || deg3_v_b_c > 0 || deg4 > 0 || v_c_edge > 0 ? 0 : 1;
                                             for(int a_b_edge = 0; a_b_edge <= max_a_b_edge; a_b_edge++){
                                                 
-                                                SmallRegion R(4,c,counter++);
+                                                HatRegion R(4, v);
                                                 for (int i = 0; i < deg2_v_a; i++) {
                                                     int node = R.addNode();
                                                     R.addEdge(node, v);
@@ -78,6 +80,7 @@ void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal){
                                                 if(a_b_edge){
                                                     R.addEdge(a, b);
                                                 }
+                                                counter++;
                                                 store_sign(R, signature_minimal);
                                             }
                                         }
@@ -105,7 +108,7 @@ void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal){
                                 for (int s_down_edge = start_s_down_edge; s_down_edge <= end_s_down_edge; s_down_edge++) {
                                     
                                     for(int deg2 = 0; deg2 <= 1; deg2++){
-                                        SmallRegion R(4,c,counter++);
+                                        HatRegion R(4, v);
                                         
                                         int s = R.addNode();
                                         R.addEdge(s, v);
@@ -148,6 +151,7 @@ void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal){
                                             R.addEdge(node, s);
                                             R.addEdge(node, v);
                                         }
+                                        counter++;
                                         store_sign(R, signature_minimal);
                                     }
                                     
@@ -160,7 +164,7 @@ void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal){
             }
         } else if (s_size == 2){
             for(int deg3 = 0; deg3 <= 1; deg3++){
-                SmallRegion R(4,c,counter++);
+                HatRegion R(4, v);
                 int s1 = R.addNode();
                 int s2 = R.addNode();
                 R.addEdge(v, s1);
@@ -174,11 +178,12 @@ void generate4regions(std::map<vector<int>,SmallRegion > &signature_minimal){
                     R.addEdge(node, s1);
                     R.addEdge(node, s2);
                 }
+                counter++;
                 store_sign(R, signature_minimal);
             }
             
         }
     }
     
-    cout << "done with 4regions. Total regions checked: " << counter << endl;
+    cout << "done with 4hat_regions. Total regions checked: " << counter << endl;
 }

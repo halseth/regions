@@ -4,8 +4,9 @@ using namespace std;
 
 #include "HatARegion.h"
 #include "store_sign.h"
+#include "4hat_a_regions.h"
 
-void generate_4a_regions(std::map<vector<int>, BaseRegion> &signature_minimal){
+void generate_4hat_a_regions(std::map<vector<int>, BaseRegion> &signature_minimal){
     int counter = 0;
     int v = 0;
     int a = 1;

@@ -9,6 +9,6 @@
 #ifndef New_method_generate_4a_regions_h
 #define New_method_generate_4a_regions_h
 
-void generate_4a_regions(std::map<vector<int>, BaseRegion> &signature_minimal);
+void generate_4hat_a_regions(std::map<vector<int>, BaseRegion> &signature_minimal);
 
 #endif

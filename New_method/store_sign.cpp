@@ -2,7 +2,6 @@
 #include <sstream>
 #include <set>
 #include <map>
-#include "SmallRegion.h"
 #include <vector>
 #include "store_sign.h"
 using namespace std;
@@ -26,7 +25,9 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
     // Check if it is valid for it's subclass type
 	if(!R.isValid()){
         cout << "not valid!" << endl;
+#ifndef TEST
 		exit(0);
+#endif
 		return;
 	}
 	

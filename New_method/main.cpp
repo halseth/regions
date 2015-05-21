@@ -15,10 +15,11 @@ using namespace std;
 #include "BaseRegion.h"
 
 #include "EmptyRegion.h"
-#include "3a_regions.h"
-#include "3b_regions.h"
-#include "4a_regions.h"
-#include "4b_regions.h"
+#include "3hat_a_regions.h"
+#include "3hat_b_regions.h"
+#include "4hat_a_regions.h"
+#include "4hat_b_regions.h"
+#include "4hat_regions.h"
 
 
 enum RegionType {
@@ -29,12 +30,12 @@ enum RegionType {
 };
 
 map<vector<int>, BaseRegion> empty_region;
-map<vector<int>, BaseRegion> signature_minimal_4a_regions;
-map<vector<int>, BaseRegion> signature_minimal_4b_regions;
-map<vector<int>, BaseRegion> signature_minimal_4_regions;
-map<vector<int>, BaseRegion> signature_minimal_3a_regions;
-map<vector<int>, BaseRegion> signature_minimal_3b_regions;
-map<vector<int>, BaseRegion> signature_minimal_3_regions;
+map<vector<int>, BaseRegion> signature_minimal_4hat_a_regions;
+map<vector<int>, BaseRegion> signature_minimal_4hat_b_regions;
+map<vector<int>, BaseRegion> signature_minimal_4hat_regions;
+map<vector<int>, BaseRegion> signature_minimal_3hat_a_regions;
+map<vector<int>, BaseRegion> signature_minimal_3hat_b_regions;
+map<vector<int>, BaseRegion> signature_minimal_3hat__regions;
 
 string type_to_string(int a){
     switch (a) {
@@ -72,13 +73,13 @@ map<vector<int>, BaseRegion > set_regionmap(RegionType t){
             return empty_region;
             break;
         case Type3B:
-            return signature_minimal_3b_regions;
+            return signature_minimal_3hat_b_regions;
             break;
         case Type3A:
-            return signature_minimal_3a_regions;
+            return signature_minimal_3hat_a_regions;
             break;
         case Type4A:
-            return signature_minimal_4a_regions;
+            return signature_minimal_4hat_a_regions;
             break;
         default:
             cerr << "should not happen" << endl;
@@ -90,18 +91,18 @@ map<vector<int>, BaseRegion > set_regionmap(RegionType t){
  
 int main(){
     
-    generate_3a_regions(signature_minimal_3a_regions);
-    generate_3b_regions(signature_minimal_3b_regions);
+    generate_3hat_a_regions(signature_minimal_3hat_a_regions);
+    generate_3hat_b_regions(signature_minimal_3hat_b_regions);
     //generate3regions(signature_minimal_3regions);
-    generate_4a_regions(signature_minimal_4a_regions);
-    generate_4b_regions(signature_minimal_4b_regions);
-    //generate4regions(signature_minimal_4regions);
+    generate_4hat_a_regions(signature_minimal_4hat_a_regions);
+    generate_4hat_b_regions(signature_minimal_4hat_b_regions);
+    generate_4hat_regions(signature_minimal_4hat_regions);
     generate_Empty_regions(empty_region);
  
     //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
     
     int id = 0;
-    for(std::map<vector<int>, BaseRegion>::iterator it = signature_minimal_3a_regions.begin() ; it != signature_minimal_3a_regions.end(); it++){
+    for(std::map<vector<int>, BaseRegion>::iterator it = signature_minimal_3hat_a_regions.begin() ; it != signature_minimal_3hat_a_regions.end(); it++){
         id++;
         ofstream file;
         stringstream ss;

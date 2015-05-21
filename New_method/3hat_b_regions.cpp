@@ -4,8 +4,9 @@ using namespace std;
 
 #include "HatBRegion.h"
 #include "store_sign.h"
+#include "3hat_b_regions.h"
 
-void generate_3b_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
+void generate_3hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
     int v = 0;
     int a = 1;
     int b = 2;
