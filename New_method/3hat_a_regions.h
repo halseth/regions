@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Johan Torås Halseth. All rights reserved.
 //
 
-#ifndef New_method__b_regions_h
-#define New_method__b_regions_h
+#ifndef New_method_3hat_a_regions_h
+#define New_method_3hat_a_regions_h
 
 void generate_3hat_a_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
 

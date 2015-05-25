@@ -50,6 +50,6 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
 	}
 	
 	cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << "):"<< endl;
-	print_map(signature_minimal);
+	//print_map(signature_minimal);
 	cout << endl;
 }

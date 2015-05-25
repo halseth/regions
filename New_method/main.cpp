@@ -20,6 +20,9 @@ using namespace std;
 #include "4hat_ab_regions.h"
 #include "4hat_b_regions.h"
 #include "4hat_regions.h"
+#include "4hat_a_regions.h"
+#include "5hat_a_regions.h"
+#include "5hat_regions.h"
 
 
 enum RegionType {
@@ -30,12 +33,15 @@ enum RegionType {
 };
 
 map<vector<int>, BaseRegion> empty_region;
+map<vector<int>, BaseRegion> signature_minimal_4hat_a_regions;
 map<vector<int>, BaseRegion> signature_minimal_4hat_ab_regions;
 map<vector<int>, BaseRegion> signature_minimal_4hat_b_regions;
 map<vector<int>, BaseRegion> signature_minimal_4hat_regions;
 map<vector<int>, BaseRegion> signature_minimal_3hat_a_regions;
 map<vector<int>, BaseRegion> signature_minimal_3hat_ab_regions;
-map<vector<int>, BaseRegion> signature_minimal_3hat__regions;
+map<vector<int>, BaseRegion> signature_minimal_3hat_regions;
+map<vector<int>, BaseRegion> signature_minimal_5hat_a_regions;
+map<vector<int>, BaseRegion> signature_minimal_5hat_regions;
 
 string type_to_string(int a){
     switch (a) {
@@ -91,13 +97,16 @@ map<vector<int>, BaseRegion > set_regionmap(RegionType t){
  
 int main(){
     
-    generate_3hat_a_regions(signature_minimal_3hat_a_regions);
+    //generate_3hat_a_regions(signature_minimal_3hat_a_regions);
     generate_3hat_ab_regions(signature_minimal_3hat_ab_regions);
-    //generate3regions(signature_minimal_3regions);
-    generate_4hat_ab_regions(signature_minimal_4hat_ab_regions);
-    generate_4hat_b_regions(signature_minimal_4hat_b_regions);
+    //generate_3regions(signature_minimal_3hat_regions); // == 3hat_ab
+    generate_4hat_a_regions(signature_minimal_4hat_a_regions);
+    //generate_4hat_ab_regions(signature_minimal_4hat_ab_regions);
+    //generate_4hat_b_regions(signature_minimal_4hat_b_regions);
     generate_4hat_regions(signature_minimal_4hat_regions);
-    generate_Empty_regions(empty_region);
+    //generate_Empty_regions(empty_region);
+    generate_5hat_a_regions(signature_minimal_5hat_a_regions);
+    generate_5hat_regions(signature_minimal_5hat_regions, signature_minimal_5hat_a_regions, signature_minimal_4hat_a_regions, signature_minimal_4hat_regions, signature_minimal_3hat_ab_regions);
  
     //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
     

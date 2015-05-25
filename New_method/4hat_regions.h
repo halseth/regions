@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Johan Torås Halseth. All rights reserved.
 //
 
-#ifndef New_method__hat_regions_h
-#define New_method__hat_regions_h
+#ifndef New_method_4hat_regions_h
+#define New_method_4hat_regions_h
 
 void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
 
