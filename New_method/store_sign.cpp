@@ -26,6 +26,7 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
 	if(!R.isValid()){
         cout << "not valid!" << endl;
 #ifndef TEST
+        R.printRegion();
 		exit(0);
 #endif
 		return;

@@ -19,7 +19,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
     
     for (int s_empty = 0; s_empty <= 1; s_empty++) {
         if(s_empty){
-            /*{ // a-c edge
+            { // a-c edge
                 std::map<std::vector<int>,BaseRegion>::const_iterator it_4hat;
                 for (it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); it_4hat++) {
                     HatRegion R(5,v);
@@ -102,7 +102,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                     }
                     
                 }
-            }*/
+            }
             
             for (int va_nodes = 0; va_nodes <= 1; va_nodes++) {
                 for (int vb_nodes = 0; vb_nodes <= 2; vb_nodes++) {
@@ -116,25 +116,27 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                                     for(int vb_d_edge = 0; vb_d_edge <= max_vb_d_edge; vb_d_edge++){
                                         int max_vc_d_edge = vc_nodes > 0 ? 1 : 0;
                                         for(int vc_d_edge = 0; vc_d_edge <= max_vc_d_edge; vc_d_edge++){
-                                            int max_vc_b_edge = vc_nodes >= 0 && !vb_c_edge ? 1 : 0;
+                                            int max_vc_b_edge = vc_nodes > 0 && !vb_c_edge ? 1 : 0;
                                             for(int vc_b_edge = 0; vc_b_edge <= max_vc_b_edge; vc_b_edge++){
                                                 int max_vc_a_edge = vc_nodes > 0 && vb_nodes == 0 ? 1 : 0;
                                                 for(int vc_a_edge = 0; vc_a_edge <= max_vc_a_edge; vc_a_edge++){
                                                     
                                                     int max_va_d_edge = va_nodes > 0 && vb_nodes == 0 && vc_nodes == 0 ? 1 : 0;
                                                     for(int va_d_edge = 0; va_d_edge <= max_va_d_edge; va_d_edge++){
-                                                        int max_va_c_edge = va_nodes > 0 && vb_nodes == 0 ? 1 : 0;
+                                                        int max_va_c_edge = va_nodes > 0 && vb_nodes == 0 && !vc_b_edge &&!vc_a_edge ? 1 : 0;
                                                         for(int va_c_edge = 0; va_c_edge <= max_va_c_edge; va_c_edge++){
                                                             
                                                             int max_vd_a_edge = vd_nodes > 0 && vc_nodes == 0 && vb_nodes == 0 && !va_c_edge && !va_d_edge ? 1 : 0;
                                                             for(int vd_a_edge = 0; vd_a_edge <= max_vd_a_edge; vd_a_edge++){
-                                                                int max_vd_b_edge = vd_nodes > 0 && vc_nodes == 0 && !va_c_edge && !va_d_edge ? 1 : 0;
+                                                                int max_vd_b_edge = vd_nodes > 0 && vc_nodes == 0 && !va_c_edge && !va_d_edge && !vb_d_edge && !vb_c_edge ? 1 : 0;
                                                                 for(int vd_b_edge = 0; vd_b_edge <= max_vd_b_edge; vd_b_edge++){
                                                                     HatRegion R(5,v);
                                                                     
                                                                     int va = -1;
                                                                     for (int i = 0; i < va_nodes; i++) {
                                                                         va = R.addNode();
+                                                                        R.addEdge(v, va);
+                                                                        R.addEdge(va, a);
                                                                     }
                                                                     
                                                                     int vb1 = -1;
@@ -143,6 +145,8 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                                                                         int vb = R.addNode();
                                                                         if(vb1 == -1) vb1 = vb;
                                                                         vb2 = vb;
+                                                                        R.addEdge(v, vb);
+                                                                        R.addEdge(vb, b);
                                                                     }
                                                                     
                                                                     int vc1 = -1;
@@ -151,11 +155,15 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                                                                         int vc = R.addNode();
                                                                         if(vc1 == -1) vc1 = vc;
                                                                         vc2 = vc;
+                                                                        R.addEdge(v, vc);
+                                                                        R.addEdge(vc, c);
                                                                     }
                                                                     
                                                                     int vd = -1;
                                                                     for (int i = 0; i < vd_nodes; i++) {
                                                                         vd = R.addNode();
+                                                                        R.addEdge(v, vd);
+                                                                        R.addEdge(vd, d);
                                                                     }
                                                                     
                                                                     if (vb_a_edge) {
@@ -215,7 +223,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                 }
             }
         } else {
-          /*  std::map<std::vector<int>,BaseRegion>::iterator it_4hat_a;
+            std::map<std::vector<int>,BaseRegion>::iterator it_4hat_a;
             for (it_4hat_a = regions_4hat_a.begin(); it_4hat_a != regions_4hat_a.end(); it_4hat_a++) {
                 std::map<std::vector<int>,BaseRegion>::iterator it_5hat_a;
                 for (it_5hat_a = regions_5hat_a.begin(); it_5hat_a != regions_5hat_a.end(); it_5hat_a++) {
@@ -253,7 +261,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                     counter++;
                     store_sign(R, signature_minimal);
                 }
-            }*/
+            }
             
         }
     }

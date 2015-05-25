@@ -37,6 +37,7 @@ void BaseRegion::addEdge(int from, int to){
     if (from == to) {
         return;
     }
+    //std::cout << "adding edge " << from << " to " << to << std::endl;
     adj[from][to] = true;
     adj[to][from] = true;
 }
@@ -71,6 +72,7 @@ bool BaseRegion::isValid(){
     
     // It must be connected
     if (!connected(g)) {
+        std::cout << "Not connected" << std::endl;
         valid = false;
     }
    
@@ -81,6 +83,7 @@ bool BaseRegion::isValid(){
     }
     
     if(!checkPlanarity(g)){
+        std::cout << "Not planar" << std::endl;
         valid = false;
     }
     
