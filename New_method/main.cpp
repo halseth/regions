@@ -24,6 +24,7 @@ using namespace std;
 #include "5hat_a_regions.h"
 #include "5hat_regions.h"
 #include "6hat_a_regions.h"
+#include "6hat_regions.h"
 
 
 enum RegionType {
@@ -44,6 +45,7 @@ map<vector<int>, BaseRegion> signature_minimal_3hat_regions;
 map<vector<int>, BaseRegion> signature_minimal_5hat_a_regions;
 map<vector<int>, BaseRegion> signature_minimal_5hat_regions;
 map<vector<int>, BaseRegion> signature_minimal_6hat_a_regions;
+map<vector<int>, BaseRegion> signature_minimal_6hat_regions;
 
 string type_to_string(int a){
     switch (a) {
@@ -109,8 +111,8 @@ int main(){
     //generate_Empty_regions(empty_region);
     //generate_5hat_a_regions(signature_minimal_5hat_a_regions);
     //generate_5hat_regions(signature_minimal_5hat_regions, signature_minimal_5hat_a_regions, signature_minimal_4hat_a_regions, signature_minimal_4hat_regions, signature_minimal_3hat_ab_regions);
-    generate_6hat_a_regions(signature_minimal_6hat_a_regions);
-    
+    //generate_6hat_a_regions(signature_minimal_6hat_a_regions);
+    generate_6hat_regions(signature_minimal_6hat_regions, signature_minimal_5hat_regions, signature_minimal_4hat_a_regions, signature_minimal_4hat_regions, signature_minimal_3hat_ab_regions);
     //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
     
     int id = 0;
