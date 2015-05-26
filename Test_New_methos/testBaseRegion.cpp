@@ -157,6 +157,7 @@ TEST_CASE( "Testing multiple gluing", "[BaseRegion]" ) {
     BaseRegion shouldEqual(3);
     
     REQUIRE( r.isEqual(shouldEqual));
+    REQUIRE(r == shouldEqual);
     
     BaseRegion r2(3);
     r2.addLabelToNode(1, 0);

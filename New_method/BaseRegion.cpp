@@ -8,10 +8,39 @@
 
 #include <lemon/planarity.h>
 #include <lemon/connectivity.h>
+#include <fstream>
 #include "BaseRegion.h"
 #include "subsets.hpp"
 
 BaseRegion::BaseRegion(int boundarySize){
+    init(boundarySize);
+}
+
+
+BaseRegion::BaseRegion(std::string string_rep){
+    std::stringstream ss;
+    ss << string_rep;
+    
+    int boundary_size;
+    ss >> boundary_size;
+   // std::cout << "found boundary size " << boundary_size << std::endl;
+    
+    init(boundary_size);
+    
+    int internal_nodes;
+    ss >> internal_nodes;
+   // std::cout << "internal nodes is " << internal_nodes << std::endl;
+    for(int i = 0; i < internal_nodes; i++){
+        this->addNode();
+    }
+    int from, to;
+    while (ss >> from && ss >> to) {
+        this->addEdge(from, to);
+       // std::cout << "found edge (" << from << ", " << to << ")" << std::endl;
+    }
+}
+
+void BaseRegion::init(int boundarySize){
     num_internal_nodes = 0;
     for(int i = 0; i < MAX_SIZE; i++){
         std::vector<bool> t;
@@ -27,6 +56,22 @@ BaseRegion::BaseRegion(int boundarySize){
     for(int i = 0; i < Boundary.size(); i++){
         this->addEdge( Boundary[i], Boundary[(i+1)%Boundary.size()] );
     }
+}
+
+std::string BaseRegion::toString(){
+    std::stringstream ss;
+    ss << this->getBoundarySize() << " ";
+    ss << this->num_internal_nodes << " ";
+    
+    for(int i = 0; i < this->getSize(); i++){
+        for(int j = i+1; j < this->getSize(); j++){
+            if(this->isAdjacent(i, j)){
+                ss << i << " ";
+                ss << j << " ";
+            }
+        }
+    }
+    return ss.str();
 }
 
 int BaseRegion::addNode(){
@@ -226,7 +271,7 @@ void BaseRegion::test(){
 }
 
 
-bool BaseRegion::isEqual(const BaseRegion &b){
+bool BaseRegion::isEqual(const BaseRegion &b) const{
     bool equal = true;
     equal &= this->Boundary == b.Boundary;
     if (!equal) {

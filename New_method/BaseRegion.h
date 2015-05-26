@@ -25,9 +25,16 @@ private:
     
     // Private methods
     int signature(std::vector<int> X, std::vector<int> S);
+    void init(int boundarySize);
     
 public:
     BaseRegion(int boundarySize);
+    BaseRegion(std::string filename);
+    std::string toString();
+    
+    // Operator overloading
+    bool operator==(const BaseRegion& b) const {return isEqual(b);};
+    
     virtual bool isValid();
     int getSize() const;
     int addNode();
@@ -38,7 +45,7 @@ public:
     
     void printRegion();
     
-    bool isEqual(const BaseRegion &b);
+    bool isEqual(const BaseRegion &b) const;
     
     void addLabelToNode(int label, int node);
     void clearLabels();
