@@ -104,10 +104,11 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                 }
             }
             
-            for (int va_nodes = 0; va_nodes <= 1; va_nodes++) {
-                for (int vb_nodes = 0; vb_nodes <= 2; vb_nodes++) {
-                    for (int vc_nodes = 0; vc_nodes <= 2; vc_nodes++) {
-                        for (int vd_nodes = 0; vd_nodes <= 1; vd_nodes++) {
+            
+            for (int va_nodes = 0; va_nodes <= 2; va_nodes++) {
+                for (int vb_nodes = 0; vb_nodes <= 4; vb_nodes++) {
+                    for (int vc_nodes = 0; vc_nodes <= 4; vc_nodes++) {
+                        for (int vd_nodes = 0; vd_nodes <= 2; vd_nodes++) {
                             int max_vb_a_edge = vb_nodes > 0 ? 1 : 0;
                             for(int vb_a_edge = 0; vb_a_edge <= max_vb_a_edge; vb_a_edge++){
                                 int max_vb_c_edge = vb_nodes > 0 ? 1 : 0;
@@ -207,6 +208,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                                                                     }
                                                                     
                                                                     counter++;
+                                                                    
                                                                     store_sign(R, signature_minimal);
                                                                 }
                                                             }

@@ -6,6 +6,8 @@
 #include "store_sign.h"
 using namespace std;
 
+int biggest = 0;
+
 
 void print_map(const std::map<vector<int>,BaseRegion > &map){
 	std::map<vector<int>,BaseRegion >::const_iterator it;
@@ -37,11 +39,13 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
 	if(signature_minimal.count(sign) == 0 )
 	{
 		//cout << "Saving new signature because (signature_minimal.count(sign) == 0)" << endl;
+        if(R.getSize() > biggest) biggest = R.getSize();
 		signature_minimal.insert(pair<vector<int>, BaseRegion>(sign, R));
 	} 
 	else if( signature_minimal.at(sign).getSize() > R.getSize() )
 	{
-		//cout << "Saving new signature because signature_minimal.at(sign).size() =" << signature_minimal.at(sign).size() << " and R.size()=" << R.size() << endl;
+        //cout << "Saving new signature because signature_minimal.at(sign).size() =" << signature_minimal.at(sign).size() << " and R.size()=" << R.size() << endl;
+        if(R.getSize() > biggest) biggest = R.getSize();
 		signature_minimal.erase(sign);
 		signature_minimal.insert(pair<vector<int>, BaseRegion>(sign, R));
 	}
@@ -50,7 +54,7 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
 		return;
 	}
 	
-	cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << "):"<< endl;
+	cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << "). Biggest=" << biggest << endl;
 	//print_map(signature_minimal);
 	cout << endl;
 }

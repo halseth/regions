@@ -13,6 +13,7 @@
 		0423A9DF1B0CD81F00449DB6 /* EmptyRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418F81B0349F10064638C /* EmptyRegion.cpp */; };
 		0423A9E11B0CDA3700449DB6 /* 4hat_b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938371AFB8BB900C01262 /* 4hat_b_regions.cpp */; };
 		0423A9E61B0CDE9E00449DB6 /* 4hat_ab_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938351AFB7C7B00C01262 /* 4hat_ab_regions.cpp */; };
+		043716511B14C57900D4E1AD /* 6hat_a_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0437164F1B14C57900D4E1AD /* 6hat_a_regions.cpp */; };
 		044319091AF7D5F800E3FC06 /* store_sign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 044319081AF7D5F800E3FC06 /* store_sign.cpp */; };
 		0443190B1AF7D65C00E3FC06 /* subsets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0443190A1AF7D65C00E3FC06 /* subsets.cpp */; };
 		045938321AFB709E00C01262 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938311AFB709E00C01262 /* main.cpp */; };
@@ -67,6 +68,8 @@
 		0423A9E01B0CD8A000449DB6 /* EmptyRegion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyRegion.h; sourceTree = "<group>"; };
 		0423A9E51B0CDD6300449DB6 /* 4hat_b_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4hat_b_regions.h; sourceTree = "<group>"; };
 		0423A9E81B0CE0BA00449DB6 /* 4hat_ab_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4hat_ab_regions.h; sourceTree = "<group>"; };
+		0437164F1B14C57900D4E1AD /* 6hat_a_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 6hat_a_regions.cpp; sourceTree = "<group>"; };
+		043716501B14C57900D4E1AD /* 6hat_a_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 6hat_a_regions.h; sourceTree = "<group>"; };
 		044319081AF7D5F800E3FC06 /* store_sign.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = store_sign.cpp; sourceTree = "<group>"; };
 		0443190A1AF7D65C00E3FC06 /* subsets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = subsets.cpp; sourceTree = "<group>"; };
 		0443190C1AF7D77300E3FC06 /* 4hat_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4hat_regions.cpp; sourceTree = "<group>"; };
@@ -121,6 +124,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0415BD211B14C52500DA42ED /* 6regions */ = {
+			isa = PBXGroup;
+			children = (
+				0437164F1B14C57900D4E1AD /* 6hat_a_regions.cpp */,
+				043716501B14C57900D4E1AD /* 6hat_a_regions.h */,
+			);
+			name = 6regions;
+			sourceTree = "<group>";
+		};
 		0423A9D51B0C749800449DB6 /* Helper_methods */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +151,7 @@
 				049228FC1B0DEE150032E4B9 /* 4regions */,
 				049229001B0DF5980032E4B9 /* 5regions */,
 				04F418F81B0349F10064638C /* EmptyRegion.cpp */,
+				0415BD211B14C52500DA42ED /* 6regions */,
 				0423A9E01B0CD8A000449DB6 /* EmptyRegion.h */,
 			);
 			name = Generate;
@@ -328,6 +341,7 @@
 				049229031B0DF5C70032E4B9 /* 5hat_a_regions.cpp in Sources */,
 				0443190B1AF7D65C00E3FC06 /* subsets.cpp in Sources */,
 				04857F3D1B135C6500B8762C /* 5hat_regions.cpp in Sources */,
+				043716511B14C57900D4E1AD /* 6hat_a_regions.cpp in Sources */,
 				0423A9E11B0CDA3700449DB6 /* 4hat_b_regions.cpp in Sources */,
 				04F418FD1B04CE120064638C /* BaseRegion.cpp in Sources */,
 				04F419001B04D3A00064638C /* HatRegion.cpp in Sources */,
