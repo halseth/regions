@@ -16,7 +16,7 @@ void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fi
     file.open(filename);
     
     if (!file.is_open()) {
-        std::cerr << "ERROR opening file" << std::endl;
+        std::cerr << "ERROR opening file " << filename << std::endl;
         exit(0);
     } else {
         std::map<std::vector<int>,BaseRegion>::iterator it;
@@ -25,6 +25,7 @@ void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fi
             file << str_rep << std::endl;
         }
         file.close();
+        std::cout << "Done storing to file " << filename << std::endl;
     }
     
 }
@@ -33,17 +34,17 @@ void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fi
 void load_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string filename){
     std::ifstream file;
     file.open(filename);
+    map.clear();
     
     if (!file.is_open()) {
-        std::cerr << "ERROR opening file" << std::endl;
-        exit(0);
+        std::cerr << "ERROR opening file " << filename << std::endl;
     } else {
-        map.clear();
         std::string line;
         while (getline(file, line)) {
             //std::cout << "line; " << line << std::endl;
             BaseRegion R(line);
             store_sign(R, map);
         }
+        std::cout << "Done loading from file " << filename << std::endl;
     }
 }

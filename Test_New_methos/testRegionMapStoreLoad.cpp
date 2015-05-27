@@ -12,7 +12,7 @@
 #include "4hat_a_regions.h"
 #include "store_region_map.h"
 
-TEST_CASE( "Testining region map reading an saving", "[Region map to file]" ) {
+TEST_CASE( "Testing region map reading an saving", "[Region map to file]" ) {
     
     std::map<std::vector<int>, BaseRegion> signature_minimal_4hat_a_regions;
     generate_4hat_a_regions(signature_minimal_4hat_a_regions);
