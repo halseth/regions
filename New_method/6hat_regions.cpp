@@ -121,6 +121,8 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
             }
             
             { // v-b edge
+                long loc_total = regions_5hat.size() * regions_3hat.size();
+                long loc_counter = 0;
                 std::map<std::vector<int>,BaseRegion>::const_iterator it_3hat;
                 for (it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); it_3hat++) {
                     std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat;
@@ -156,12 +158,16 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                         
                         counter++;
                         store_sign(R, signature_minimal);
+                        loc_counter++;
+                        std::cout << "v-b edge: checked " << loc_counter << " of " << loc_total << std::endl;
                     }
                     
                 }
             }
             
             { // v-c edge
+                long loc_total = regions_4hat.size() * regions_4hat.size();
+                long loc_counter = 0;
                 std::map<std::vector<int>,BaseRegion>::const_iterator it_4hat1;
                 for (it_4hat1 = regions_4hat.begin(); it_4hat1 != regions_4hat.end(); it_4hat1++) {
                     std::map<std::vector<int>,BaseRegion>::const_iterator it_4hat2;
@@ -197,12 +203,16 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                         
                         counter++;
                         store_sign(R, signature_minimal);
+                        loc_counter++;
+                        std::cout << "v-c edge: checked " << loc_counter << " of " << loc_total << std::endl;
                     }
                     
                 }
             }
             
             { // at least one vc-node
+                long loc_total = regions_5hat.size() * regions_5hat.size();
+                long loc_counter = 0;
                 std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat1;
                 for(it_5hat1 = regions_5hat.begin(); it_5hat1 != regions_5hat.end(); ++it_5hat1){
                     std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat2;
@@ -242,6 +252,8 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                         
                         counter++;
                         store_sign(R, signature_minimal);
+                        loc_counter++;
+                        std::cout << "vc-node: checked " << loc_counter << " of " << loc_total << std::endl;
                     }
                 }
             }
@@ -398,6 +410,8 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
         } else {// S > 0
             
             { // s connected to b
+                long loc_total = regions_4hat_a.size() * regions_6hat_a.size();
+                long loc_counter = 0;
                 std::map<std::vector<int>,BaseRegion>::const_iterator it_4hat_a;
                 for(it_4hat_a = regions_4hat_a.begin(); it_4hat_a != regions_4hat_a.end(); ++it_4hat_a){
                     std::map<std::vector<int>,BaseRegion>::const_iterator it_6hat_a;
@@ -437,11 +451,15 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                         
                         counter++;
                         store_sign(R, signature_minimal);
+                        loc_counter++;
+                        std::cout << "s to b: checked " << loc_counter << " of " << loc_total << std::endl;
                     }
                 }
             }
             
             { // s connected to c
+                long loc_total = regions_5hat_a.size() * regions_5hat_a.size();
+                long loc_counter = 0;
                 std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat_a1;
                 for(it_5hat_a1 = regions_5hat_a.begin(); it_5hat_a1 != regions_5hat_a.end(); ++it_5hat_a1){
                     std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat_a2;
@@ -481,6 +499,8 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                         
                         counter++;
                         store_sign(R, signature_minimal);
+                        loc_counter++;
+                        std::cout << "s to c: checked " << loc_counter << " of " << loc_total << std::endl;
                     }
                 }
             }

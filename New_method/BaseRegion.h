@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <string>
 
 #define MAX_SIZE 32
 

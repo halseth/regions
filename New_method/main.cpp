@@ -25,6 +25,8 @@ using namespace std;
 #include "5hat_regions.h"
 #include "6hat_a_regions.h"
 #include "6hat_regions.h"
+#include "7hat_a_regions.h"
+
 #include "store_region_map.h"
 
 
@@ -58,10 +60,12 @@ map<vector<int>, BaseRegion> regions_5hat;
 map<vector<int>, BaseRegion> regions_6hat_a;
 #define FILENAME_6HAT "regions_6hat.txt"
 map<vector<int>, BaseRegion> regions_6hat;
+#define FILENAME_7HAT_A "regions_7hat_a.txt"
+map<vector<int>, BaseRegion> regions_7hat_a;
 
  
 int main(){
-    
+    /*
     load_region_map(region_empty, FILENAME_EMPTY);
     if (region_empty.empty()) {
         generate_Empty_regions(region_empty);
@@ -128,6 +132,13 @@ int main(){
         generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
         store_region_map(regions_6hat, FILENAME_6HAT);
     //}
+    */
+    load_region_map(regions_7hat_a, FILENAME_7HAT_A);
+    if (regions_7hat_a.empty()) {
+        generate_7hat_a_regions(regions_7hat_a);
+        store_region_map(regions_7hat_a, FILENAME_7HAT_A);
+    }
+    
     //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
     
     /*
