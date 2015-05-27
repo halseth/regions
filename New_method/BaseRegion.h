@@ -26,6 +26,7 @@ private:
     
     // Private methods
     int signature(std::vector<int> X, std::vector<int> S);
+    int signature2(std::vector<int> X, std::vector<int> S);
     void init(int boundarySize);
     
 public:

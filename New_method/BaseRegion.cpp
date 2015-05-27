@@ -236,6 +236,124 @@ int BaseRegion::signature(std::vector<int> X, std::vector<int> S){
     return best - X.size();
 }
 
+int BaseRegion::signature2(std::vector<int> X, std::vector<int> S){
+    
+    //Helper array to calculate indexes of vertices
+    int xs[this->getBoundarySize()];
+    for(int i = 0; i < this->getBoundarySize(); i++){
+        xs[i] = 0;
+    }
+    for(int i = 0; i < X.size(); i++){
+        xs[X[i]] = 1;
+    }
+    int item = 0;
+    for(int i = 0; i < this->getBoundarySize(); i++){
+        if(xs[i] == 0){
+            xs[item++] = i;
+        }
+    }
+    
+    int best = this->getSize();
+    // Try all possible dominating sets and check if they are good
+    int x_size = X.size();
+    
+    // Size of set in addition to X is max 2 (we can always pick v and w)
+    for(int k = 0; k <= 2; k++){
+        std::vector<std::vector<int> > d_subsets;
+        
+        // Pick boundary nodes
+        gen_subsets(this->getBoundarySize()-1-x_size, k, d_subsets);
+        for(int i = 0; i < d_subsets.size(); i++){
+            std::vector<int> D;
+            for(int j = 0; j < X.size();j++){
+                D.push_back(X[j]);
+            }
+            std::vector<int> additional = d_subsets[i];
+            for(int j = 0; j < additional.size(); j++){
+                int a = additional[j];
+                D.push_back(xs[a]);
+            }
+            
+            bool valid = true;
+            
+            bool dominated[this->getSize()];
+            for(int j = 0; j < this->getSize(); j++){
+                dominated[j] = false;
+            }
+            for(int j = 0; j < D.size(); j++){
+                int d = D[j];
+                dominated[d] = true;
+            }
+            
+            
+            //Check if X is part of D
+            for(int j = 0; j < X.size(); j++){
+                int x = X[j];
+                valid &= dominated[x];
+            }
+            
+            if(!valid){
+                std::cerr << "ERROR in signature calculation!. X not part of D." << std::endl;
+                exit(0);
+            }
+            
+            // Check if it is a dominating set of V(R)\S
+            for(int j = 0; j < S.size(); j++){
+                int s = S[j];
+                dominated[s] = true;
+            }
+            
+            for(int j = 0; j < D.size(); j++){
+                int d = D[j];
+                for(int l = 0; l < adj[d].size(); l++){
+                    if(adj[d][l]) dominated[l] = true;
+                }
+            }
+            
+            std::vector<int> not_dominated;
+            for(int v = 0; v < this->getSize(); v++){
+                valid &= dominated[v];
+                if(!dominated[v]){
+                    not_dominated.push_back(v);
+                }
+            }
+            
+            if (!valid) {
+                // Try to pick one extra internal vertex to make it valid
+                for(int internal = getBoundarySize(); internal < getSize(); internal++){
+                    bool fix_domination = true;
+                    for(int v = 0; v < not_dominated.size(); v++){
+                        fix_domination &= isAdjacent(not_dominated[v], internal);
+                    }
+                    // Found vertex to fix domination, add to D
+                    if (fix_domination) {
+                        D.push_back(internal);
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            
+            //Check if valid and smallest possible
+            if(valid && D.size() < best){
+                best = D.size();
+            }
+            
+        }
+    }
+    /* std::cout << "For x=";
+     for(int i = 0; i<X.size(); i++){
+     std::cout << X[i] << " ";
+     }
+     std::cout << "and s=";
+     for(int i = 0; i<S.size(); i++){
+     std::cout << S[i] << " ";
+     }
+     std::cout << "we return " << (best - X.size()) << std::endl;
+     */
+    return best - X.size();
+}
+
 void BaseRegion::getSignature(std::vector<int> &signature){
     signature.clear();
     
@@ -251,7 +369,7 @@ void BaseRegion::getSignature(std::vector<int> &signature){
                 if(x_set & (1 << i)) X.push_back(i);
             }
             
-            signature.push_back(this->signature(X, S));
+            signature.push_back(this->signature2(X, S));
         }
     }
 }
