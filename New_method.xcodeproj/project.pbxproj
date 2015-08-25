@@ -36,6 +36,7 @@
 		04A5AE9A1B0B24D90057572D /* Region.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE991B0B24D90057572D /* Region.cpp */; };
 		04A5AE9C1B0B25E30057572D /* testRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE9B1B0B25E30057572D /* testRegion.cpp */; };
 		04A5AE9D1B0B26410057572D /* Region.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE991B0B24D90057572D /* Region.cpp */; };
+		04DEA7361B8B369300308B6D /* testSignatureMethod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04DEA7341B8B336800308B6D /* testSignatureMethod.cpp */; };
 		04F418FD1B04CE120064638C /* BaseRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418FB1B04CE120064638C /* BaseRegion.cpp */; };
 		04F419001B04D3A00064638C /* HatRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418FE1B04D3A00064638C /* HatRegion.cpp */; };
 		04F419031B04D4A20064638C /* HatABCRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F419011B04D4A20064638C /* HatABCRegion.cpp */; };
@@ -110,6 +111,7 @@
 		04A5AE971B0B244E0057572D /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		04A5AE991B0B24D90057572D /* Region.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Region.cpp; sourceTree = "<group>"; };
 		04A5AE9B1B0B25E30057572D /* testRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testRegion.cpp; sourceTree = "<group>"; };
+		04DEA7341B8B336800308B6D /* testSignatureMethod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testSignatureMethod.cpp; sourceTree = "<group>"; };
 		04F418F81B0349F10064638C /* EmptyRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmptyRegion.cpp; sourceTree = "<group>"; };
 		04F418FB1B04CE120064638C /* BaseRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseRegion.cpp; sourceTree = "<group>"; };
 		04F418FC1B04CE120064638C /* BaseRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseRegion.h; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				0423A9D71B0C87D400449DB6 /* testVirtualMethods.cpp */,
 				043716551B151BC600D4E1AD /* testRegionFromAndToString.cpp */,
 				0437165B1B15254600D4E1AD /* testRegionMapStoreLoad.cpp */,
+				04DEA7341B8B336800308B6D /* testSignatureMethod.cpp */,
 			);
 			name = Test_New_method;
 			path = Test_New_methos;
@@ -402,6 +405,7 @@
 				04A5AE931B0B21D80057572D /* testHatBRegion.cpp in Sources */,
 				04A5AE8F1B0B1BA90057572D /* testHatRegion.cpp in Sources */,
 				043716571B151CBD00D4E1AD /* testRegionFromAndToString.cpp in Sources */,
+				04DEA7361B8B369300308B6D /* testSignatureMethod.cpp in Sources */,
 				04A5AE9D1B0B26410057572D /* Region.cpp in Sources */,
 				04F419321B09F4C20064638C /* HatABCRegion.cpp in Sources */,
 				04F4192E1B0648180064638C /* testBaseRegion.cpp in Sources */,
@@ -534,7 +538,7 @@
 		04F4191E1B0644B30064638C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CC = "/usr/local/bin/clang-omp";
+				CC = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					TEST,
 					"DEBUG=1",
@@ -548,7 +552,6 @@
 					"-I",
 					/usr/local/include,
 					"$(OTHER_CFLAGS)",
-					"-fopenmp",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -557,7 +560,7 @@
 		04F4191F1B0644B30064638C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CC = "/usr/local/bin/clang-omp";
+				CC = "";
 				GCC_PREPROCESSOR_DEFINITIONS = TEST;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -568,7 +571,6 @@
 					"-I",
 					/usr/local/include,
 					"$(OTHER_CFLAGS)",
-					"-fopenmp",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

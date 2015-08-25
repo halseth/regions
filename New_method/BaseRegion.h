@@ -43,6 +43,7 @@ public:
     void addEdge(int from, int to);
     bool isAdjacent(int a, int b);
     void getSignature(std::vector<int> &signature);
+    void getSignature2(std::vector<int> &signature);
     int getBoundarySize();
     
     void printRegion();

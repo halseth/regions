@@ -11,7 +11,7 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
     int v = 0;
     int a = 1;
     int b = 3;
-    int c = 2;
+    int c = 2; // TODO: change c and b?
     for(int s_size = 0; s_size <= 2; s_size++){
         if (s_size == 0) {
             for(int deg2_v_a = 0; deg2_v_a <= 1; deg2_v_a++){
@@ -80,6 +80,7 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
                                                 if(a_b_edge){
                                                     R.addEdge(a, b);
                                                 }
+                                                
                                                 counter++;
                                                 store_sign(R, signature_minimal);
                                             }
@@ -162,24 +163,32 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
                     }
                 }
             }
-        } else if (s_size == 2){
+        } else if (false && s_size == 2){
             for(int deg3 = 0; deg3 <= 1; deg3++){
-                HatRegion R(4, v);
-                int s1 = R.addNode();
-                int s2 = R.addNode();
-                R.addEdge(v, s1);
-                R.addEdge(v, s2);
-                R.addEdge(c, s1);
-                R.addEdge(c, s2);
-                R.addEdge(s1, s2);
-                if(deg3){
-                    int node = R.addNode();
-                    R.addEdge(node, v);
-                    R.addEdge(node, s1);
-                    R.addEdge(node, s2);
+                for(int va_node = 0; va_node <= 2; va_node++){
+                    HatRegion R(4, v);
+                    int s1 = R.addNode();
+                    int s2 = R.addNode();
+                    R.addEdge(v, s1);
+                    R.addEdge(v, s2);
+                    R.addEdge(c, s1);
+                    R.addEdge(c, s2);
+                    R.addEdge(s1, s2);
+                    if(deg3){
+                        int node = R.addNode();
+                        R.addEdge(node, v);
+                        R.addEdge(node, s1);
+                        R.addEdge(node, s2);
+                    }
+                    for (int i = 0; i < va_node; i++) {
+                        int va = R.addNode();
+                        R.addEdge(v, va);
+                        R.addEdge(va, a);
+                    }
+                    counter++;
+                    store_sign(R, signature_minimal);
                 }
-                counter++;
-                store_sign(R, signature_minimal);
+                
             }
             
         }

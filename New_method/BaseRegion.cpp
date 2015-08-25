@@ -141,6 +141,7 @@ int BaseRegion::getBoundarySize(){
 }
 
 // Calculates the signature zeta(X,S) of a region
+// TODO: Most likely wrong
 int BaseRegion::signature(std::vector<int> X, std::vector<int> S){
     
     //Helper array to calculate indexes of vertices
@@ -148,9 +149,13 @@ int BaseRegion::signature(std::vector<int> X, std::vector<int> S){
     for(int i = 0; i < this->getSize(); i++){
         xs[i] = 0;
     }
+    
+    // Set indices in X to 1
     for(int i = 0; i < X.size(); i++){
         xs[X[i]] = 1;
     }
+    
+    // The first elements in the array will point to the elements not in X
     int item = 0;
     for(int i = 0; i < this->getSize(); i++){
         if(xs[i] == 0){
@@ -230,9 +235,16 @@ int BaseRegion::signature(std::vector<int> X, std::vector<int> S){
     std::cout << "and s=";
     for(int i = 0; i<S.size(); i++){
         std::cout << S[i] << " ";
-    }
-    std::cout << "we return " << (best - X.size()) << std::endl;
-    */
+    }*/
+//    std::cout << "we return " << (best - X.size()) << "for X=";
+//    for (int i = 0; i < X.size(); i++) {
+//        std::cout << X[i] << " ";
+//    }
+//    std::cout << "S=";
+//    for (int i = 0; i < S.size(); i++) {
+//        std::cout << S[i] << " ";
+//    }
+//    std::cout << std::endl;
     return best - X.size();
 }
 
@@ -260,7 +272,7 @@ int BaseRegion::signature2(std::vector<int> X, std::vector<int> S){
     // Size of set in addition to X is max 2 (we can always pick v and w)
     for(int k = 0; k <= 2; k++){
         std::vector<std::vector<int> > d_subsets;
-        
+//        std::cout << "k=" << k << std::endl;
         // Pick boundary nodes
         gen_subsets(this->getBoundarySize()-1-x_size, k, d_subsets);
         for(int i = 0; i < d_subsets.size(); i++){
@@ -269,10 +281,13 @@ int BaseRegion::signature2(std::vector<int> X, std::vector<int> S){
                 D.push_back(X[j]);
             }
             std::vector<int> additional = d_subsets[i];
+//            std::cout << "Additional :";
             for(int j = 0; j < additional.size(); j++){
                 int a = additional[j];
+//                std::cout << " " << a;
                 D.push_back(xs[a]);
             }
+//            std::cout << std::endl;
             
             bool valid = true;
             
@@ -323,10 +338,14 @@ int BaseRegion::signature2(std::vector<int> X, std::vector<int> S){
                 for(int internal = getBoundarySize(); internal < getSize(); internal++){
                     bool fix_domination = true;
                     for(int v = 0; v < not_dominated.size(); v++){
+                        if (not_dominated[v] == internal) {
+                            continue;
+                        }
                         fix_domination &= isAdjacent(not_dominated[v], internal);
                     }
                     // Found vertex to fix domination, add to D
                     if (fix_domination) {
+//                        std::cout << "Fixed" << std::endl;
                         D.push_back(internal);
                         valid = true;
                         break;
@@ -349,14 +368,44 @@ int BaseRegion::signature2(std::vector<int> X, std::vector<int> S){
      for(int i = 0; i<S.size(); i++){
      std::cout << S[i] << " ";
      }
-     std::cout << "we return " << (best - X.size()) << std::endl;
      */
+    
+//    std::cout << "we return " << (best - X.size()) << "for X=";
+//    for (int i = 0; i < X.size(); i++) {
+//        std::cout << X[i] << " ";
+//    }
+//    std::cout << "S=";
+//    for (int i = 0; i < S.size(); i++) {
+//        std::cout << S[i] << " ";
+//    }
+//    std::cout << std::endl;
     return best - X.size();
 }
 
 void BaseRegion::getSignature(std::vector<int> &signature){
     signature.clear();
+//    std::cout << "Sign1" << std::endl;
     
+    for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
+        for(int x_set = 0; x_set <= std::pow(2, Boundary.size())-1; x_set++){
+            if((s_set & x_set) != 0) continue; // overlaps
+            
+            std::vector<int> X;
+            std::vector<int> S;
+            
+            for(int i = 0; i < Boundary.size(); i++){
+                if(s_set & (1 << i)) S.push_back(i);
+                if(x_set & (1 << i)) X.push_back(i);
+            }
+            
+            signature.push_back(this->signature(X, S));
+        }
+    }
+}
+
+void BaseRegion::getSignature2(std::vector<int> &signature){
+    signature.clear();
+//    std::cout << "Sign2" << std::endl;
     for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
         for(int x_set = 0; x_set <= std::pow(2, Boundary.size())-1; x_set++){
             if((s_set & x_set) != 0) continue; // overlaps
