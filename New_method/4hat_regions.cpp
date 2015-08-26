@@ -163,7 +163,7 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
                     }
                 }
             }
-        } else if (false && s_size == 2){
+        } else if (s_size == 2){
             for(int deg3 = 0; deg3 <= 1; deg3++){
                 for(int va_node = 0; va_node <= 2; va_node++){
                     HatRegion R(4, v);

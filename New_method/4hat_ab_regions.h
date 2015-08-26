@@ -11,5 +11,6 @@
 
 // Generates 4hat regions where all internal are dominated by a and b
 void generate_4hat_ab_regions(std::map<vector<int>, BaseRegion> &signature_minimal);
+void generate_4hat_ab_regions_new(std::map<vector<int>, BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_4hat_a, std::map<std::vector<int>,BaseRegion> &regions_4hat_b);
 
 #endif

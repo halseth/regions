@@ -65,82 +65,83 @@ map<vector<int>, BaseRegion> regions_7hat_a;
 
  
 int main(){
-    /*
+    
 //    load_region_map(region_empty, FILENAME_EMPTY);
-    if (region_empty.empty()) {
-        generate_Empty_regions(region_empty);
-        store_region_map(region_empty, FILENAME_EMPTY);
-    }
-    
-//    load_region_map(regions_3hat_a, FILENAME_3HAT_A);
-    if(regions_3hat_a.empty()){
-        generate_3hat_a_regions(regions_3hat_a);
-        store_region_map(regions_3hat_a, FILENAME_3HAT_A);
-    }
-    
-//    load_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
-    if (regions_3hat_ab.empty()) {
-        generate_3hat_ab_regions(regions_3hat_ab);
-        store_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
-    }
-    regions_3hat = regions_3hat_ab;
-    
-//    load_region_map(regions_4hat_a, FILENAME_4HAT_A);
+//    if (region_empty.empty()) {
+//        generate_Empty_regions(region_empty);
+//        store_region_map(region_empty, FILENAME_EMPTY);
+//    }
+//    
+////    load_region_map(regions_3hat_a, FILENAME_3HAT_A);
+//    if(regions_3hat_a.empty()){
+//        generate_3hat_a_regions(regions_3hat_a);
+//        store_region_map(regions_3hat_a, FILENAME_3HAT_A);
+//    }
+//    
+////    load_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
+//    if (regions_3hat_ab.empty()) {
+//        generate_3hat_ab_regions(regions_3hat_ab);
+//        store_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
+//    }
+//    regions_3hat = regions_3hat_ab;
+//    
+////    load_region_map(regions_4hat_a, FILENAME_4HAT_A);
     if (regions_4hat_a.empty()) {
         generate_4hat_a_regions(regions_4hat_a);
         store_region_map(regions_4hat_a, FILENAME_4HAT_A);
     }
-    
-//    load_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
-    if (regions_4hat_ab.empty()) {
-        generate_4hat_ab_regions(regions_4hat_ab);
-        store_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
-    }
-    
-//    load_region_map(regions_4hat_b, FILENAME_4HAT_B);
+//
+    ////    load_region_map(regions_4hat_b, FILENAME_4HAT_B);
     if (regions_4hat_b.empty()) {
         generate_4hat_b_regions(regions_4hat_b);
         store_region_map(regions_4hat_b, FILENAME_4HAT_B);
     }
+////    load_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
+    if (regions_4hat_ab.empty()) {
+        generate_4hat_ab_regions_new(regions_4hat_ab, regions_4hat_a, regions_4hat_b);
+        generate_4hat_ab_regions(regions_4hat_ab);
+        store_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
+    }
+//
+
     
 //    load_region_map(regions_4hat, FILENAME_4HAT);
-    if (regions_4hat.empty()) {
-        generate_4hat_regions(regions_4hat);
-        store_region_map(regions_4hat, FILENAME_4HAT);
-    }
+//    if (regions_4hat.empty()) {
+//        generate_4hat_regions(regions_4hat);
+//        store_region_map(regions_4hat, FILENAME_4HAT);
+//    }
 
-//    load_region_map(regions_5hat_a, FILENAME_5HAT_A);
-    if (regions_5hat_a.empty()) {
-        generate_5hat_a_regions(regions_5hat_a);
-        store_region_map(regions_5hat_a, FILENAME_5HAT_A);
-    }
- */   
-//    load_region_map(regions_5hat, FILENAME_5HAT);
-    if (regions_5hat.empty()) {
-        generate_5hat_regions(regions_5hat, regions_5hat_a, regions_4hat_a, regions_4hat, regions_3hat);
-        store_region_map(regions_5hat, FILENAME_5HAT);
-    }
-     
-/*
-//    load_region_map(regions_6hat_a, FILENAME_6HAT_A);
-    if (regions_6hat_a.empty()) {
-        generate_6hat_a_regions(regions_6hat_a);
-        store_region_map(regions_6hat_a, FILENAME_6HAT_A);
-    }
-    */
-     /*
-    //load_region_map(regions_6hat, FILENAME_6HAT);
-   // if (regions_6hat.empty()) {
-        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
-        store_region_map(regions_6hat, FILENAME_6HAT);
-    //}
-    */
-    /*
-    load_region_map(regions_7hat_a, FILENAME_7HAT_A);
-    if (regions_7hat_a.empty()) {
-        generate_7hat_a_regions(regions_7hat_a);
-        store_region_map(regions_7hat_a, FILENAME_7HAT_A);
-    }*/
+////    load_region_map(regions_5hat_a, FILENAME_5HAT_A);
+//    if (regions_5hat_a.empty()) {
+//        generate_5hat_a_regions(regions_5hat_a);
+//        store_region_map(regions_5hat_a, FILENAME_5HAT_A);
+//    }
+//
+////    load_region_map(regions_5hat, FILENAME_5HAT);
+//    if (regions_5hat.empty()) {
+//        generate_5hat_regions(regions_5hat, regions_5hat_a, regions_4hat_a, regions_4hat, regions_3hat);
+//        store_region_map(regions_5hat, FILENAME_5HAT);
+//    }
+//     
+//
+////    load_region_map(regions_6hat_a, FILENAME_6HAT_A);
+//    if (regions_6hat_a.empty()) {
+//        generate_6hat_a_regions(regions_6hat_a);
+//        store_region_map(regions_6hat_a, FILENAME_6HAT_A);
+//    }
+//    
+//     
+//    //load_region_map(regions_6hat, FILENAME_6HAT);
+//   // if (regions_6hat.empty()) {
+//        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
+//        store_region_map(regions_6hat, FILENAME_6HAT);
+//    //}
+    
+//    load_region_map(regions_7hat_a, FILENAME_7HAT_A);
+//    if (regions_7hat_a.empty()) {
+//        generate_7hat_a_regions(regions_7hat_a);
+//        store_region_map(regions_7hat_a, FILENAME_7HAT_A);
+//    }
     
     //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
     

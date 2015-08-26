@@ -10,40 +10,40 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
     int counter = 0;
     int v = 0;
     int a = 1;
-    int b = 3;
-    int c = 2;
+    int b = 2;
+    int c = 3;
     
     std::vector<int> boundaryDominators;
-    boundaryDominators.push_back(c); // TODO: Should be b
+    boundaryDominators.push_back(b);
     
     for(int s_size = 0; s_size <= 2; s_size++){
         if (s_size == 0) {
-            for(int nodes_vc = 0; nodes_vc <= 4; nodes_vc++){
-                int max_edges = nodes_vc == 0 ? 0b00: 0b11;
+            for(int nodes_vb = 0; nodes_vb <= 4; nodes_vb++){
+                int max_edges = nodes_vb == 0 ? 0b00: 0b11;
                 for(int edges = 0b00; edges <= max_edges; edges++){
-                    int max_ab_edge = nodes_vc > 0 ? 0 : 1;
-                    for(int ab_edge = 0; ab_edge <= max_ab_edge; ab_edge++){
-                        int max_vc_edge = edges == 0b11 || ab_edge ? 0 : 1;
-                        for(int vc_edge = 0; vc_edge <= max_vc_edge; vc_edge++){
+                    int max_ab_edge = nodes_vb > 0 ? 0 : 1;
+                    for(int ac_edge = 0; ac_edge <= max_ab_edge; ac_edge++){
+                        int max_vb_edge = (nodes_vb <= 1 && edges == 0b11) || ac_edge ? 0 : 1;
+                        for(int vb_edge = 0; vb_edge <= max_vb_edge; vb_edge++){
                             HatABCRegion R(4, v, boundaryDominators);
                             
-                            for(int i = 0; i < nodes_vc; i++){
+                            for(int i = 0; i < nodes_vb; i++){
                                 int node = R.addNode();
                                 R.addEdge(v, node);
-                                R.addEdge(c, node);
+                                R.addEdge(b, node);
                                 if(i == 0 && (edges & 0b10) != 0){
                                     R.addEdge(node, a);
                                 }
-                                if(i == nodes_vc-1 && (edges & 0b01) != 0){
-                                    R.addEdge(node, b);
+                                if(i == nodes_vb-1 && (edges & 0b01) != 0){
+                                    R.addEdge(node, c);
                                 }
                             }
                             
-                            if(ab_edge){
-                                R.addEdge(a, b);
+                            if(ac_edge){
+                                R.addEdge(a, c);
                             }
-                            if(vc_edge){
-                                R.addEdge(v, c);
+                            if(vb_edge){
+                                R.addEdge(v, b);
                             }
                             
                             counter++;
@@ -66,18 +66,18 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
                                 int end_s_down_edge = under == 0 ? 1 : 0;
                                 for (int s_down_edge = start_s_down_edge; s_down_edge <= end_s_down_edge; s_down_edge++) {
                                     
-                                    int max_edge_vc = (s_down_edge || under_edge != 0) && (s_up_edge || over_edge != 0) ? 0 : 1;
-                                    for(int edge_vc = 0; edge_vc <= max_edge_vc; edge_vc++){
+                                    int max_edge_vb = (s_down_edge || under_edge != 0) && (s_up_edge || over_edge != 0) ? 0 : 1;
+                                    for(int edge_vb = 0; edge_vb <= max_edge_vb; edge_vb++){
                                         HatABCRegion R(4, v, boundaryDominators);
                                         
                                         int s = R.addNode();
                                         R.addEdge(s, v);
-                                        R.addEdge(s, c);
+                                        R.addEdge(s, b);
                                         
                                         for(int i = 0; i < over; i++){
                                             int u = R.addNode();
                                             R.addEdge(v, u);
-                                            R.addEdge(c, u);
+                                            R.addEdge(b, u);
                                             R.addEdge(s, u);
                                             if( over_edge ){
                                                 R.addEdge(u, a);
@@ -87,10 +87,10 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
                                         for(int i = 0; i < under; i++){
                                             int u = R.addNode();
                                             R.addEdge(v, u);
-                                            R.addEdge(c, u);
+                                            R.addEdge(b, u);
                                             R.addEdge(s, u);
                                             if( under_edge  ){
-                                                R.addEdge(u, b);
+                                                R.addEdge(u, c);
                                             }
                                         }
                                         
@@ -98,12 +98,12 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
                                             R.addEdge(s, a);
                                         }
                                         if(s_down_edge){
-                                            R.addEdge(s, b);
+                                            R.addEdge(s, c);
                                             
                                         }
                                         
-                                        if(edge_vc){
-                                            R.addEdge(v, c);
+                                        if(edge_vb){
+                                            R.addEdge(v, b);
                                         }
                                         
                                         counter++;
@@ -125,14 +125,14 @@ void generate_4hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
                     int s2 = R.addNode();
                     R.addEdge(v, s1);
                     R.addEdge(v, s2);
-                    R.addEdge(c, s1);
-                    R.addEdge(c, s2);
+                    R.addEdge(b, s1);
+                    R.addEdge(b, s2);
                     R.addEdge(s1, s2);
                     if(s_up_edge){
                         R.addEdge(s1, a);
                     }
                     if(s_down_edge){
-                        R.addEdge(s2, b);
+                        R.addEdge(s2, c);
                     }
                     
                     counter++;

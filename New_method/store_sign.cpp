@@ -35,7 +35,7 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
 	}
 	
 	vector<int> sign;			
-	R.getSignature(sign);
+	R.getSignature2(sign);
 	if(signature_minimal.count(sign) == 0 )
 	{
 		//cout << "Saving new signature because (signature_minimal.count(sign) == 0)" << endl;

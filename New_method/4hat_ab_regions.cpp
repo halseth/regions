@@ -6,6 +6,8 @@ using namespace std;
 #include "store_sign.h"
 #include "4hat_ab_regions.h"
 
+
+// THIS GENERATES TOO FEW!!
 void generate_4hat_ab_regions(std::map<vector<int>, BaseRegion> &signature_minimal){
     int counter = 0;
     int v = 0;
@@ -72,7 +74,12 @@ void generate_4hat_ab_regions(std::map<vector<int>, BaseRegion> &signature_minim
                                         }
                                         
                                         counter++;
+                                        int before = signature_minimal.size();
                                         store_sign(R, signature_minimal);
+                                        if (signature_minimal.size() > before) {
+                                            R.printRegion();
+                                           // exit(0);
+                                        }
                                     }
                                 }
                             }
@@ -138,7 +145,12 @@ void generate_4hat_ab_regions(std::map<vector<int>, BaseRegion> &signature_minim
                                         }
                                         
                                         counter++;
+                                        int before = signature_minimal.size();
                                         store_sign(R, signature_minimal);
+                                        if (signature_minimal.size() > before) {
+                                            R.printRegion();
+                                            // exit(0);
+                                        }
                                     }
                                     
                                     
@@ -167,11 +179,89 @@ void generate_4hat_ab_regions(std::map<vector<int>, BaseRegion> &signature_minim
                     }
                     
                     counter++;
+                    int before = signature_minimal.size();
+                    store_sign(R, signature_minimal);
+                    if (signature_minimal.size() > before) {
+                        R.printRegion();
+                        // exit(0);
+                    }
+                }
+            }
+        }
+    }
+    
+    cout << "done with 4ab_regions. Total regions checked: " << counter << endl;
+}
+
+void generate_4hat_ab_regions_new(std::map<vector<int>, BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_4hat_a, std::map<std::vector<int>,BaseRegion> &regions_4hat_b){
+    int counter = 0;
+    int v = 0;
+    int a = 1;
+    int b = 2;
+    int c = 3;
+    
+    for (std::map<std::vector<int>,BaseRegion>::const_iterator it_4a = regions_4hat_a.begin(); it_4a != regions_4hat_a.end(); it_4a++) {
+        counter++;
+        BaseRegion R = it_4a->second;
+        store_sign(R, signature_minimal);
+    }
+    
+    for (std::map<std::vector<int>,BaseRegion>::const_iterator it_4b = regions_4hat_b.begin(); it_4b != regions_4hat_b.end(); it_4b++) {
+        counter++;
+        BaseRegion R = it_4b->second;
+        store_sign(R, signature_minimal);
+    }
+    
+    std::vector<int> boundaryDominators;
+    boundaryDominators.push_back(a);
+    boundaryDominators.push_back(b);
+    
+    for (int s = 0; s <= 1; s++) {
+        for (int mid = 0; mid <= 1; mid++) {
+            for (int down_edge = 0; down_edge <= 1; down_edge++) {
+                int max_vb_edge = s && down_edge ? 0 : 1;
+                for (int vb_edge = 0; vb_edge <= max_vb_edge; vb_edge++) {
+                    HatABCRegion R(4, v, boundaryDominators);
+                    int node_va = R.addNode();
+                    R.addEdge(v, node_va);
+                    R.addEdge(a, node_va);
+                    
+                    int node_vb = R.addNode();
+                    R.addEdge(v, node_vb);
+                    R.addEdge(b, node_vb);
+                    
+                    int node = -1;
+                    if (mid) {
+                        node = R.addNode();
+                        R.addEdge(v, node);
+                        R.addEdge(a, node);
+                        R.addEdge(b, node);
+                    }
+                    
+                    if (s) {
+                        if (mid) {
+                            R.addEdge(node, node_va);
+                            R.addEdge(node, node_vb);
+                        } else {
+                            R.addEdge(node_va, node_vb);
+                        }
+                    }
+                    
+                    if (down_edge) {
+                        R.addEdge(node_vb, c);
+                    }
+                    
+                    if (vb_edge) {
+                        R.addEdge(v, b);
+                    }
+                    
+                    counter++;
                     store_sign(R, signature_minimal);
                 }
             }
         }
     }
     
+
     cout << "done with 4ab_regions. Total regions checked: " << counter << endl;
 }
