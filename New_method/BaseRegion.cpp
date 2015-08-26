@@ -83,10 +83,10 @@ void BaseRegion::addEdge(int from, int to){
         return;
     }
     //std::cout << "adding edge " << from << " to " << to << std::endl;
-    if (adj[from][to] || adj[to][from]) {
-        std::cout << "edge " << from << " to " << to << " already exists. Error?" << std::endl;
-        exit(0);
-    }
+//    if (adj[from][to] || adj[to][from]) {
+//        std::cout << "edge " << from << " to " << to << " already exists. Error?" << std::endl;
+//        exit(0);
+//    }
     adj[from][to] = true;
     adj[to][from] = true;
 }
