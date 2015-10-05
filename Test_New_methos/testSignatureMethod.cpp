@@ -186,3 +186,66 @@ TEST_CASE( "Testing signature method2", "[Signature2]" ) {
     
     REQUIRE(sign == sign2);
 }
+
+TEST_CASE( "Testing signature equivalence", "[Signature3]" ) {
+    
+    int v = 0;
+    int a = 1;
+    int b = 2;
+    int c = 3;
+
+    HatRegion R(4, v);
+    
+    // NB: not really s nodes, should change name
+    int s1 = R.addNode();
+    int s2 = R.addNode();
+    R.addEdge(s1, v);
+    R.addEdge(s1, b);
+    R.addEdge(s2, v);
+    R.addEdge(s2, b);
+    R.addEdge(s2, s1);
+    
+    int node = R.addNode();
+    R.addEdge(node, v);
+    R.addEdge(node, a);
+    
+    int s3 = R.addNode();
+    R.addEdge(s3, v);
+    R.addEdge(s3, s1);
+    R.addEdge(s3, s2);
+    
+    REQUIRE(R.isValid());
+    std::stringstream ss;
+    std::vector<int> sign;
+    R.getSignature2(sign);
+    
+    for(int i = 0; i < sign.size(); i++){
+        ss << sign[i] << " ";
+    }
+    
+    HatRegion R2(4, v);
+    s1 = R2.addNode();
+    s2 = R2.addNode();
+    R2.addEdge(s1, v);
+    R2.addEdge(s1, b);
+    R2.addEdge(s2, v);
+    R2.addEdge(s2, b);
+    
+    node = R2.addNode();
+    R2.addEdge(node, v);
+    R2.addEdge(node, a);
+    
+    s3 = R2.addNode();
+    R2.addEdge(s3, v);
+    
+    REQUIRE(R2.isValid());
+    std::stringstream ss2;
+    std::vector<int> sign2;
+    R2.getSignature2(sign2);
+    
+    for(int i = 0; i < sign2.size(); i++){
+        ss2 << sign2[i] << " ";
+    }
+    
+    REQUIRE(sign == sign2);
+}

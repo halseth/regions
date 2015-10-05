@@ -206,6 +206,7 @@ void generate_4hat_regions_new(std::map<vector<int>,BaseRegion> &signature_minim
     int c = 3;
     for(int s_size = 0; s_size <= 2; s_size++){
         if (s_size == 0) {
+            
             for(int deg2_v_a = 0; deg2_v_a <= 1; deg2_v_a++){
                 for(int deg2_v_c = 0; deg2_v_c <= 1; deg2_v_c++){
                     for(int deg3_v_a_b = 0; deg3_v_a_b <= 1; deg3_v_a_b++){
@@ -222,59 +223,66 @@ void generate_4hat_regions_new(std::map<vector<int>,BaseRegion> &signature_minim
                                             int max_a_c_edge = deg2_v_b > 0 || deg3_v_a_b > 0 || deg3_v_b_c > 0 || deg4 > 0 || v_b_edge > 0 ? 0 : 1;
                                             for(int a_c_edge = 0; a_c_edge <= max_a_c_edge; a_c_edge++){
                                                 
-                                                HatRegion R(4, v);
-                                                for (int i = 0; i < deg2_v_a; i++) {
-                                                    int node = R.addNode();
-                                                    R.addEdge(node, v);
-                                                    R.addEdge(node, a);
+                                                for (int deg1 = 0; deg1 <= 1; deg1++) {
+                                                    HatRegion R(4, v);
+                                                    for (int i = 0; i < deg2_v_a; i++) {
+                                                        int node = R.addNode();
+                                                        R.addEdge(node, v);
+                                                        R.addEdge(node, a);
+                                                    }
+                                                    for (int i = 0; i < deg2_v_c; i++) {
+                                                        int node = R.addNode();
+                                                        R.addEdge(node, v);
+                                                        R.addEdge(node, c);
+                                                    }
+                                                    for (int i = 0; i < deg3_v_a_b; i++) {
+                                                        int node = R.addNode();
+                                                        R.addEdge(node, v);
+                                                        R.addEdge(node, a);
+                                                        R.addEdge(node, b);
+                                                    }
+                                                    for (int i = 0; i < deg3_v_b_c; i++) {
+                                                        int node = R.addNode();
+                                                        R.addEdge(node, v);
+                                                        R.addEdge(node, b);
+                                                        R.addEdge(node, c);
+                                                    }
+                                                    
+                                                    for (int i = 0; i < deg2_v_b; i++) {
+                                                        int node = R.addNode();
+                                                        R.addEdge(node, v);
+                                                        R.addEdge(node, b);
+                                                    }
+                                                    
+                                                    for(int i = 0; i < deg3_v_a_c; i++){
+                                                        int node = R.addNode();
+                                                        R.addEdge(node, v);
+                                                        R.addEdge(node, a);
+                                                        R.addEdge(node, c);
+                                                    }
+                                                    for (int i = 0; i < deg4; i++) {
+                                                        int node = R.addNode();
+                                                        R.addEdge(node, v);
+                                                        R.addEdge(node, a);
+                                                        R.addEdge(node, b);
+                                                        R.addEdge(node, c);
+                                                    }
+                                                    
+                                                    if(v_b_edge){
+                                                        R.addEdge(v, b);
+                                                    }
+                                                    if(a_c_edge){
+                                                        R.addEdge(a, c);
+                                                    }
+                                                    
+                                                    if(deg1){
+                                                        int node = R.addNode();
+                                                        R.addEdge(v, node);
+                                                    }
+                                                    
+                                                    counter++;
+                                                    store_sign(R, signature_minimal);
                                                 }
-                                                for (int i = 0; i < deg2_v_c; i++) {
-                                                    int node = R.addNode();
-                                                    R.addEdge(node, v);
-                                                    R.addEdge(node, c);
-                                                }
-                                                for (int i = 0; i < deg3_v_a_b; i++) {
-                                                    int node = R.addNode();
-                                                    R.addEdge(node, v);
-                                                    R.addEdge(node, a);
-                                                    R.addEdge(node, b);
-                                                }
-                                                for (int i = 0; i < deg3_v_b_c; i++) {
-                                                    int node = R.addNode();
-                                                    R.addEdge(node, v);
-                                                    R.addEdge(node, b);
-                                                    R.addEdge(node, c);
-                                                }
-                                                
-                                                for (int i = 0; i < deg2_v_b; i++) {
-                                                    int node = R.addNode();
-                                                    R.addEdge(node, v);
-                                                    R.addEdge(node, b);
-                                                }
-                                                
-                                                for(int i = 0; i < deg3_v_a_c; i++){
-                                                    int node = R.addNode();
-                                                    R.addEdge(node, v);
-                                                    R.addEdge(node, a);
-                                                    R.addEdge(node, c);
-                                                }
-                                                for (int i = 0; i < deg4; i++) {
-                                                    int node = R.addNode();
-                                                    R.addEdge(node, v);
-                                                    R.addEdge(node, a);
-                                                    R.addEdge(node, b);
-                                                    R.addEdge(node, c);
-                                                }
-                                                
-                                                if(v_b_edge){
-                                                    R.addEdge(v, b);
-                                                }
-                                                if(a_c_edge){
-                                                    R.addEdge(a, c);
-                                                }
-                                                
-                                                counter++;
-                                                store_sign(R, signature_minimal);
                                             }
                                         }
                                     }
@@ -342,7 +350,12 @@ void generate_4hat_regions_new(std::map<vector<int>,BaseRegion> &signature_minim
                         R.addEdge(va, a);
                     }
                     counter++;
+                    int before = signature_minimal.size();
                     store_sign(R, signature_minimal);
+                    if (signature_minimal.size() > before) {
+                        R.printRegion();
+                         exit(0);
+                    } // TODO: This caso should be unecessary
                 }
                 
             }

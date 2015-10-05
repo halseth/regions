@@ -22,6 +22,11 @@ void print_map(const std::map<vector<int>,BaseRegion > &map){
 	}
 }
 
+// Flips dangling N3 vertices outside region by removing them
+void flip_n3(BaseRegion &R){
+    
+}
+
 void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
     
     // Check if it is valid for it's subclass type

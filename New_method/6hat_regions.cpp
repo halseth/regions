@@ -17,7 +17,7 @@ void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
     int b = 2;
     int c = 3;
     int d = 4;
-    int e = 4;
+    int e = 5; //WHAT?
     
     for (int s_empty = 0; s_empty <= 1; s_empty++) {
         if(s_empty){

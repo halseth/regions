@@ -104,7 +104,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                 }
             }
             
-            
+            // No cross edge
             for (int va_nodes = 0; va_nodes <= 2; va_nodes++) {
                 for (int vb_nodes = 0; vb_nodes <= 4; vb_nodes++) {
                     for (int vc_nodes = 0; vc_nodes <= 4; vc_nodes++) {
@@ -131,85 +131,92 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                                                             for(int vd_a_edge = 0; vd_a_edge <= max_vd_a_edge; vd_a_edge++){
                                                                 int max_vd_b_edge = vd_nodes > 0 && vc_nodes == 0 && !va_c_edge && !va_d_edge && !vb_d_edge && !vb_c_edge ? 1 : 0;
                                                                 for(int vd_b_edge = 0; vd_b_edge <= max_vd_b_edge; vd_b_edge++){
-                                                                    HatRegion R(5,v);
                                                                     
-                                                                    int va = -1;
-                                                                    for (int i = 0; i < va_nodes; i++) {
-                                                                        va = R.addNode();
-                                                                        R.addEdge(v, va);
-                                                                        R.addEdge(va, a);
+                                                                    for (int deg1 = 0; deg1 <= 1; deg1++) {                                                                        
+                                                                        HatRegion R(5,v);
+                                                                        
+                                                                        int va = -1;
+                                                                        for (int i = 0; i < va_nodes; i++) {
+                                                                            va = R.addNode();
+                                                                            R.addEdge(v, va);
+                                                                            R.addEdge(va, a);
+                                                                        }
+                                                                        
+                                                                        int vb1 = -1;
+                                                                        int vb2 = -1;
+                                                                        for (int i = 0; i < vb_nodes; i++) {
+                                                                            int vb = R.addNode();
+                                                                            if(vb1 == -1) vb1 = vb;
+                                                                            vb2 = vb;
+                                                                            R.addEdge(v, vb);
+                                                                            R.addEdge(vb, b);
+                                                                        }
+                                                                        
+                                                                        int vc1 = -1;
+                                                                        int vc2 = -1;
+                                                                        for (int i = 0; i < vc_nodes; i++) {
+                                                                            int vc = R.addNode();
+                                                                            if(vc1 == -1) vc1 = vc;
+                                                                            vc2 = vc;
+                                                                            R.addEdge(v, vc);
+                                                                            R.addEdge(vc, c);
+                                                                        }
+                                                                        
+                                                                        int vd = -1;
+                                                                        for (int i = 0; i < vd_nodes; i++) {
+                                                                            vd = R.addNode();
+                                                                            R.addEdge(v, vd);
+                                                                            R.addEdge(vd, d);
+                                                                        }
+                                                                        
+                                                                        if (vb_a_edge) {
+                                                                            R.addEdge(vb1, a);
+                                                                        }
+                                                                        
+                                                                        if (vb_c_edge) {
+                                                                            R.addEdge(vb2, c);
+                                                                        }
+                                                                        
+                                                                        if (vb_d_edge) {
+                                                                            R.addEdge(vb2, d);
+                                                                        }
+                                                                        
+                                                                        if (vc_a_edge) {
+                                                                            R.addEdge(vc1, a);
+                                                                        }
+                                                                        
+                                                                        if (vc_b_edge) {
+                                                                            R.addEdge(vc1, b);
+                                                                        }
+                                                                        
+                                                                        if (vc_d_edge) {
+                                                                            R.addEdge(vc2, d);
+                                                                        }
+                                                                        
+                                                                        if (va_d_edge) {
+                                                                            R.addEdge(va, d);
+                                                                        }
+                                                                        
+                                                                        if (va_c_edge) {
+                                                                            R.addEdge(va, c);
+                                                                        }
+                                                                        
+                                                                        if (vd_a_edge) {
+                                                                            R.addEdge(vd, a);
+                                                                        }
+                                                                        
+                                                                        if (vd_b_edge) {
+                                                                            R.addEdge(vd, b);
+                                                                        }
+                                                                        
+                                                                        if (deg1) {
+                                                                            int node = R.addNode();
+                                                                            R.addEdge(node, v);
+                                                                        }
+                                                                        
+                                                                        counter++;
+                                                                        store_sign(R, signature_minimal);
                                                                     }
-                                                                    
-                                                                    int vb1 = -1;
-                                                                    int vb2 = -1;
-                                                                    for (int i = 0; i < vb_nodes; i++) {
-                                                                        int vb = R.addNode();
-                                                                        if(vb1 == -1) vb1 = vb;
-                                                                        vb2 = vb;
-                                                                        R.addEdge(v, vb);
-                                                                        R.addEdge(vb, b);
-                                                                    }
-                                                                    
-                                                                    int vc1 = -1;
-                                                                    int vc2 = -1;
-                                                                    for (int i = 0; i < vc_nodes; i++) {
-                                                                        int vc = R.addNode();
-                                                                        if(vc1 == -1) vc1 = vc;
-                                                                        vc2 = vc;
-                                                                        R.addEdge(v, vc);
-                                                                        R.addEdge(vc, c);
-                                                                    }
-                                                                    
-                                                                    int vd = -1;
-                                                                    for (int i = 0; i < vd_nodes; i++) {
-                                                                        vd = R.addNode();
-                                                                        R.addEdge(v, vd);
-                                                                        R.addEdge(vd, d);
-                                                                    }
-                                                                    
-                                                                    if (vb_a_edge) {
-                                                                        R.addEdge(vb1, a);
-                                                                    }
-                                                                    
-                                                                    if (vb_c_edge) {
-                                                                        R.addEdge(vb2, c);
-                                                                    }
-                                                                    
-                                                                    if (vb_d_edge) {
-                                                                        R.addEdge(vb2, d);
-                                                                    }
-                                                                    
-                                                                    if (vc_a_edge) {
-                                                                        R.addEdge(vc1, a);
-                                                                    }
-                                                                    
-                                                                    if (vc_b_edge) {
-                                                                        R.addEdge(vc1, b);
-                                                                    }
-                                                                    
-                                                                    if (vc_d_edge) {
-                                                                        R.addEdge(vc2, d);
-                                                                    }
-                                                                    
-                                                                    if (va_d_edge) {
-                                                                        R.addEdge(va, d);
-                                                                    }
-                                                                    
-                                                                    if (va_c_edge) {
-                                                                        R.addEdge(va, c);
-                                                                    }
-                                                                    
-                                                                    if (vd_a_edge) {
-                                                                        R.addEdge(vd, a);
-                                                                    }
-                                                                    
-                                                                    if (vd_b_edge) {
-                                                                        R.addEdge(vd, b);
-                                                                    }
-                                                                    
-                                                                    counter++;
-                                                                    
-                                                                    store_sign(R, signature_minimal);
                                                                 }
                                                             }
                                                         }
