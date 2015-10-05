@@ -17,6 +17,7 @@ using namespace std;
 #include "EmptyRegion.h"
 #include "3hat_a_regions.h"
 #include "3hat_ab_regions.h"
+#include "3_regions.hpp"
 #include "4hat_ab_regions.h"
 #include "3hat_regions.h"
 #include "4hat_b_regions.h"
@@ -54,6 +55,8 @@ map<vector<int>, BaseRegion> regions_3hat_a;
 map<vector<int>, BaseRegion> regions_3hat_ab;
 #define FILENAME_3HAT "regions_3hat.txt"
 map<vector<int>, BaseRegion> regions_3hat;
+#define FILENAME_3 "regions_3.txt"
+map<vector<int>, BaseRegion> regions_3;
 #define FILENAME_5HAT_A "regions_5hat_a.txt"
 map<vector<int>, BaseRegion> regions_5hat_a;
 #define FILENAME_5HAT "regions_5hat.txt"
@@ -134,17 +137,23 @@ int main(){
     }
 
 
-    if (load_from_file) load_region_map(regions_6hat_a, FILENAME_6HAT_A);
-    if (regions_6hat_a.empty()) {
-        generate_6hat_a_regions(regions_6hat_a);
-        if (save_to_file) store_region_map(regions_6hat_a, FILENAME_6HAT_A);
-    }
-
-     
-    if (load_from_file) load_region_map(regions_6hat, FILENAME_6HAT);
-    if (regions_6hat.empty()) {
-        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
-        if (save_to_file) store_region_map(regions_6hat, FILENAME_6HAT);
+//    if (load_from_file) load_region_map(regions_6hat_a, FILENAME_6HAT_A);
+//    if (regions_6hat_a.empty()) {
+//        generate_6hat_a_regions(regions_6hat_a);
+//        if (save_to_file) store_region_map(regions_6hat_a, FILENAME_6HAT_A);
+//    }
+//
+//     
+//    if (load_from_file) load_region_map(regions_6hat, FILENAME_6HAT);
+//    if (regions_6hat.empty()) {
+//        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
+//        if (save_to_file) store_region_map(regions_6hat, FILENAME_6HAT);
+//    }
+    
+    if (load_from_file) load_region_map(regions_3, FILENAME_3);
+    if (regions_3.empty()) {
+        generate_3_regions(regions_3, regions_3hat, regions_4hat, regions_5hat);
+        if (save_to_file) store_region_map(regions_3, FILENAME_3);
     }
     
 //    if (load_from_file) load_region_map(regions_7hat_a, FILENAME_7HAT_A);

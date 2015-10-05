@@ -15,6 +15,7 @@ void generate_3hat_ab_regions(std::map<vector<int>,BaseRegion> &signature_minima
     boundaryDominators.push_back(a);
     boundaryDominators.push_back(b);
     
+    //TODO: add dangling n3's
     for (int deg2_v_a = 0; deg2_v_a <= 1; deg2_v_a++) {
         for(int deg2_v_b = 0; deg2_v_b <= 1; deg2_v_b++){
             for (int deg_3 = 0; deg_3 <= 1; deg_3++) {
