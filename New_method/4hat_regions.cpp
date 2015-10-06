@@ -319,8 +319,8 @@ void generate_4hat_regions_new(std::map<vector<int>,BaseRegion> &signature_minim
                     R.addLabelToNode(3, a);
                     R.addLabelToNode(4, c);
                     
-                    R.glue(over);
-                    R.glue(under);
+                    R.glue(&over);
+                    R.glue(&under);
                     
                     counter++;
                     store_sign(R, signature_minimal);

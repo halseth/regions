@@ -27,45 +27,49 @@ void generate_3_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std
         exit(1);
     }
     
-    int v = 0;
-    int a = 1;
-    int w = 2;
+   // int v = 0;
+    
+    int a = 0;
+    int b = 1;
+    int c = 2;
+    //int w = 2;
     
     // ---------------- |S| = 0 ----------------
-    for (int deg2_v_a = 0; deg2_v_a <= 2; deg2_v_a++) {
-        for(int deg2_v_w = 0; deg2_v_w <= 2; deg2_v_w++){
-            for(int deg2_w_a = 0; deg2_w_a <= 2; deg2_w_a++){
+    cout << "---------------- |S| =0 ----------------" << endl;
+    for (int deg2_a_b = 0; deg2_a_b <= 2; deg2_a_b++) {
+        for(int deg2_a_c = 0; deg2_a_c <= 2; deg2_a_c++){
+            for(int deg2_b_c = 0; deg2_b_c <= 2; deg2_b_c++){
                 for (int deg_3 = 0; deg_3 <= 1; deg_3++) {
                     
-                    for(int dangling_n3_v = 0; dangling_n3_v <= 1; dangling_n3_v++){
-                        for(int dangling_n3_w = 0; dangling_n3_w <= 1; dangling_n3_w++){
-                            Region R(3, v, w);
+                    for(int dangling_n3_a = 0; dangling_n3_a <= 1; dangling_n3_a++){
+                        for(int dangling_n3_c = 0; dangling_n3_c <= 1; dangling_n3_c++){
+                            Region R(3, a, c);
                             
-                            for (int i = 0; i < deg2_v_a; i++) {
-                                int c = R.addNode();
-                                R.addEdge(c, v);
-                                R.addEdge(c, a);
+                            for (int i = 0; i < deg2_a_b; i++) {
+                                int node = R.addNode();
+                                R.addEdge(node, a);
+                                R.addEdge(node, b);
                             }
-                            for (int i = 0; i < deg2_v_w; i++) {
-                                int c = R.addNode();
-                                R.addEdge(c, v);
-                                R.addEdge(c, w);
+                            for (int i = 0; i < deg2_a_c; i++) {
+                                int node = R.addNode();
+                                R.addEdge(node, a);
+                                R.addEdge(node, c);
                             }
                             for (int i = 0; i < deg_3; i++) {
-                                int c = R.addNode();
-                                R.addEdge(c, v);
-                                R.addEdge(c, a);
-                                R.addEdge(c, w);
+                                int node = R.addNode();
+                                R.addEdge(node, a);
+                                R.addEdge(node, b);
+                                R.addEdge(node, c);
                             }
                             
-                            if (dangling_n3_v) {
-                                int c = R.addNode();
-                                R.addEdge(c, v);
+                            if (dangling_n3_a) {
+                                int node = R.addNode();
+                                R.addEdge(node, a);
                             }
                             
-                            if (dangling_n3_w) {
-                                int c = R.addNode();
-                                R.addEdge(c, w);
+                            if (dangling_n3_c) {
+                                int node = R.addNode();
+                                R.addEdge(node, c);
                             }
                             
                             store_sign(R, signature_minimal);
@@ -77,51 +81,50 @@ void generate_3_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std
     }
     
     // ---------------- |S| > 1 ----------------
-    
-    // No node connected to w is handled by adding 3hat regions
-    std::map<std::vector<int>,BaseRegion>::const_iterator it_3hat;
-    for(it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
+    cout << "---------------- |S| > 1 ----------------" << endl;
+    // No node connected to c is handled by adding 3hat regions
+    for(map<vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
         BaseRegion R = it_3hat->second;
         store_sign(R, signature_minimal);
     }
     
     
-    // At least one connected to w
-    std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat, it_4hat;
-    for(it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat){
-        for(it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat){
-            Region R(3, v, w);
+    // At least one connected to c
+    cout << "---------------- |S| > 1 + 1 ----------------" << endl;
+    for(map<vector<int>,BaseRegion>::const_iterator it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat){
+        for(map<vector<int>,BaseRegion>::const_iterator it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat){
+            Region R(3, a, c);
             
             // We have at least on node in S
             int s = R.addNode();
-            R.addEdge(v, s);
+            R.addEdge(a, s);
             
-            int c = R.addNode();
-            R.addEdge(s, c);
-            R.addEdge(w, c);
+            int node = R.addNode();
+            R.addEdge(s, node);
+            R.addEdge(c, node);
+            
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(s, s);
+            R.addLabelToNode(node, node);
             
             BaseRegion R_5hat = it_5hat->second;
             BaseRegion R_4hat = it_4hat->second;
-            std::vector<BaseRegion> toGLue;
-            
-            R.addLabelToNode(v, v);
-            R.addLabelToNode(a, a);
-            R.addLabelToNode(w, w);
-            R.addLabelToNode(s, s);
-            R.addLabelToNode(c, c);
+            std::vector<BaseRegion*> toGLue;
             
             R_5hat.addLabelToNode(s, 0);
-            R_5hat.addLabelToNode(v, 1);
-            R_5hat.addLabelToNode(a, 2);
-            R_5hat.addLabelToNode(w, 3);
-            R_5hat.addLabelToNode(c, 4);
-            toGLue.push_back(R_5hat);
+            R_5hat.addLabelToNode(a, 1);
+            R_5hat.addLabelToNode(b, 2);
+            R_5hat.addLabelToNode(c, 3);
+            R_5hat.addLabelToNode(node, 4);
+            toGLue.push_back(&R_5hat);
             
             R_4hat.addLabelToNode(s, 0);
-            R_4hat.addLabelToNode(c, 1);
-            R_4hat.addLabelToNode(w, 2);
-            R_4hat.addLabelToNode(v, 3);
-            toGLue.push_back(R_4hat);
+            R_4hat.addLabelToNode(node, 1);
+            R_4hat.addLabelToNode(c, 2);
+            R_4hat.addLabelToNode(a, 3);
+            toGLue.push_back(&R_4hat);
             
             R.glue(toGLue);
             

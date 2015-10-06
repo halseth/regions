@@ -18,6 +18,7 @@
 
 class BaseRegion {
 private:
+    // Data
     std::vector<int> Boundary;
     int num_internal_nodes;
     std::vector<std::vector<bool> > adj;
@@ -32,6 +33,7 @@ private:
 public:
     BaseRegion(int boundarySize);
     BaseRegion(std::string filename);
+    BaseRegion(const BaseRegion &obj);
     std::string toString();
     
     // Operator overloading
@@ -44,7 +46,7 @@ public:
     bool isAdjacent(int a, int b);
     void getSignature(std::vector<int> &signature);
     void getSignature2(std::vector<int> &signature);
-    int getBoundarySize();
+    int getBoundarySize() const;
     
     void printRegion();
     
@@ -53,12 +55,13 @@ public:
     void addLabelToNode(int label, int node);
     void clearLabels();
     
-    void glue(BaseRegion &region);
-    void glue(const std::vector<BaseRegion> regions);
+    void glue(BaseRegion* region);
+    void glue(const std::vector<BaseRegion*> regions);
     std::map<int, int> getLabelToNode();
     std::map<int, std::set<int> > getNodeToLabels();
     
     virtual void test();
+    BaseRegion copy();
     
 };
 

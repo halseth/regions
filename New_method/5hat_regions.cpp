@@ -36,7 +36,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                     R_4hat.addLabelToNode(2, b);
                     R_4hat.addLabelToNode(3, c);
                     
-                    R.glue(R_4hat);
+                    R.glue(&R_4hat);
                     
                     counter++;
                     store_sign(R, signature_minimal);
@@ -58,7 +58,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                     R_3hat.addLabelToNode(1, a);
                     R_3hat.addLabelToNode(2, b);
                     
-                    R.glue(R_3hat);
+                    R.glue(&R_3hat);
                     
                     counter++;
                     store_sign(R, signature_minimal);
@@ -78,14 +78,14 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                         R.addLabelToNode(3, c);
                         R.addLabelToNode(4, d);
                         
-                        std::vector<BaseRegion> toGLue;
+                        std::vector<BaseRegion*> toGLue;
                         
                         BaseRegion R_3hat = it_3hat->second;
                         R_3hat.clearLabels();
                         R_3hat.addLabelToNode(0, v);
                         R_3hat.addLabelToNode(1, a);
                         R_3hat.addLabelToNode(2, b);
-                        toGLue.push_back(R_3hat);
+                        toGLue.push_back(&R_3hat);
                         
                         BaseRegion R_4hat = it_4hat->second;
                         R_4hat.clearLabels();
@@ -93,7 +93,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                         R_4hat.addLabelToNode(2, a);
                         R_4hat.addLabelToNode(3, b);
                         R_4hat.addLabelToNode(4, c);
-                        toGLue.push_back(R_4hat);
+                        toGLue.push_back(&R_4hat);
                         
                         R.glue(toGLue);
                         
@@ -243,7 +243,7 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                     
                     BaseRegion R_4hat_a = it_4hat_a->second;
                     BaseRegion R_5hat_a = it_5hat_a->second;
-                    std::vector<BaseRegion> toGLue;
+                    std::vector<BaseRegion*> toGLue;
                     
                     R.addLabelToNode(0, v);
                     R.addLabelToNode(1, a);
@@ -256,14 +256,14 @@ void generate_5hat_regions(std::map<std::vector<int>,BaseRegion> &signature_mini
                     R_4hat_a.addLabelToNode(5, a);
                     R_4hat_a.addLabelToNode(2, b);
                     R_4hat_a.addLabelToNode(1, c);
-                    toGLue.push_back(R_4hat_a);
+                    toGLue.push_back(&R_4hat_a);
                     
                     R_5hat_a.addLabelToNode(0, v);
                     R_5hat_a.addLabelToNode(5, a);
                     R_5hat_a.addLabelToNode(2, b);
                     R_5hat_a.addLabelToNode(3, c);
                     R_5hat_a.addLabelToNode(4, d);
-                    toGLue.push_back(R_5hat_a);
+                    toGLue.push_back(&R_5hat_a);
                     
                     R.glue(toGLue);
                     

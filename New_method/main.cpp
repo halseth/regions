@@ -23,6 +23,7 @@ using namespace std;
 #include "4hat_b_regions.h"
 #include "4hat_regions.h"
 #include "4hat_a_regions.h"
+#include "4_regions.hpp"
 #include "5hat_a_regions.h"
 #include "5hat_regions.h"
 #include "6hat_a_regions.h"
@@ -41,14 +42,7 @@ enum RegionType {
 
 #define FILENAME_EMPTY "region_empty.txt"
 map<vector<int>, BaseRegion> region_empty;
-#define FILENAME_4HAT_A "regions_4hat_a.txt"
-map<vector<int>, BaseRegion> regions_4hat_a;
-#define FILENAME_4HAT_AB "regions_4hat_ab.txt"
-map<vector<int>, BaseRegion> regions_4hat_ab;
-#define FILENAME_4HAT_B "regions_4hat_b.txt"
-map<vector<int>, BaseRegion> regions_4hat_b;
-#define FILENAME_4HAT "regions_4hat.txt"
-map<vector<int>, BaseRegion> regions_4hat;
+
 #define FILENAME_3HAT_A "regions_3hat_a.txt"
 map<vector<int>, BaseRegion> regions_3hat_a;
 #define FILENAME_3HAT_AB "regions_3hat_ab.txt"
@@ -57,6 +51,18 @@ map<vector<int>, BaseRegion> regions_3hat_ab;
 map<vector<int>, BaseRegion> regions_3hat;
 #define FILENAME_3 "regions_3.txt"
 map<vector<int>, BaseRegion> regions_3;
+
+#define FILENAME_4HAT_A "regions_4hat_a.txt"
+map<vector<int>, BaseRegion> regions_4hat_a;
+#define FILENAME_4HAT_AB "regions_4hat_ab.txt"
+map<vector<int>, BaseRegion> regions_4hat_ab;
+#define FILENAME_4HAT_B "regions_4hat_b.txt"
+map<vector<int>, BaseRegion> regions_4hat_b;
+#define FILENAME_4HAT "regions_4hat.txt"
+map<vector<int>, BaseRegion> regions_4hat;
+#define FILENAME_4 "regions_4.txt"
+map<vector<int>, BaseRegion> regions_4;
+
 #define FILENAME_5HAT_A "regions_5hat_a.txt"
 map<vector<int>, BaseRegion> regions_5hat_a;
 #define FILENAME_5HAT "regions_5hat.txt"
@@ -71,7 +77,7 @@ map<vector<int>, BaseRegion> regions_7hat_a;
  
 int main(){
     
-    bool load_from_file = true;
+    bool load_from_file = false;
     bool save_to_file = true;
     
     if (load_from_file) load_region_map(region_empty, FILENAME_EMPTY);
@@ -154,6 +160,12 @@ int main(){
     if (regions_3.empty()) {
         generate_3_regions(regions_3, regions_3hat, regions_4hat, regions_5hat);
         if (save_to_file) store_region_map(regions_3, FILENAME_3);
+    }
+    
+    if (load_from_file) load_region_map(regions_4, FILENAME_4);
+    if (regions_4.empty()) {
+        generate_4_regions(regions_4, regions_3hat, regions_3, regions_4hat, regions_5hat);
+        if (save_to_file) store_region_map(regions_4, FILENAME_4);
     }
     
 //    if (load_from_file) load_region_map(regions_7hat_a, FILENAME_7HAT_A);

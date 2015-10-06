@@ -32,7 +32,7 @@ void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
             R.addLabelToNode(1, a);
             R.addLabelToNode(2, b);
             
-            R.glue(R2);
+            R.glue(&R2);
             
             if(deg1){
                 int c = R.addNode();

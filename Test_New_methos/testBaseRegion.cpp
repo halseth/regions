@@ -9,6 +9,7 @@
 #include "catch.hpp"
 #include <iostream>
 #include "BaseRegion.h"
+using namespace std;
 
 TEST_CASE( "Testin BaseRegion", "[BaseRegion]" ) {
     BaseRegion b(3);
@@ -247,5 +248,144 @@ TEST_CASE( "Testing multiple complex gluing", "[BaseRegion]" ) {
     shouldEqual.addEdge(node, 2);
     
     REQUIRE( r.isEqual(shouldEqual));
+    
+}
+
+TEST_CASE( "Testing multiple complex gluing2", "[BaseRegion]" ) {
+    int a = 0;
+    int b = 1;
+    int c = 2;
+    int d = 3;
+    
+    BaseRegion R(4);
+    int s = R.addNode();
+    R.addEdge(a, s);
+    
+    int e = R.addNode();
+    R.addEdge(e, c);
+    R.addEdge(s, e);
+    R.addLabelToNode(a, a);
+    R.addLabelToNode(b, b);
+    R.addLabelToNode(c, c);
+    R.addLabelToNode(d, d);
+    R.addLabelToNode(s, s);
+    R.addLabelToNode(e, e);
+    
+    std::vector<BaseRegion> toGLue;
+    
+    BaseRegion R1(5);
+    R1.addEdge(0, 2);
+    R1.addEdge(0, 3);
+    R1.addLabelToNode(s, 0);
+    R1.addLabelToNode(a, 1);
+    R1.addLabelToNode(b, 2);
+    R1.addLabelToNode(c, 3);
+    R1.addLabelToNode(e, 4);
+    toGLue.push_back(R1);
+    
+    BaseRegion R2(5);
+    R2.addEdge(0, 2);
+    R2.addEdge(0, 3);
+    R2.addLabelToNode(s, 0);
+    R2.addLabelToNode(e, 1);
+    R2.addLabelToNode(c, 2);
+    R2.addLabelToNode(d, 3);
+    R2.addLabelToNode(a, 4);
+    toGLue.push_back(R2);
+    
+    R.glue(toGLue);
+    
+    REQUIRE( R.isValid());
+    
+}
+
+TEST_CASE( "Testing multiple complex gluing3", "[BaseRegion]" ) {
+    int a = 0;
+    int b = 1;
+    int c = 2;
+    
+    BaseRegion R(3);
+    
+    // We have at least on node in S
+    int s = R.addNode();
+    R.addEdge(a, s);
+    
+    int node = R.addNode();
+    R.addEdge(s, node);
+    R.addEdge(c, node);
+    
+    R.addLabelToNode(a, a);
+    R.addLabelToNode(b, b);
+    R.addLabelToNode(c, c);
+    R.addLabelToNode(s, s);
+    R.addLabelToNode(node, node);
+    
+    BaseRegion R_5hat(5);
+    R_5hat.addEdge(0, 2);
+    R_5hat.addEdge(0, 3);
+    REQUIRE( R_5hat.isValid());
+    
+    BaseRegion R_4hat(4);
+    R_4hat.addEdge(1, 3);
+    REQUIRE( R_4hat.isValid());
+    
+    std::vector<BaseRegion> toGLue;
+    
+    R_5hat.addLabelToNode(s, 0);
+    R_5hat.addLabelToNode(a, 1);
+    R_5hat.addLabelToNode(b, 2);
+    R_5hat.addLabelToNode(c, 3);
+    R_5hat.addLabelToNode(node, 4);
+    toGLue.push_back(R_5hat);
+    
+    R_4hat.addLabelToNode(s, 0);
+    R_4hat.addLabelToNode(node, 1);
+    R_4hat.addLabelToNode(c, 2);
+    R_4hat.addLabelToNode(a, 3);
+    toGLue.push_back(R_4hat);
+    
+    cout << "before glue label to node: " << endl;
+    for(std::map<int, int>::const_iterator map_it = R.labelToNode.begin(); map_it != R.labelToNode.end(); map_it++){
+        cout << map_it->first << ":" << map_it->second << endl;
+    }
+    
+    cout << "before glue node to label: " << endl;
+    for (std::map<int, std::set<int> >::const_iterator map_it = R.nodeToLabels.begin(); map_it != R.nodeToLabels.end(); map_it++) {
+        int node = map_it->first;
+        cout << "node: " << node << "  ";
+        std::set<int> labelSet = map_it->second;
+        for(std::set<int>::const_iterator set_it = labelSet.begin(); set_it != labelSet.end(); set_it++){
+            cout << *set_it;
+        }
+        cout << endl;
+    }
+    
+    R.glue(toGLue);
+    cout << "after glue label to node: " << endl;
+    for(std::map<int, int>::const_iterator map_it = R.labelToNode.begin(); map_it != R.labelToNode.end(); map_it++){
+        cout << map_it->first << ":" << map_it->second << endl;
+    }
+    
+    cout << "after glue node to label: " << endl;
+    for (std::map<int, std::set<int> >::const_iterator map_it = R.nodeToLabels.begin(); map_it != R.nodeToLabels.end(); map_it++) {
+        int node = map_it->first;
+        cout << "node: " << node << "  ";
+        std::set<int> labelSet = map_it->second;
+        for(std::set<int>::const_iterator set_it = labelSet.begin(); set_it != labelSet.end(); set_it++){
+            cout << *set_it;
+        }
+        cout << endl;
+    }
+    
+    std::cout << "5hat:" << std::endl;
+    R_5hat.printRegion();
+    std::cout << "4hat:" << std::endl;
+    R_4hat.printRegion();
+    std::cout << "glued:" << std::endl;
+    R.printRegion();
+    std::cout << "done print" << std::endl;
+    
+    REQUIRE( R.isValid());
+    std::cout << "done method" << std::endl;
     
 }

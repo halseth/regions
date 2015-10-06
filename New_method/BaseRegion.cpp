@@ -41,14 +41,16 @@ BaseRegion::BaseRegion(std::string string_rep){
 }
 
 void BaseRegion::init(int boundarySize){
+    std::vector<std::vector<bool> > adjacent;
     num_internal_nodes = 0;
     for(int i = 0; i < MAX_SIZE; i++){
         std::vector<bool> t;
         for(int j = 0; j < MAX_SIZE; j++){
             t.push_back(false);
         }
-        adj.push_back(t);
+        adjacent.push_back(t);
     }
+    this->adj = adjacent;
     for(int i = 0; i < boundarySize; i++){
         Boundary.push_back(i);
     }
@@ -123,6 +125,10 @@ bool BaseRegion::isValid(){
     if (!connected(g)) {
         std::cout << "Not connected" << std::endl;
         valid = false;
+#ifndef TEST
+        printRegion();
+        exit(0);
+#endif
     }
    
     // It must be planar with all internal vertices drawn on the inside
@@ -134,13 +140,17 @@ bool BaseRegion::isValid(){
     if(!checkPlanarity(g)){
         std::cout << "Not planar" << std::endl;
         valid = false;
+#ifndef TEST
+        printRegion();
+        exit(0);
+#endif
     }
     
     return valid;
 }
 
 
-int BaseRegion::getBoundarySize(){
+int BaseRegion::getBoundarySize() const{
     return Boundary.size();
 }
 
@@ -428,6 +438,7 @@ void BaseRegion::getSignature2(std::vector<int> &signature){
 }
 
 void BaseRegion::printRegion(){
+    std::cout << "Num nodes: " << getSize() << std::endl;
     for(int i = 0; i < getSize(); i++){
         for(int j = i+1; j < getSize(); j++){
             if (isAdjacent(i, j)) {
@@ -470,7 +481,7 @@ void BaseRegion::clearLabels(){
     nodeToLabels.clear();
 }
 
-void BaseRegion::glue(BaseRegion &region){
+void BaseRegion::glue(BaseRegion* region){
     
     using namespace std;
     
@@ -482,7 +493,7 @@ void BaseRegion::glue(BaseRegion &region){
         }
     }
     
-    for(std::map<int, int>::const_iterator map_it = region.labelToNode.begin(); map_it != region.labelToNode.end(); map_it++){
+    for(std::map<int, int>::const_iterator map_it = region->labelToNode.begin(); map_it != region->labelToNode.end(); map_it++){
         if(map_it->first >= free_label){
             free_label = map_it->first + 1;
         }
@@ -495,20 +506,20 @@ void BaseRegion::glue(BaseRegion &region){
     std::map<int, int> temporaryLabelToNode = this->labelToNode;
     
     // Give all nodes in the graph to glue labels
-    for (int i = 0; i < region.getSize(); i++) {
+    for (int i = 0; i < region->getSize(); i++) {
         
         // Not having a label
-        if(region.nodeToLabels.count(i) == 0 || region.nodeToLabels[i].size() == 0) {
+        if(region->nodeToLabels.count(i) == 0 || region->nodeToLabels[i].size() == 0) {
             std::set<int> labels;
             labels.insert(free_label);
-            region.nodeToLabels[i] = labels;
-            region.labelToNode[free_label] = i;
+            region->nodeToLabels[i] = labels;
+            region->labelToNode[free_label] = i;
             free_label++;
         }
     }
         
     // Update labels in target graph to be consistent with glue graph. Add necessary nodes to target
-    for (std::map<int, std::set<int> >::const_iterator map_it = region.nodeToLabels.begin(); map_it != region.nodeToLabels.end(); map_it++) {
+    for (std::map<int, std::set<int> >::const_iterator map_it = region->nodeToLabels.begin(); map_it != region->nodeToLabels.end(); map_it++) {
         int node = map_it->first;
         std::set<int> labelSet = map_it->second;
         
@@ -528,21 +539,21 @@ void BaseRegion::glue(BaseRegion &region){
         }
         
         // Add missing labels
-        for(std::set<int>::const_iterator set_it = region.nodeToLabels[node].begin(); set_it != region.nodeToLabels[node].end(); set_it++){
+        for(std::set<int>::const_iterator set_it = region->nodeToLabels[node].begin(); set_it != region->nodeToLabels[node].end(); set_it++){
             this->addLabelToNode(*set_it, nodeNum);
         }
     }
         
         
     // Add edges
-    for (int i = 0; i < region.getSize(); i++) {
-        for(int j = i+1; j < region.getSize(); j++){
-            if(region.isAdjacent(i, j)){
+    for (int i = 0; i < region->getSize(); i++) {
+        for(int j = i+1; j < region->getSize(); j++){
+            if(region->isAdjacent(i, j)){
                 // Find these two nodes in the target
-                int label1 = *(region.nodeToLabels[i].begin());
+                int label1 = *(region->nodeToLabels[i].begin());
                 int node1 = this->labelToNode[label1];
                 
-                int label2 = *(region.nodeToLabels[j].begin());
+                int label2 = *(region->nodeToLabels[j].begin());
                 int node2 = this->labelToNode[label2];
                     
                 //Add the edge between them
@@ -554,9 +565,9 @@ void BaseRegion::glue(BaseRegion &region){
     this->nodeToLabels = temporaryNodeToLabels;
 }
 
-void BaseRegion::glue(const std::vector<BaseRegion> regions){
-    for (std::vector<BaseRegion>::const_iterator it = regions.begin(); it != regions.end(); it++) {
-        BaseRegion r = *it;
+void BaseRegion::glue(const std::vector<BaseRegion*> regions){
+    for (std::vector<BaseRegion*>::const_iterator it = regions.begin(); it != regions.end(); it++) {
+        BaseRegion* r = *it;
         glue(r);
     }
 }
@@ -567,4 +578,28 @@ std::map<int, int> BaseRegion::getLabelToNode(){
 
 std::map<int, std::set<int> > BaseRegion::getNodeToLabels(){
     return nodeToLabels;
+}
+
+BaseRegion::BaseRegion(const BaseRegion &obj)
+{
+    //std::cout << "copy constructor" << std::endl;
+    init(obj.getBoundarySize());
+    this->adj = obj.adj;
+    this->num_internal_nodes = obj.num_internal_nodes;
+    
+    // Do not copy labels
+//    // Deep copy of labels
+//    
+//    for(std::map<int, int>::const_iterator map_it = obj.labelToNode.begin(); map_it != obj.labelToNode.end(); map_it++){
+//        this->labelToNode[map_it->first] = map_it->second;
+//    }
+//    
+//    for (std::map<int, std::set<int> >::const_iterator map_it = obj.nodeToLabels.begin(); map_it != obj.nodeToLabels.end(); map_it++) {
+//        std::set<int> labels;
+//        std::set<int> labelSet = map_it->second;
+//        for(std::set<int>::const_iterator set_it = labelSet.begin(); set_it != labelSet.end(); set_it++){
+//            labels.insert(*set_it);
+//        }
+//        this->nodeToLabels[map_it->first] = labels;
+//    }
 }
