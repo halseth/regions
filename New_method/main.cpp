@@ -73,8 +73,12 @@ map<vector<int>, BaseRegion> old_regions_4hat_b;
 #define FILENAME_4HAT_AB "regions_4hat_ab.txt"
 map<vector<int>, BaseRegion> regions_4hat_ab;
 
+#define OLD_FILENAME_4HAT "old_regions_4hat.txt"
+map<vector<int>, BaseRegion> old_regions_4hat;
+
 #define FILENAME_4HAT "regions_4hat.txt"
 map<vector<int>, BaseRegion> regions_4hat;
+
 #define FILENAME_4star "regions_4star.txt"
 map<vector<int>, BaseRegion> regions_4star;
 #define FILENAME_4 "regions_4.txt"
@@ -179,12 +183,23 @@ int main(){
 //        if (save_to_file) store_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
 //    }
 //
-//    if (load_from_file) load_region_map(regions_4hat, FILENAME_4HAT);
-//    if (regions_4hat.empty()) {
-//        generate_4hat_regions(regions_4hat);
-//        generate_4hat_regions_new(regions_4hat, regions_4hat_a);
-//        if (save_to_file) store_region_map(regions_4hat, FILENAME_4HAT);
-//    }
+    load_region_map(old_regions_4hat, OLD_FILENAME_4HAT);
+    if (load_from_file) load_region_map(regions_4hat, FILENAME_4HAT);
+    if (regions_4hat.empty()) {
+        generate_4hat_regions(regions_4hat, regions_3hat, regions_4hat_b);
+        //generate_4hat_regions_new(regions_4hat, regions_4hat_a);
+        if (save_to_file) store_region_map(regions_4hat, FILENAME_4HAT);
+    }
+    
+    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_4hat.begin() ; it != old_regions_4hat.end(); it++){
+        BaseRegion old = it->second;
+        
+        if (!contains_sign(regions_4hat, old)) {
+            cout << "old 4hat had more" << endl;
+            old.printRegion();
+            exit(1);
+        }
+    }
 //
 //    if (load_from_file) load_region_map(regions_5hat_a, FILENAME_5HAT_A);
 //    if (regions_5hat_a.empty()) {
