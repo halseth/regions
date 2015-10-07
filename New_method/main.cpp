@@ -84,6 +84,8 @@ map<vector<int>, BaseRegion> old_regions_5hat_b;
 map<vector<int>, BaseRegion> regions_5hat_b;
 
 
+#define OLD_FILENAME_5HAT "old_regions_5hat.txt"
+map<vector<int>, BaseRegion> old_regions_5hat;
 #define FILENAME_5HAT "regions_5hat.txt"
 map<vector<int>, BaseRegion> regions_5hat;
 #define FILENAME_5 "regions_5.txt"
@@ -210,17 +212,28 @@ int main(){
         BaseRegion old = it->second;
         
         if (!contains_sign(regions_5hat_b, old)) {
+            cout << "old 5hat_b had more" << endl;
+            old.printRegion();
+            exit(1);
+        }
+    }
+    
+    load_region_map(old_regions_5hat, OLD_FILENAME_5HAT);
+    if (load_from_file) load_region_map(regions_5hat, FILENAME_5HAT);
+    if (regions_5hat.empty()) {
+        generate_5hat_regions(regions_5hat, regions_3hat, regions_4hat, regions_4hat_b, regions_5hat_b);
+        if (save_to_file) store_region_map(regions_5hat, FILENAME_5HAT);
+    }
+    
+    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_5hat.begin() ; it != old_regions_5hat.end(); it++){
+        BaseRegion old = it->second;
+        
+        if (!contains_sign(regions_5hat, old)) {
             cout << "old 5hat had more" << endl;
             old.printRegion();
             exit(1);
         }
     }
-//
-//    if (load_from_file) load_region_map(regions_5hat, FILENAME_5HAT);
-//    if (regions_5hat.empty()) {
-//        generate_5hat_regions(regions_5hat, regions_5hat_a, regions_4hat_a, regions_4hat, regions_3hat);
-//        if (save_to_file) store_region_map(regions_5hat, FILENAME_5HAT);
-//    }
 
 
 //    if (load_from_file) load_region_map(regions_6hat_a, FILENAME_6HAT_A);
