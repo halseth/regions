@@ -11,15 +11,18 @@ int biggest = 0;
 
 void print_map(const std::map<vector<int>,BaseRegion > &map){
 	std::map<vector<int>,BaseRegion >::const_iterator it;
+    int big = 0;
 	for(it = map.begin(); it != map.end(); it++){
 		
-		cout << "Sign: ";
-		for(int i = 0; i < it->first.size(); i++){
-			cout << it->first[i] << " ";
-		}
+//		cout << "Sign: ";
+//		for(int i = 0; i < it->first.size(); i++){
+//			cout << it->first[i] << " ";
+//		}
 		int small = it->second.getSize();
-		cout << " Smallest: " << small << endl;
+        if(small > big) big = small;
+//		cout << " Smallest: " << small << endl;
 	}
+    cout << "Biggest: " << big << endl;
 }
 
 // Flips dangling N3 vertices outside region by removing them
@@ -70,6 +73,7 @@ void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &s
     }
     
     cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << "). Biggest=" << biggest << endl;
-    //print_map(signature_minimal);
+    print_map(signature_minimal);
+    
     cout << endl;
 }

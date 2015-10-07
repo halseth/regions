@@ -23,9 +23,11 @@ using namespace std;
 #include "4hat_b_regions.h"
 #include "4hat_regions.h"
 #include "4hat_a_regions.h"
+#include "4star_regions.hpp"
 #include "4_regions.hpp"
 #include "5hat_a_regions.h"
 #include "5hat_regions.h"
+#include "5_regions.hpp"
 #include "6hat_a_regions.h"
 #include "6hat_regions.h"
 #include "7hat_a_regions.h"
@@ -60,6 +62,8 @@ map<vector<int>, BaseRegion> regions_4hat_ab;
 map<vector<int>, BaseRegion> regions_4hat_b;
 #define FILENAME_4HAT "regions_4hat.txt"
 map<vector<int>, BaseRegion> regions_4hat;
+#define FILENAME_4star "regions_4star.txt"
+map<vector<int>, BaseRegion> regions_4star;
 #define FILENAME_4 "regions_4.txt"
 map<vector<int>, BaseRegion> regions_4;
 
@@ -67,6 +71,9 @@ map<vector<int>, BaseRegion> regions_4;
 map<vector<int>, BaseRegion> regions_5hat_a;
 #define FILENAME_5HAT "regions_5hat.txt"
 map<vector<int>, BaseRegion> regions_5hat;
+#define FILENAME_5 "regions_5.txt"
+map<vector<int>, BaseRegion> regions_5;
+
 #define FILENAME_6HAT_A "regions_6hat_a.txt"
 map<vector<int>, BaseRegion> regions_6hat_a;
 #define FILENAME_6HAT "regions_6hat.txt"
@@ -77,7 +84,7 @@ map<vector<int>, BaseRegion> regions_7hat_a;
  
 int main(){
     
-    bool load_from_file = false;
+    bool load_from_file = true;
     bool save_to_file = true;
     
     if (load_from_file) load_region_map(region_empty, FILENAME_EMPTY);
@@ -150,11 +157,11 @@ int main(){
 //    }
 //
 //     
-//    if (load_from_file) load_region_map(regions_6hat, FILENAME_6HAT);
-//    if (regions_6hat.empty()) {
-//        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
-//        if (save_to_file) store_region_map(regions_6hat, FILENAME_6HAT);
-//    }
+    if (load_from_file) load_region_map(regions_6hat, FILENAME_6HAT);
+    if (regions_6hat.empty()) {
+        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
+        if (save_to_file) store_region_map(regions_6hat, FILENAME_6HAT);
+    }
     
     if (load_from_file) load_region_map(regions_3, FILENAME_3);
     if (regions_3.empty()) {
@@ -162,10 +169,22 @@ int main(){
         if (save_to_file) store_region_map(regions_3, FILENAME_3);
     }
     
+    if (load_from_file) load_region_map(regions_4star, FILENAME_4star);
+    if (regions_4star.empty()) {
+        generate_4star_regions(regions_4star, regions_3hat, regions_3, regions_4hat, regions_6hat);
+        if (save_to_file) store_region_map(regions_4star, FILENAME_4star);
+    }
+    
     if (load_from_file) load_region_map(regions_4, FILENAME_4);
     if (regions_4.empty()) {
         generate_4_regions(regions_4, regions_3hat, regions_3, regions_4hat, regions_5hat);
         if (save_to_file) store_region_map(regions_4, FILENAME_4);
+    }
+    
+    if (load_from_file) load_region_map(regions_5, FILENAME_5);
+    if (regions_5.empty()) {
+        generate_5_regions(regions_5, regions_3hat, regions_3, regions_4hat, regions_4star, regions_4, regions_5hat, regions_6hat);
+        if (save_to_file) store_region_map(regions_5, FILENAME_5);
     }
     
 //    if (load_from_file) load_region_map(regions_7hat_a, FILENAME_7HAT_A);
