@@ -24,7 +24,7 @@ using namespace std;
 #include "4hat_regions.h"
 #include "4star_regions.hpp"
 #include "4_regions.hpp"
-#include "5hat_a_regions.h"
+#include "5hat_b_regions.h"
 #include "5hat_regions.h"
 #include "5_regions.hpp"
 #include "6hat_a_regions.h"
@@ -35,13 +35,6 @@ using namespace std;
 #include "store_region_map.h"
 #include "store_sign.h"
 
-
-enum RegionType {
-    Empty,
-    Type3B,
-    Type3A,
-    Type4A
-};
 
 #define FILENAME_EMPTY "region_empty.txt"
 map<vector<int>, BaseRegion> region_empty;
@@ -84,8 +77,13 @@ map<vector<int>, BaseRegion> regions_4star;
 #define FILENAME_4 "regions_4.txt"
 map<vector<int>, BaseRegion> regions_4;
 
-#define FILENAME_5HAT_A "regions_5hat_a.txt"
-map<vector<int>, BaseRegion> regions_5hat_a;
+#define OLD_FILENAME_5HAT_B "old_regions_5hat_b.txt"
+map<vector<int>, BaseRegion> old_regions_5hat_b;
+
+#define FILENAME_5HAT_B "regions_5hat_b.txt"
+map<vector<int>, BaseRegion> regions_5hat_b;
+
+
 #define FILENAME_5HAT "regions_5hat.txt"
 map<vector<int>, BaseRegion> regions_5hat;
 #define FILENAME_5 "regions_5.txt"
@@ -200,12 +198,23 @@ int main(){
             exit(1);
         }
     }
-//
-//    if (load_from_file) load_region_map(regions_5hat_a, FILENAME_5HAT_A);
-//    if (regions_5hat_a.empty()) {
-//        generate_5hat_a_regions(regions_5hat_a);
-//        if (save_to_file) store_region_map(regions_5hat_a, FILENAME_5HAT_A);
-//    }
+
+    load_region_map(old_regions_5hat_b, OLD_FILENAME_5HAT_B);
+    if (load_from_file) load_region_map(regions_5hat_b, FILENAME_5HAT_B);
+    if (regions_5hat_b.empty()) {
+        generate_5hat_b_regions(regions_5hat_b, regions_3hat_b, regions_4hat_b);
+        if (save_to_file) store_region_map(regions_5hat_b, FILENAME_5HAT_B);
+    }
+    
+    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_5hat_b.begin() ; it != old_regions_5hat_b.end(); it++){
+        BaseRegion old = it->second;
+        
+        if (!contains_sign(regions_5hat_b, old)) {
+            cout << "old 5hat had more" << endl;
+            old.printRegion();
+            exit(1);
+        }
+    }
 //
 //    if (load_from_file) load_region_map(regions_5hat, FILENAME_5HAT);
 //    if (regions_5hat.empty()) {

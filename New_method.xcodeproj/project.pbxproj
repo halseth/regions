@@ -28,7 +28,7 @@
 		04857F3D1B135C6500B8762C /* 5hat_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04857F3B1B135C6500B8762C /* 5hat_regions.cpp */; };
 		049228F91B0DC1790032E4B9 /* 4hat_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0443190C1AF7D77300E3FC06 /* 4hat_regions.cpp */; };
 		049228FF1B0DEE750032E4B9 /* 4hat_b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 049228FD1B0DEE750032E4B9 /* 4hat_b_regions.cpp */; };
-		049229031B0DF5C70032E4B9 /* 5hat_a_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 049229011B0DF5C70032E4B9 /* 5hat_a_regions.cpp */; };
+		049229031B0DF5C70032E4B9 /* 5hat_b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 049229011B0DF5C70032E4B9 /* 5hat_b_regions.cpp */; };
 		04A5AE8F1B0B1BA90057572D /* testHatRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE8E1B0B1BA90057572D /* testHatRegion.cpp */; };
 		04A5AE911B0B1DD90057572D /* testHatARegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE901B0B1DD90057572D /* testHatARegion.cpp */; };
 		04A5AE931B0B21D80057572D /* testHatBRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A5AE921B0B21D80057572D /* testHatBRegion.cpp */; };
@@ -106,8 +106,8 @@
 		049228FA1B0DC2650032E4B9 /* 4hat_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4hat_regions.h; sourceTree = "<group>"; };
 		049228FD1B0DEE750032E4B9 /* 4hat_b_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 4hat_b_regions.cpp; sourceTree = "<group>"; };
 		049228FE1B0DEE750032E4B9 /* 4hat_b_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 4hat_b_regions.h; sourceTree = "<group>"; };
-		049229011B0DF5C70032E4B9 /* 5hat_a_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 5hat_a_regions.cpp; sourceTree = "<group>"; };
-		049229021B0DF5C70032E4B9 /* 5hat_a_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 5hat_a_regions.h; sourceTree = "<group>"; };
+		049229011B0DF5C70032E4B9 /* 5hat_b_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 5hat_b_regions.cpp; sourceTree = "<group>"; };
+		049229021B0DF5C70032E4B9 /* 5hat_b_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 5hat_b_regions.h; sourceTree = "<group>"; };
 		04A5AE8E1B0B1BA90057572D /* testHatRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatRegion.cpp; sourceTree = "<group>"; };
 		04A5AE901B0B1DD90057572D /* testHatARegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatARegion.cpp; sourceTree = "<group>"; };
 		04A5AE921B0B21D80057572D /* testHatBRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testHatBRegion.cpp; sourceTree = "<group>"; };
@@ -275,8 +275,8 @@
 		049229001B0DF5980032E4B9 /* 5regions */ = {
 			isa = PBXGroup;
 			children = (
-				049229011B0DF5C70032E4B9 /* 5hat_a_regions.cpp */,
-				049229021B0DF5C70032E4B9 /* 5hat_a_regions.h */,
+				049229011B0DF5C70032E4B9 /* 5hat_b_regions.cpp */,
+				049229021B0DF5C70032E4B9 /* 5hat_b_regions.h */,
 				04857F3B1B135C6500B8762C /* 5hat_regions.cpp */,
 				04857F3C1B135C6500B8762C /* 5hat_regions.h */,
 				04F0E6F61BC316BC00B68076 /* 5_regions.cpp */,
@@ -408,7 +408,7 @@
 				0423A9DD1B0CD5FA00449DB6 /* 3hat_b_regions.cpp in Sources */,
 				043716541B14DB6E00D4E1AD /* 6hat_regions.cpp in Sources */,
 				045938321AFB709E00C01262 /* main.cpp in Sources */,
-				049229031B0DF5C70032E4B9 /* 5hat_a_regions.cpp in Sources */,
+				049229031B0DF5C70032E4B9 /* 5hat_b_regions.cpp in Sources */,
 				0443190B1AF7D65C00E3FC06 /* subsets.cpp in Sources */,
 				04857F3D1B135C6500B8762C /* 5hat_regions.cpp in Sources */,
 				043716511B14C57900D4E1AD /* 6hat_a_regions.cpp in Sources */,
