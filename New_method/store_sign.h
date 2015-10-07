@@ -15,5 +15,6 @@
 
 void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal);
 void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal);
+bool contains_sign(std::map<std::vector<int>,BaseRegion> &regions, BaseRegion &region);
 
 #endif

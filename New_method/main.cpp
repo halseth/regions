@@ -15,14 +15,13 @@ using namespace std;
 #include "BaseRegion.h"
 
 #include "EmptyRegion.h"
-#include "3hat_a_regions.h"
+#include "3hat_b_regions.h"
 #include "3hat_ab_regions.h"
 #include "3_regions.hpp"
 #include "4hat_ab_regions.h"
 #include "3hat_regions.h"
 #include "4hat_b_regions.h"
 #include "4hat_regions.h"
-#include "4hat_a_regions.h"
 #include "4star_regions.hpp"
 #include "4_regions.hpp"
 #include "5hat_a_regions.h"
@@ -34,6 +33,7 @@ using namespace std;
 #include "7hat_a_regions.h"
 
 #include "store_region_map.h"
+#include "store_sign.h"
 
 
 enum RegionType {
@@ -46,21 +46,33 @@ enum RegionType {
 #define FILENAME_EMPTY "region_empty.txt"
 map<vector<int>, BaseRegion> region_empty;
 
-#define FILENAME_3HAT_A "regions_3hat_a.txt"
-map<vector<int>, BaseRegion> regions_3hat_a;
-#define FILENAME_3HAT_AB "regions_3hat_ab.txt"
-map<vector<int>, BaseRegion> regions_3hat_ab;
+#define FILENAME_3HAT_B "regions_3hat_b.txt"
+map<vector<int>, BaseRegion> regions_3hat_b;
+
+#define OLD_FILENAME_3HAT_B "old_regions_3hat_b.txt"
+map<vector<int>, BaseRegion> old_regions_3hat_b;
+
+//#define FILENAME_3HAT_AB "regions_3hat_ab.txt"
+//map<vector<int>, BaseRegion> regions_3hat_ab;
+
 #define FILENAME_3HAT "regions_3hat.txt"
 map<vector<int>, BaseRegion> regions_3hat;
+
+#define OLD_FILENAME_3HAT "old_regions_3hat.txt"
+map<vector<int>, BaseRegion> old_regions_3hat;
+
 #define FILENAME_3 "regions_3.txt"
 map<vector<int>, BaseRegion> regions_3;
 
-#define FILENAME_4HAT_A "regions_4hat_a.txt"
-map<vector<int>, BaseRegion> regions_4hat_a;
-#define FILENAME_4HAT_AB "regions_4hat_ab.txt"
-map<vector<int>, BaseRegion> regions_4hat_ab;
 #define FILENAME_4HAT_B "regions_4hat_b.txt"
 map<vector<int>, BaseRegion> regions_4hat_b;
+#define OLD_FILENAME_4HAT_B "old_regions_4hat_b.txt"
+map<vector<int>, BaseRegion> old_regions_4hat_b;
+
+
+#define FILENAME_4HAT_AB "regions_4hat_ab.txt"
+map<vector<int>, BaseRegion> regions_4hat_ab;
+
 #define FILENAME_4HAT "regions_4hat.txt"
 map<vector<int>, BaseRegion> regions_4hat;
 #define FILENAME_4star "regions_4star.txt"
@@ -88,70 +100,103 @@ map<vector<int>, BaseRegion> regions_7hat_a;
  
 int main(){
     
-    bool load_from_file = true;
+    bool load_from_file = false;
     bool save_to_file = true;
     
-    if (load_from_file) load_region_map(region_empty, FILENAME_EMPTY);
-    if (region_empty.empty()) {
-        generate_Empty_regions(region_empty);
-        if (save_to_file) store_region_map(region_empty, FILENAME_EMPTY);
-    }
-
-    if (load_from_file) load_region_map(regions_3hat_a, FILENAME_3HAT_A);
-    if(regions_3hat_a.empty()){
-        generate_3hat_a_regions(regions_3hat_a);
-        if (save_to_file) store_region_map(regions_3hat_a, FILENAME_3HAT_A);
-    }
-
-    if (load_from_file) load_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
-    if (regions_3hat_ab.empty()) {
-        generate_3hat_ab_regions(regions_3hat_ab);
-        if (save_to_file) store_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
+//    if (load_from_file) load_region_map(region_empty, FILENAME_EMPTY);
+//    if (region_empty.empty()) {
+//        generate_Empty_regions(region_empty);
+//        if (save_to_file) store_region_map(region_empty, FILENAME_EMPTY);
+//    }
+//
+    
+    load_region_map(old_regions_3hat_b, OLD_FILENAME_3HAT_B);
+    if (load_from_file) load_region_map(regions_3hat_b, FILENAME_3HAT_B);
+    if(regions_3hat_b.empty()){
+        generate_3hat_b_regions(regions_3hat_b);
+        if (save_to_file) store_region_map(regions_3hat_b, FILENAME_3HAT_B);
     }
     
+    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_3hat_b.begin() ; it != old_regions_3hat_b.end(); it++){
+        BaseRegion old = it->second;
+       
+        if (!contains_sign(regions_3hat_b, old)) {
+            cout << "old had more" << endl;
+            exit(1);
+        }
+    }
+    
+//
+//    if (load_from_file) load_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
+//    if (regions_3hat_ab.empty()) {
+//        generate_3hat_ab_regions(regions_3hat_ab);
+//        if (save_to_file) store_region_map(regions_3hat_ab, FILENAME_3HAT_AB);
+//    }
+//
+    load_region_map(old_regions_3hat, OLD_FILENAME_3HAT);
     if (load_from_file) load_region_map(regions_3hat, FILENAME_3HAT);
     if (regions_3hat.empty()) {
-        generate_3hat_regions(regions_3hat, regions_3hat_ab);
+        generate_3hat_regions(regions_3hat);
         if (save_to_file) store_region_map(regions_3hat, FILENAME_3HAT);
     }
-
-    if (load_from_file) load_region_map(regions_4hat_a, FILENAME_4HAT_A);
-    if (regions_4hat_a.empty()) {
-        generate_4hat_a_regions(regions_4hat_a);
-        if (save_to_file) store_region_map(regions_4hat_a, FILENAME_4HAT_A);
+    
+    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_3hat.begin() ; it != old_regions_3hat.end(); it++){
+        BaseRegion old = it->second;
+        
+        if (!contains_sign(regions_3hat, old)) {
+            cout << "old had more" << endl;
+            exit(1);
+        }
     }
 
+    load_region_map(old_regions_4hat_b, OLD_FILENAME_4HAT_B);
     if (load_from_file) load_region_map(regions_4hat_b, FILENAME_4HAT_B);
     if (regions_4hat_b.empty()) {
-        generate_4hat_b_regions(regions_4hat_b);
+        generate_4hat_b_regions(regions_4hat_b, regions_3hat_b);
         if (save_to_file) store_region_map(regions_4hat_b, FILENAME_4HAT_B);
     }
     
-    if (load_from_file) load_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
-    if (regions_4hat_ab.empty()) {
-        generate_4hat_ab_regions_new(regions_4hat_ab, regions_4hat_a, regions_4hat_b);
-        generate_4hat_ab_regions(regions_4hat_ab);
-        if (save_to_file) store_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
+    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_4hat_b.begin() ; it != old_regions_4hat_b.end(); it++){
+        BaseRegion old = it->second;
+        
+        if (!contains_sign(regions_4hat_b, old)) {
+            cout << "old 4hat had more" << endl;
+            old.printRegion();
+            exit(1);
+        }
     }
-
-    if (load_from_file) load_region_map(regions_4hat, FILENAME_4HAT);
-    if (regions_4hat.empty()) {
-        generate_4hat_regions(regions_4hat);
-        generate_4hat_regions_new(regions_4hat, regions_4hat_a);
-        if (save_to_file) store_region_map(regions_4hat, FILENAME_4HAT);
-    }
-
-    if (load_from_file) load_region_map(regions_5hat_a, FILENAME_5HAT_A);
-    if (regions_5hat_a.empty()) {
-        generate_5hat_a_regions(regions_5hat_a);
-        if (save_to_file) store_region_map(regions_5hat_a, FILENAME_5HAT_A);
-    }
-
-    if (load_from_file) load_region_map(regions_5hat, FILENAME_5HAT);
-    if (regions_5hat.empty()) {
-        generate_5hat_regions(regions_5hat, regions_5hat_a, regions_4hat_a, regions_4hat, regions_3hat);
-        if (save_to_file) store_region_map(regions_5hat, FILENAME_5HAT);
-    }
+//
+//    if (load_from_file) load_region_map(regions_4hat_b, FILENAME_4HAT_B);
+//    if (regions_4hat_b.empty()) {
+//        generate_4hat_b_regions(regions_4hat_b);
+//        if (save_to_file) store_region_map(regions_4hat_b, FILENAME_4HAT_B);
+//    }
+//    
+//    if (load_from_file) load_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
+//    if (regions_4hat_ab.empty()) {
+//        generate_4hat_ab_regions_new(regions_4hat_ab, regions_4hat_a, regions_4hat_b);
+//        generate_4hat_ab_regions(regions_4hat_ab);
+//        if (save_to_file) store_region_map(regions_4hat_ab, FILENAME_4HAT_AB);
+//    }
+//
+//    if (load_from_file) load_region_map(regions_4hat, FILENAME_4HAT);
+//    if (regions_4hat.empty()) {
+//        generate_4hat_regions(regions_4hat);
+//        generate_4hat_regions_new(regions_4hat, regions_4hat_a);
+//        if (save_to_file) store_region_map(regions_4hat, FILENAME_4HAT);
+//    }
+//
+//    if (load_from_file) load_region_map(regions_5hat_a, FILENAME_5HAT_A);
+//    if (regions_5hat_a.empty()) {
+//        generate_5hat_a_regions(regions_5hat_a);
+//        if (save_to_file) store_region_map(regions_5hat_a, FILENAME_5HAT_A);
+//    }
+//
+//    if (load_from_file) load_region_map(regions_5hat, FILENAME_5HAT);
+//    if (regions_5hat.empty()) {
+//        generate_5hat_regions(regions_5hat, regions_5hat_a, regions_4hat_a, regions_4hat, regions_3hat);
+//        if (save_to_file) store_region_map(regions_5hat, FILENAME_5HAT);
+//    }
 
 
 //    if (load_from_file) load_region_map(regions_6hat_a, FILENAME_6HAT_A);
@@ -161,41 +206,41 @@ int main(){
 //    }
 //
 //     
-    if (load_from_file) load_region_map(regions_6hat, FILENAME_6HAT);
-    if (regions_6hat.empty()) {
-        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
-        if (save_to_file) store_region_map(regions_6hat, FILENAME_6HAT);
-    }
-    
-    if (load_from_file) load_region_map(regions_3, FILENAME_3);
-    if (regions_3.empty()) {
-        generate_3_regions(regions_3, regions_3hat, regions_4hat, regions_5hat);
-        if (save_to_file) store_region_map(regions_3, FILENAME_3);
-    }
-    
-    if (load_from_file) load_region_map(regions_4star, FILENAME_4star);
-    if (regions_4star.empty()) {
-        generate_4star_regions(regions_4star, regions_3hat, regions_3, regions_4hat, regions_6hat);
-        if (save_to_file) store_region_map(regions_4star, FILENAME_4star);
-    }
-    
-    if (load_from_file) load_region_map(regions_4, FILENAME_4);
-    if (regions_4.empty()) {
-        generate_4_regions(regions_4, regions_3hat, regions_3, regions_4hat, regions_5hat);
-        if (save_to_file) store_region_map(regions_4, FILENAME_4);
-    }
-    
-    if (load_from_file) load_region_map(regions_5, FILENAME_5);
-    if (regions_5.empty()) {
-        generate_5_regions(regions_5, regions_3hat, regions_3, regions_4hat, regions_4star, regions_4, regions_5hat, regions_6hat);
-        if (save_to_file) store_region_map(regions_5, FILENAME_5);
-    }
-    
-    if (load_from_file) load_region_map(regions_6, FILENAME_6);
-    if (regions_6.empty()) {
-        generate_6_regions(regions_6, regions_3hat, regions_4hat, regions_4star, regions_5, regions_5hat, regions_6hat);
-        if (save_to_file) store_region_map(regions_6, FILENAME_6);
-    }
+//    if (load_from_file) load_region_map(regions_6hat, FILENAME_6HAT);
+//    if (regions_6hat.empty()) {
+//        generate_6hat_regions(regions_6hat, regions_5hat, regions_4hat_a, regions_4hat, regions_3hat, regions_3hat_a, regions_6hat_a, regions_5hat_a);
+//        if (save_to_file) store_region_map(regions_6hat, FILENAME_6HAT);
+//    }
+//    
+//    if (load_from_file) load_region_map(regions_3, FILENAME_3);
+//    if (regions_3.empty()) {
+//        generate_3_regions(regions_3, regions_3hat, regions_4hat, regions_5hat);
+//        if (save_to_file) store_region_map(regions_3, FILENAME_3);
+//    }
+//    
+//    if (load_from_file) load_region_map(regions_4star, FILENAME_4star);
+//    if (regions_4star.empty()) {
+//        generate_4star_regions(regions_4star, regions_3hat, regions_3, regions_4hat, regions_6hat);
+//        if (save_to_file) store_region_map(regions_4star, FILENAME_4star);
+//    }
+//    
+//    if (load_from_file) load_region_map(regions_4, FILENAME_4);
+//    if (regions_4.empty()) {
+//        generate_4_regions(regions_4, regions_3hat, regions_3, regions_4hat, regions_5hat);
+//        if (save_to_file) store_region_map(regions_4, FILENAME_4);
+//    }
+//    
+//    if (load_from_file) load_region_map(regions_5, FILENAME_5);
+//    if (regions_5.empty()) {
+//        generate_5_regions(regions_5, regions_3hat, regions_3, regions_4hat, regions_4star, regions_4, regions_5hat, regions_6hat);
+//        if (save_to_file) store_region_map(regions_5, FILENAME_5);
+//    }
+//    
+//    if (load_from_file) load_region_map(regions_6, FILENAME_6);
+//    if (regions_6.empty()) {
+//        generate_6_regions(regions_6, regions_3hat, regions_4hat, regions_4star, regions_5, regions_5hat, regions_6hat);
+//        if (save_to_file) store_region_map(regions_6, FILENAME_6);
+//    }
     
 //    if (load_from_file) load_region_map(regions_7hat_a, FILENAME_7HAT_A);
 //    if (regions_7hat_a.empty()) {

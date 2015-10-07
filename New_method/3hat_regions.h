@@ -12,6 +12,6 @@
 #include <map>
 #include "BaseRegion.h"
 
-void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_3hat_ab);
+void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
 
 #endif /* defined(__New_method___hat_regions__) */

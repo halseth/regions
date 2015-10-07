@@ -8,6 +8,7 @@ using namespace std;
 
 // FINDS TOO FEW
 void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
+    cout << "in generate_4hat_regions" << endl;
     int counter = 0;
     int v = 0;
     int a = 1;

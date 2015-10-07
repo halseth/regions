@@ -16,6 +16,7 @@ using namespace std;
 #include "4_regions.hpp"
 
 void generate_4_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std::map<std::vector<int>,BaseRegion> &regions_3hat, std::map<std::vector<int>,BaseRegion> &regions_3, std::map<std::vector<int>,BaseRegion> &regions_4hat, std::map<std::vector<int>,BaseRegion> &regions_5hat){
+    cout << "in generate_4_regions" << endl;
     
     if(!signature_minimal.empty()){
         cerr << "signminimal not empty";

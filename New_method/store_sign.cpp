@@ -77,3 +77,13 @@ void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &s
     
     cout << endl;
 }
+
+bool contains_sign(std::map<std::vector<int>,BaseRegion> &regions, BaseRegion &region){
+    vector<int> sign;
+    region.getSignature2(sign);
+    if(regions.count(sign) == 0 )
+    {
+        return false;
+    }
+    return true;
+}

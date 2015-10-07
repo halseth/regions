@@ -15,33 +15,47 @@ using namespace std;
 #include "store_sign.h"
 #include "HatRegion.h"
 
-void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_3hat_ab){
-    int v = 0;
-    int a = 1;
-    int b = 2;
+void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
+    int a = 0;
+    int b = 1;
+    int c = 2;
     
-    for (int deg1 = 0; deg1 <= 1; deg1++) {
-        for (std::map<std::vector<int>,BaseRegion>::const_iterator it = regions_3hat_ab.begin(); it != regions_3hat_ab.end(); it++) {
-            BaseRegion R2 = it->second;
-            R2.addLabelToNode(0, v);
-            R2.addLabelToNode(1, a);
-            R2.addLabelToNode(2, b);
-            
-            HatRegion R(3, v);
-            R.addLabelToNode(0, v);
-            R.addLabelToNode(1, a);
-            R.addLabelToNode(2, b);
-            
-            R.glue(&R2);
-            
-            if(deg1){
-                int c = R.addNode();
-                R.addEdge(c, v);
+    for (int dangling_n3 = 0; dangling_n3 <= 1; dangling_n3++) {
+        
+        // Can always assume |S| = 0, since picking a is at least as good
+        for (int deg2_a_b = 0; deg2_a_b <= 1; deg2_a_b++) {
+            for (int deg2_a_c = 0; deg2_a_c <= 1; deg2_a_c++) {
+                for (int deg3 = 0; deg3 <= 1; deg3++) {
+                    HatRegion R(3,a);
+                    
+                    for (int i = 0; i < dangling_n3; i++) {
+                        int node = R.addNode();
+                        R.addEdge(a, node);
+                    }
+                    
+                    for (int i = 0; i < deg2_a_b; i++) {
+                        int node = R.addNode();
+                        R.addEdge(a, node);
+                        R.addEdge(node, b);
+                    }
+                    
+                    for (int i = 0; i < deg2_a_c; i++) {
+                        int node = R.addNode();
+                        R.addEdge(a, node);
+                        R.addEdge(node, c);
+                    }
+                    
+                    for (int i = 0; i < deg3; i++) {
+                        int node = R.addNode();
+                        R.addEdge(a, node);
+                        R.addEdge(b, node);
+                        R.addEdge(c, node);
+                    }
+                    
+                    store_sign(R, signature_minimal);
+                }
             }
-            store_sign(R, signature_minimal);
         }
-        
-        
     }
     
     cout << "done with 3hat_regions" << endl;
