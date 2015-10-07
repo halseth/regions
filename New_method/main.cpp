@@ -30,6 +30,7 @@ using namespace std;
 #include "5_regions.hpp"
 #include "6hat_a_regions.h"
 #include "6hat_regions.h"
+#include "6_regions.hpp"
 #include "7hat_a_regions.h"
 
 #include "store_region_map.h"
@@ -78,6 +79,9 @@ map<vector<int>, BaseRegion> regions_5;
 map<vector<int>, BaseRegion> regions_6hat_a;
 #define FILENAME_6HAT "regions_6hat.txt"
 map<vector<int>, BaseRegion> regions_6hat;
+#define FILENAME_6 "regions_6.txt"
+map<vector<int>, BaseRegion> regions_6;
+
 #define FILENAME_7HAT_A "regions_7hat_a.txt"
 map<vector<int>, BaseRegion> regions_7hat_a;
 
@@ -185,6 +189,12 @@ int main(){
     if (regions_5.empty()) {
         generate_5_regions(regions_5, regions_3hat, regions_3, regions_4hat, regions_4star, regions_4, regions_5hat, regions_6hat);
         if (save_to_file) store_region_map(regions_5, FILENAME_5);
+    }
+    
+    if (load_from_file) load_region_map(regions_6, FILENAME_6);
+    if (regions_6.empty()) {
+        generate_6_regions(regions_6, regions_3hat, regions_4hat, regions_4star, regions_5, regions_5hat, regions_6hat);
+        if (save_to_file) store_region_map(regions_6, FILENAME_6);
     }
     
 //    if (load_from_file) load_region_map(regions_7hat_a, FILENAME_7HAT_A);
