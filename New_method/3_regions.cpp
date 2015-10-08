@@ -27,12 +27,9 @@ void generate_3_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std
         exit(1);
     }
     
-   // int v = 0;
-    
     int a = 0;
     int b = 1;
     int c = 2;
-    //int w = 2;
     
     // ---------------- |S| = 0 ----------------
     cout << "---------------- |S| =0 ----------------" << endl;
@@ -133,7 +130,25 @@ void generate_3_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std
         }
     }
 
-    // TODO: symmetri
+    // Add symmetries
+//    cout << "find symmetries"<< endl;
+//    std::map<vector<int>,BaseRegion> signature_minimal_copy(signature_minimal.begin(), signature_minimal.end());
+//    
+//    for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy.begin(); it != signature_minimal_copy.end(); ++it) {
+//        Region R(3,a,c);
+//        
+//        R.addLabelToNode(a, a);
+//        R.addLabelToNode(b, b);
+//        R.addLabelToNode(c, c);
+//        
+//        BaseRegion copy = it->second;
+//        copy.addLabelToNode(c, 0);
+//        copy.addLabelToNode(b, 1);
+//        copy.addLabelToNode(a, 2);
+//        R.glue(&copy);
+//        
+//        store_sign(R, signature_minimal);
+//    }
 
     cout << "done with 3_regions" << endl;
 }

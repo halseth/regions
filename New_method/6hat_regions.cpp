@@ -9,8 +9,533 @@
 #include "6hat_regions.h"
 #include "store_sign.h"
 #include <iostream>
+using namespace std;
 
-void generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_5hat, std::map<std::vector<int>,BaseRegion> &regions_4hat_a,std::map<std::vector<int>,BaseRegion> &regions_4hat, std::map<std::vector<int>,BaseRegion> &regions_3hat, std::map<std::vector<int>,BaseRegion> &regions_3hat_a, std::map<std::vector<int>,BaseRegion> &regions_6hat_a, std::map<std::vector<int>,BaseRegion> &regions_5hat_a){
+void generate_6hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std::map<vector<int>,BaseRegion> &regions_3hat, std::map<vector<int>,BaseRegion> &regions_4hat, std::map<vector<int>,BaseRegion> &regions_4hat_b, std::map<vector<int>,BaseRegion> &regions_5hat_b, std::map<vector<int>,BaseRegion> &regions_5hat, std::map<vector<int>,BaseRegion> &regions_6hat_b){
+    cout << "in generate_6hat_regions" << endl;
+    
+    if(!signature_minimal.empty()){
+        cerr << "signminimal not empty";
+        exit(1);
+    }
+    
+    if(regions_3hat.empty() || regions_4hat.empty() || regions_4hat_b.empty() || regions_5hat_b.empty() || regions_5hat.empty() || regions_6hat_b.empty()){
+        cerr << "needed regions empty" << endl;
+        exit(1);
+    }
+    
+    int a = 0;
+    int b = 1;
+    int c = 2;
+    int d = 3;
+    int e = 4;
+    int f = 5;
+    
+    // S any size
+    
+    // a-c edge
+    cout << "a-c edge" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat) {
+        for (map<vector<int>,BaseRegion>::const_iterator it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat) {
+            HatRegion R(6, a);
+            R.addEdge(a, c);
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(d, d);
+            R.addLabelToNode(e, e);
+            R.addLabelToNode(f, f);
+            
+            std::vector<BaseRegion*> toGlue;
+            
+            BaseRegion R_3hat = it_3hat->second;
+            R_3hat.addLabelToNode(a, 0);
+            R_3hat.addLabelToNode(b, 1);
+            R_3hat.addLabelToNode(c, 2);
+            toGlue.push_back(&R_3hat);
+            
+            BaseRegion R_5hat = it_5hat->second;
+            R_5hat.addLabelToNode(a, 0);
+            R_5hat.addLabelToNode(c, 1);
+            R_5hat.addLabelToNode(d, 2);
+            R_5hat.addLabelToNode(e, 3);
+            R_5hat.addLabelToNode(f, 4);
+            toGlue.push_back(&R_5hat);
+            
+            R.glue(toGlue);
+            
+            store_sign(R, signature_minimal);
+            
+        }
+    }
+    
+    // a-d edge
+    cout << "a-d edge" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_4hat_1 = regions_4hat.begin(); it_4hat_1 != regions_4hat.end(); ++it_4hat_1) {
+        for (map<vector<int>,BaseRegion>::const_iterator it_4hat_2 = regions_4hat.begin(); it_4hat_2 != regions_4hat.end(); ++it_4hat_2) {
+            HatRegion R(6, a);
+            R.addEdge(a, d);
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(d, d);
+            R.addLabelToNode(e, e);
+            R.addLabelToNode(f, f);
+            
+            std::vector<BaseRegion*> toGlue;
+            
+            BaseRegion R_4hat_1 = it_4hat_1->second;
+            R_4hat_1.addLabelToNode(a, 0);
+            R_4hat_1.addLabelToNode(b, 1);
+            R_4hat_1.addLabelToNode(c, 2);
+            R_4hat_1.addLabelToNode(d, 3);
+            toGlue.push_back(&R_4hat_1);
+            
+            BaseRegion R_4hat_2 = it_4hat_2->second;
+            R_4hat_2.addLabelToNode(a, 0);
+            R_4hat_2.addLabelToNode(d, 1);
+            R_4hat_2.addLabelToNode(e, 2);
+            R_4hat_2.addLabelToNode(f, 3);
+            toGlue.push_back(&R_4hat_2);
+            
+            R.glue(toGlue);
+            
+            store_sign(R, signature_minimal);
+            
+        }
+    }
+    
+    // b-d edge
+    cout << "b-d edge" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat) {
+        HatRegion R(6, a);
+        R.addEdge(b, d);
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        R.addLabelToNode(e, e);
+        R.addLabelToNode(f, f);
+        
+        std::vector<BaseRegion*> toGlue;
+        
+        BaseRegion R_5hat = it_5hat->second;
+        R_5hat.addLabelToNode(a, 0);
+        R_5hat.addLabelToNode(b, 1);
+        R_5hat.addLabelToNode(d, 2);
+        R_5hat.addLabelToNode(e, 3);
+        R_5hat.addLabelToNode(f, 4);
+        toGlue.push_back(&R_5hat);
+        
+        R.glue(toGlue);
+        
+        store_sign(R, signature_minimal);
+        
+    }
+    
+    // b-e edge
+    cout << "b-e edge" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat) {
+        HatRegion R(6, a);
+        R.addEdge(b, e);
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        R.addLabelToNode(e, e);
+        R.addLabelToNode(f, f);
+        
+        std::vector<BaseRegion*> toGlue;
+        
+        BaseRegion R_4hat = it_4hat->second;
+        R_4hat.addLabelToNode(a, 0);
+        R_4hat.addLabelToNode(b, 1);
+        R_4hat.addLabelToNode(e, 2);
+        R_4hat.addLabelToNode(f, 3);
+        toGlue.push_back(&R_4hat);
+        
+        R.glue(toGlue);
+        
+        store_sign(R, signature_minimal);
+        
+    }
+    
+    // b-f edge
+    cout << "b-f edge" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat) {
+        HatRegion R(6, a);
+        R.addEdge(b, f);
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        R.addLabelToNode(e, e);
+        R.addLabelToNode(f, f);
+        
+        std::vector<BaseRegion*> toGlue;
+        
+        BaseRegion R_3hat = it_3hat->second;
+        R_3hat.addLabelToNode(a, 0);
+        R_3hat.addLabelToNode(b, 1);
+        R_3hat.addLabelToNode(f, 2);
+        toGlue.push_back(&R_3hat);
+        
+        R.glue(toGlue);
+        
+        store_sign(R, signature_minimal);
+        
+    }
+    
+    // c-e edge
+    cout << "c-e edge" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat) {
+        HatRegion R(6, a);
+        R.addEdge(c, e);
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        R.addLabelToNode(e, e);
+        R.addLabelToNode(f, f);
+        
+        std::vector<BaseRegion*> toGlue;
+        
+        BaseRegion R_5hat = it_5hat->second;
+        R_5hat.addLabelToNode(a, 0);
+        R_5hat.addLabelToNode(b, 1);
+        R_5hat.addLabelToNode(c, 2);
+        R_5hat.addLabelToNode(e, 3);
+        R_5hat.addLabelToNode(f, 4);
+        toGlue.push_back(&R_5hat);
+        
+        R.glue(toGlue);
+        
+        store_sign(R, signature_minimal);
+        
+    }
+    
+    // a-d node
+    cout << "a-d node" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_5hat_1 = regions_5hat.begin(); it_5hat_1 != regions_5hat.end(); ++it_5hat_1) {
+        for (map<vector<int>,BaseRegion>::const_iterator it_5hat_2 = regions_5hat.begin(); it_5hat_2 != regions_5hat.end(); ++it_5hat_2) {
+            HatRegion R(6, a);
+            int node = R.addNode();
+            R.addEdge(a, node);
+            R.addEdge(d, node);
+            
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(d, d);
+            R.addLabelToNode(e, e);
+            R.addLabelToNode(f, f);
+            R.addLabelToNode(node, node);
+            
+            std::vector<BaseRegion*> toGlue;
+            
+            BaseRegion R_5hat_1 = it_5hat_1->second;
+            R_5hat_1.addLabelToNode(a, 0);
+            R_5hat_1.addLabelToNode(b, 1);
+            R_5hat_1.addLabelToNode(c, 2);
+            R_5hat_1.addLabelToNode(d, 3);
+            R_5hat_1.addLabelToNode(node, 4);
+            toGlue.push_back(&R_5hat_1);
+            
+            BaseRegion R_5hat_2 = it_5hat_2->second;
+            R_5hat_2.addLabelToNode(a, 0);
+            R_5hat_2.addLabelToNode(node, 1);
+            R_5hat_2.addLabelToNode(d, 2);
+            R_5hat_2.addLabelToNode(e, 3);
+            R_5hat_2.addLabelToNode(f, 4);
+            toGlue.push_back(&R_5hat_2);
+            
+            R.glue(toGlue);
+            
+            store_sign(R, signature_minimal);
+        }
+    }
+    
+    // b-f node
+    cout << "b-f node" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_3hat_1 = regions_3hat.begin(); it_3hat_1 != regions_3hat.end(); ++it_3hat_1) {
+        for (map<vector<int>,BaseRegion>::const_iterator it_3hat_2 = regions_3hat.begin(); it_3hat_2 != regions_3hat.end(); ++it_3hat_2) {
+            for (int edge_node_c = 0; edge_node_c <= 1; edge_node_c++) {
+                for (int edge_node_e = 0; edge_node_e <= 1; edge_node_e++) {
+                    HatRegion R(6, a);
+                    int node = R.addNode();
+                    R.addEdge(a, node);
+                    R.addEdge(b, node);
+                    R.addEdge(f, node);
+                    
+                    if (edge_node_c) {
+                        R.addEdge(node, c);
+                    }
+                    if (edge_node_e) {
+                        R.addEdge(node, e);
+                    }
+                    
+                    R.addLabelToNode(a, a);
+                    R.addLabelToNode(b, b);
+                    R.addLabelToNode(c, c);
+                    R.addLabelToNode(d, d);
+                    R.addLabelToNode(e, e);
+                    R.addLabelToNode(f, f);
+                    R.addLabelToNode(node, node);
+                    
+                    std::vector<BaseRegion*> toGlue;
+                    
+                    BaseRegion R_3hat_1 = it_3hat_1->second;
+                    R_3hat_1.addLabelToNode(a, 0);
+                    R_3hat_1.addLabelToNode(b, 1);
+                    R_3hat_1.addLabelToNode(node, 2);
+                    toGlue.push_back(&R_3hat_1);
+                    
+                    BaseRegion R_3hat_2 = it_3hat_2->second;
+                    R_3hat_2.addLabelToNode(a, 0);
+                    R_3hat_2.addLabelToNode(node, 1);
+                    R_3hat_2.addLabelToNode(f, 2);
+                    toGlue.push_back(&R_3hat_2);
+                    
+                    R.glue(toGlue);
+                    
+                    store_sign(R, signature_minimal);
+                }
+            }
+            
+        }
+    }
+    
+    // c-e node
+    cout << "c-e node" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_4hat_1 = regions_4hat.begin(); it_4hat_1 != regions_4hat.end(); ++it_4hat_1) {
+        for (map<vector<int>,BaseRegion>::const_iterator it_4hat_2 = regions_4hat.begin(); it_4hat_2 != regions_4hat.end(); ++it_4hat_2) {
+            HatRegion R(6, a);
+            int node = R.addNode();
+            R.addEdge(a, node);
+            R.addEdge(c, node);
+            R.addEdge(e, node);
+            
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(d, d);
+            R.addLabelToNode(e, e);
+            R.addLabelToNode(f, f);
+            R.addLabelToNode(node, node);
+            
+            std::vector<BaseRegion*> toGlue;
+            
+            BaseRegion R_4hat_1 = it_4hat_1->second;
+            R_4hat_1.addLabelToNode(a, 0);
+            R_4hat_1.addLabelToNode(b, 1);
+            R_4hat_1.addLabelToNode(c, 2);
+            R_4hat_1.addLabelToNode(node, 3);
+            toGlue.push_back(&R_4hat_1);
+            
+            BaseRegion R_4hat_2 = it_4hat_2->second;
+            R_4hat_2.addLabelToNode(a, 0);
+            R_4hat_2.addLabelToNode(node, 1);
+            R_4hat_2.addLabelToNode(e, 2);
+            R_4hat_2.addLabelToNode(f, 3);
+            toGlue.push_back(&R_4hat_2);
+            
+            R.glue(toGlue);
+            
+            store_sign(R, signature_minimal);
+            
+        }
+    }
+    
+    // b-e node
+    cout << "b-e node" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat) {
+        for (map<vector<int>,BaseRegion>::const_iterator it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat) {
+            for (int edge_node_c = 0; edge_node_c <= 1; edge_node_c++) {
+                HatRegion R(6, a);
+                int node = R.addNode();
+                R.addEdge(a, node);
+                R.addEdge(b, node);
+                R.addEdge(e, node);
+                
+                if(edge_node_c){
+                    R.addEdge(node, c);
+                }
+                
+                R.addLabelToNode(a, a);
+                R.addLabelToNode(b, b);
+                R.addLabelToNode(c, c);
+                R.addLabelToNode(d, d);
+                R.addLabelToNode(e, e);
+                R.addLabelToNode(f, f);
+                R.addLabelToNode(node, node);
+                
+                std::vector<BaseRegion*> toGlue;
+                
+                BaseRegion R_3hat = it_3hat->second;
+                R_3hat.addLabelToNode(a, 0);
+                R_3hat.addLabelToNode(b, 1);
+                R_3hat.addLabelToNode(node, 2);
+                toGlue.push_back(&R_3hat);
+                
+                BaseRegion R_4hat = it_4hat->second;
+                R_4hat.addLabelToNode(a, 0);
+                R_4hat.addLabelToNode(node, 1);
+                R_4hat.addLabelToNode(e, 2);
+                R_4hat.addLabelToNode(f, 3);
+                toGlue.push_back(&R_4hat);
+                
+                R.glue(toGlue);
+                
+                store_sign(R, signature_minimal);
+                
+            }
+            
+        }
+    }
+    
+    // |S| = 0
+    cout << "|S| = 0" << endl;
+    for (int dangling_n3 = 0; dangling_n3 <= 1; dangling_n3++) {
+        for (int deg2_a_b = 0; deg2_a_b <= 1; deg2_a_b++) {
+            for (int deg2_a_f = 0; deg2_a_f <= 1; deg2_a_f++) {
+                
+                for (int deg2_a_c = 0; deg2_a_c <= 1; deg2_a_c++) {
+                    for (int deg3_a_b_c = 0; deg3_a_b_c <= 1; deg3_a_b_c++) {
+                        
+                        for (int deg2_a_e = 0; deg2_a_e <= 1; deg2_a_e++) {
+                            for (int deg3_a_e_f = 0; deg3_a_e_f <= 1; deg3_a_e_f++) {
+                                
+                                HatRegion R(6,a);
+                                
+                                for (int i = 0; i < dangling_n3; i++) {
+                                    int node = R.addNode();
+                                    R.addEdge(node, a);
+                                }
+                                
+                                for (int i = 0; i < deg2_a_b; i++) {
+                                    int node = R.addNode();
+                                    R.addEdge(node, a);
+                                    R.addEdge(node, b);
+                                }
+                                
+                                for (int i = 0; i < deg2_a_f; i++) {
+                                    int node = R.addNode();
+                                    R.addEdge(node, a);
+                                    R.addEdge(node, f);
+                                }
+                                
+                                for (int i = 0; i < deg2_a_c; i++) {
+                                    int node = R.addNode();
+                                    R.addEdge(node, a);
+                                    R.addEdge(node, c);
+                                }
+                                
+                                for (int i = 0; i < deg3_a_b_c; i++) {
+                                    int node = R.addNode();
+                                    R.addEdge(node, a);
+                                    R.addEdge(node, b);
+                                    R.addEdge(node, c);
+                                }
+                                
+                                for (int i = 0; i < deg2_a_e; i++) {
+                                    int node = R.addNode();
+                                    R.addEdge(node, a);
+                                    R.addEdge(node, e);
+                                }
+                                
+                                for (int i = 0; i < deg3_a_e_f; i++) {
+                                    int node = R.addNode();
+                                    R.addEdge(node, a);
+                                    R.addEdge(node, e);
+                                    R.addEdge(node, f);
+                                }
+                                
+                                store_sign(R, signature_minimal);
+                                
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // |S| > 0, s connected to c,d or e, or a is as good. Connected to d is already handled, so handle case connected to c (e symmetric)
+    cout << "|S| > 0" << endl;
+    for (map<vector<int>,BaseRegion>::const_iterator it_4hat_b = regions_4hat_b.begin(); it_4hat_b != regions_4hat_b.end(); ++it_4hat_b) {
+        for (map<vector<int>,BaseRegion>::const_iterator it_6hat_b = regions_6hat_b.begin(); it_6hat_b != regions_6hat_b.end(); ++it_6hat_b) {
+            HatRegion R(6, a);
+            int s = R.addNode();
+            R.addEdge(a, s);
+            R.addEdge(c, s);
+            
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(d, d);
+            R.addLabelToNode(e, e);
+            R.addLabelToNode(f, f);
+            R.addLabelToNode(s, s);
+            
+            std::vector<BaseRegion*> toGlue;
+            
+            BaseRegion R_4hat_b = it_4hat_b->second;
+            R_4hat_b.addLabelToNode(s, 0);
+            R_4hat_b.addLabelToNode(a, 1);
+            R_4hat_b.addLabelToNode(b, 2);
+            R_4hat_b.addLabelToNode(c, 3);
+            toGlue.push_back(&R_4hat_b);
+            
+            BaseRegion R_6hat_b = it_6hat_b->second;
+            R_6hat_b.addLabelToNode(a, 0);
+            R_6hat_b.addLabelToNode(s, 1);
+            R_6hat_b.addLabelToNode(c, 2);
+            R_6hat_b.addLabelToNode(d, 3);
+            R_6hat_b.addLabelToNode(e, 4);
+            R_6hat_b.addLabelToNode(f, 5);
+            toGlue.push_back(&R_6hat_b);
+            
+            R.glue(toGlue);
+            
+            store_sign(R, signature_minimal);
+            
+        }
+    }
+    
+    
+    
+    // Add symmetries
+    cout << "find symmetries"<< endl;
+    std::map<vector<int>,BaseRegion> signature_minimal_copy(signature_minimal.begin(), signature_minimal.end());
+    
+    for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy.begin(); it != signature_minimal_copy.end(); ++it) {
+        HatRegion R(6,a);
+        
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        R.addLabelToNode(e, e);
+        R.addLabelToNode(f, f);
+        
+        BaseRegion copy = it->second;
+        copy.addLabelToNode(a, 0);
+        copy.addLabelToNode(f, 1);
+        copy.addLabelToNode(e, 2);
+        copy.addLabelToNode(d, 3);
+        copy.addLabelToNode(c, 4);
+        copy.addLabelToNode(b, 5);
+        
+        R.glue(&copy);
+        
+        store_sign(R, signature_minimal);
+    }
+    
+    cout << "done with 6hat_regions." << endl;
+}
+
+void old_generate_6hat_regions(std::map<std::vector<int>,BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_5hat, std::map<std::vector<int>,BaseRegion> &regions_4hat_a,std::map<std::vector<int>,BaseRegion> &regions_4hat, std::map<std::vector<int>,BaseRegion> &regions_3hat, std::map<std::vector<int>,BaseRegion> &regions_3hat_a, std::map<std::vector<int>,BaseRegion> &regions_6hat_a, std::map<std::vector<int>,BaseRegion> &regions_5hat_a){
     int counter = 0;
     int v = 0;
     int a = 1;

@@ -82,33 +82,41 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
     // b-d node
     for (map<vector<int>,BaseRegion>::const_iterator it_3hat_1 = regions_3hat.begin(); it_3hat_1 != regions_3hat.end(); ++it_3hat_1) {
         for (map<vector<int>,BaseRegion>::const_iterator it_3hat_2 = regions_3hat.begin(); it_3hat_2 != regions_3hat.end(); ++it_3hat_2) {
-            HatRegion R(4, a);
-            int node = R.addNode();
-            R.addEdge(b, node);
-            R.addEdge(node, d);
-            R.addLabelToNode(a, a);
-            R.addLabelToNode(b, b);
-            R.addLabelToNode(c, c);
-            R.addLabelToNode(d, d);
-            R.addLabelToNode(node, node);
+            for (int edge_node_c = 0; edge_node_c <= 1; edge_node_c++) {
+                HatRegion R(4, a);
+                int node = R.addNode();
+                R.addEdge(b, node);
+                R.addEdge(node, d);
+                
+                if (edge_node_c) {
+                    R.addEdge(node, c);
+                }
+                
+                R.addLabelToNode(a, a);
+                R.addLabelToNode(b, b);
+                R.addLabelToNode(c, c);
+                R.addLabelToNode(d, d);
+                R.addLabelToNode(node, node);
+                
+                std::vector<BaseRegion*> toGlue;
+                
+                BaseRegion R_3hat_1 = it_3hat_1->second;
+                R_3hat_1.addLabelToNode(a, 0);
+                R_3hat_1.addLabelToNode(b, 1);
+                R_3hat_1.addLabelToNode(node, 2);
+                toGlue.push_back(&R_3hat_1);
+                
+                BaseRegion R_3hat_2 = it_3hat_2->second;
+                R_3hat_2.addLabelToNode(a, 0);
+                R_3hat_2.addLabelToNode(node, 1);
+                R_3hat_2.addLabelToNode(d, 2);
+                toGlue.push_back(&R_3hat_2);
+                
+                R.glue(toGlue);
+                
+                store_sign(R, signature_minimal);
+            }
             
-            std::vector<BaseRegion*> toGlue;
-            
-            BaseRegion R_3hat_1 = it_3hat_1->second;
-            R_3hat_1.addLabelToNode(a, 0);
-            R_3hat_1.addLabelToNode(b, 1);
-            R_3hat_1.addLabelToNode(node, 2);
-            toGlue.push_back(&R_3hat_1);
-            
-            BaseRegion R_3hat_2 = it_3hat_2->second;
-            R_3hat_2.addLabelToNode(a, 0);
-            R_3hat_2.addLabelToNode(node, 1);
-            R_3hat_2.addLabelToNode(d, 2);
-            toGlue.push_back(&R_3hat_2);
-            
-            R.glue(toGlue);
-            
-            store_sign(R, signature_minimal);
             
         }
     }

@@ -35,75 +35,74 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     int f = 5;
     // ---------------- S any size ----------------
     
-    // a-c edge
-//    cout << "---------------- a-c edge ----------------" << endl;
-//    for(std::map<std::vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
-//        for(std::map<std::vector<int>,BaseRegion>::const_iterator it_5 = regions_5.begin(); it_5 != regions_5.end(); ++it_5){
-//            Region R(6,a,d);
-//            R.addEdge(a, c);
-//            R.addLabelToNode(a, a);
-//            R.addLabelToNode(b, b);
-//            R.addLabelToNode(c, c);
-//            R.addLabelToNode(d, d);
-//            R.addLabelToNode(e, e);
-//            R.addLabelToNode(f, f);
-//            
-//            std::vector<BaseRegion*> toGLue;
-//            
-//            BaseRegion R_3hat = it_3hat->second;
-//            R_3hat.addLabelToNode(a, 0);
-//            R_3hat.addLabelToNode(b, 1);
-//            R_3hat.addLabelToNode(c, 2);
-//            toGLue.push_back(&R_3hat);
-//            
-//            BaseRegion R_5 = it_5->second;
-//            R_5.addLabelToNode(d, 0);
-//            R_5.addLabelToNode(e, 1);
-//            R_5.addLabelToNode(f, 2);
-//            R_5.addLabelToNode(a, 3);
-//            R_5.addLabelToNode(c, 4);
-//            toGLue.push_back(&R_5);
-//            
-//            R.glue(toGLue);
-//            
-//            store_sign(R, signature_minimal);
-//        }
-//    }
-//    
-//    // a-d edge
-//    cout << "---------------- a-d edge ----------------" << endl;
-//    for(map<vector<int>,BaseRegion>::const_iterator it_4star_a = regions_4star.begin(); it_4star_a != regions_4star.end(); ++it_4star_a){
-//        for(map<vector<int>,BaseRegion>::const_iterator it_4star_b = regions_4star.begin(); it_4star_b != regions_4star.end(); ++it_4star_b){
-//            Region R(6,a,d);
-//            R.addEdge(a, d);
-//            R.addLabelToNode(a, a);
-//            R.addLabelToNode(b, b);
-//            R.addLabelToNode(c, c);
-//            R.addLabelToNode(d, d);
-//            R.addLabelToNode(e, e);
-//            R.addLabelToNode(f, f);
-//            
-//            std::vector<BaseRegion*> toGLue;
-//            
-//            BaseRegion R_4star_a = it_4star_a->second;
-//            R_4star_a.addLabelToNode(a, 0);
-//            R_4star_a.addLabelToNode(b, 1);
-//            R_4star_a.addLabelToNode(c, 2);
-//            R_4star_a.addLabelToNode(d, 3);
-//            toGLue.push_back(&R_4star_a);
-//            
-//            BaseRegion R_4star_b = it_4star_b->second;
-//            R_4star_b.addLabelToNode(d, 0);
-//            R_4star_b.addLabelToNode(e, 1);
-//            R_4star_b.addLabelToNode(f, 2);
-//            R_4star_b.addLabelToNode(a, 3);
-//            toGLue.push_back(&R_4star_b);
-//            
-//            R.glue(toGLue);
-//            
-//            store_sign(R, signature_minimal);
-//        }
-//    }
+    cout << "---------------- a-c edge ----------------" << endl;
+    for(std::map<std::vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
+        for(std::map<std::vector<int>,BaseRegion>::const_iterator it_5 = regions_5.begin(); it_5 != regions_5.end(); ++it_5){
+            Region R(6,a,d);
+            R.addEdge(a, c);
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(d, d);
+            R.addLabelToNode(e, e);
+            R.addLabelToNode(f, f);
+            
+            std::vector<BaseRegion*> toGLue;
+            
+            BaseRegion R_3hat = it_3hat->second;
+            R_3hat.addLabelToNode(a, 0);
+            R_3hat.addLabelToNode(b, 1);
+            R_3hat.addLabelToNode(c, 2);
+            toGLue.push_back(&R_3hat);
+            
+            BaseRegion R_5 = it_5->second;
+            R_5.addLabelToNode(d, 0);
+            R_5.addLabelToNode(e, 1);
+            R_5.addLabelToNode(f, 2);
+            R_5.addLabelToNode(a, 3);
+            R_5.addLabelToNode(c, 4);
+            toGLue.push_back(&R_5);
+            
+            R.glue(toGLue);
+            
+            store_sign(R, signature_minimal);
+        }
+    }
+    
+    // a-d edge
+    cout << "---------------- a-d edge ----------------" << endl;
+    for(map<vector<int>,BaseRegion>::const_iterator it_4star_a = regions_4star.begin(); it_4star_a != regions_4star.end(); ++it_4star_a){
+        for(map<vector<int>,BaseRegion>::const_iterator it_4star_b = regions_4star.begin(); it_4star_b != regions_4star.end(); ++it_4star_b){
+            Region R(6,a,d);
+            R.addEdge(a, d);
+            R.addLabelToNode(a, a);
+            R.addLabelToNode(b, b);
+            R.addLabelToNode(c, c);
+            R.addLabelToNode(d, d);
+            R.addLabelToNode(e, e);
+            R.addLabelToNode(f, f);
+            
+            std::vector<BaseRegion*> toGLue;
+            
+            BaseRegion R_4star_a = it_4star_a->second;
+            R_4star_a.addLabelToNode(a, 0);
+            R_4star_a.addLabelToNode(b, 1);
+            R_4star_a.addLabelToNode(c, 2);
+            R_4star_a.addLabelToNode(d, 3);
+            toGLue.push_back(&R_4star_a);
+            
+            BaseRegion R_4star_b = it_4star_b->second;
+            R_4star_b.addLabelToNode(d, 0);
+            R_4star_b.addLabelToNode(e, 1);
+            R_4star_b.addLabelToNode(f, 2);
+            R_4star_b.addLabelToNode(a, 3);
+            toGLue.push_back(&R_4star_b);
+            
+            R.glue(toGLue);
+            
+            store_sign(R, signature_minimal);
+        }
+    }
     
     // b-e edge
     cout << "---------------- b-e edge ----------------" << endl;
@@ -489,73 +488,53 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
         }
     }
     
-    cout << "---------------- a-c edge ----------------" << endl;
-    for(std::map<std::vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
-        for(std::map<std::vector<int>,BaseRegion>::const_iterator it_5 = regions_5.begin(); it_5 != regions_5.end(); ++it_5){
-            Region R(6,a,d);
-            R.addEdge(a, c);
-            R.addLabelToNode(a, a);
-            R.addLabelToNode(b, b);
-            R.addLabelToNode(c, c);
-            R.addLabelToNode(d, d);
-            R.addLabelToNode(e, e);
-            R.addLabelToNode(f, f);
-            
-            std::vector<BaseRegion*> toGLue;
-            
-            BaseRegion R_3hat = it_3hat->second;
-            R_3hat.addLabelToNode(a, 0);
-            R_3hat.addLabelToNode(b, 1);
-            R_3hat.addLabelToNode(c, 2);
-            toGLue.push_back(&R_3hat);
-            
-            BaseRegion R_5 = it_5->second;
-            R_5.addLabelToNode(d, 0);
-            R_5.addLabelToNode(e, 1);
-            R_5.addLabelToNode(f, 2);
-            R_5.addLabelToNode(a, 3);
-            R_5.addLabelToNode(c, 4);
-            toGLue.push_back(&R_5);
-            
-            R.glue(toGLue);
-            
-            store_sign(R, signature_minimal);
-        }
+    // Add symmetries
+    cout << "find symmetries"<< endl;
+    
+    std::map<vector<int>,BaseRegion> signature_minimal_copy1(signature_minimal.begin(), signature_minimal.end());
+    for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy1.begin(); it != signature_minimal_copy1.end(); ++it) {
+        Region R(6,a,d);
+        
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        R.addLabelToNode(e, e);
+        R.addLabelToNode(f, f);
+        
+        BaseRegion copy = it->second;
+        copy.addLabelToNode(d, 0);
+        copy.addLabelToNode(c, 1);
+        copy.addLabelToNode(b, 2);
+        copy.addLabelToNode(a, 3);
+        copy.addLabelToNode(f, 4);
+        copy.addLabelToNode(e, 5);
+        R.glue(&copy);
+        
+        store_sign(R, signature_minimal);
     }
     
-    // a-d edge
-    cout << "---------------- a-d edge ----------------" << endl;
-    for(map<vector<int>,BaseRegion>::const_iterator it_4star_a = regions_4star.begin(); it_4star_a != regions_4star.end(); ++it_4star_a){
-        for(map<vector<int>,BaseRegion>::const_iterator it_4star_b = regions_4star.begin(); it_4star_b != regions_4star.end(); ++it_4star_b){
-            Region R(6,a,d);
-            R.addEdge(a, d);
-            R.addLabelToNode(a, a);
-            R.addLabelToNode(b, b);
-            R.addLabelToNode(c, c);
-            R.addLabelToNode(d, d);
-            R.addLabelToNode(e, e);
-            R.addLabelToNode(f, f);
-            
-            std::vector<BaseRegion*> toGLue;
-            
-            BaseRegion R_4star_a = it_4star_a->second;
-            R_4star_a.addLabelToNode(a, 0);
-            R_4star_a.addLabelToNode(b, 1);
-            R_4star_a.addLabelToNode(c, 2);
-            R_4star_a.addLabelToNode(d, 3);
-            toGLue.push_back(&R_4star_a);
-            
-            BaseRegion R_4star_b = it_4star_b->second;
-            R_4star_b.addLabelToNode(d, 0);
-            R_4star_b.addLabelToNode(e, 1);
-            R_4star_b.addLabelToNode(f, 2);
-            R_4star_b.addLabelToNode(a, 3);
-            toGLue.push_back(&R_4star_b);
-            
-            R.glue(toGLue);
-            
-            store_sign(R, signature_minimal);
-        }
+    std::map<vector<int>,BaseRegion> signature_minimal_copy2(signature_minimal.begin(), signature_minimal.end());
+    for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy2.begin(); it != signature_minimal_copy2.end(); ++it) {
+        Region R(6,a,d);
+        
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        R.addLabelToNode(e, e);
+        R.addLabelToNode(f, f);
+        
+        BaseRegion copy = it->second;
+        copy.addLabelToNode(a, 0);
+        copy.addLabelToNode(f, 1);
+        copy.addLabelToNode(e, 2);
+        copy.addLabelToNode(d, 3);
+        copy.addLabelToNode(c, 4);
+        copy.addLabelToNode(b, 5);
+        R.glue(&copy);
+        
+        store_sign(R, signature_minimal);
     }
     
     cout << "done with 6_regions" << endl;

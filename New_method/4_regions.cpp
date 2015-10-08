@@ -136,58 +136,78 @@ void generate_4_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     
     // ---------------- |S| = 0 ----------------
     cout << "---------------- |S| = 0 ----------------" << endl;
-    for (int deg2_a_b = 0; deg2_a_b <= 1; deg2_a_b++) {
-        for (int deg2_b_c = 0; deg2_b_c <= 1; deg2_b_c++) {
-            for (int deg2_a_d = 0; deg2_a_d <= 1; deg2_a_d++) {
-                for (int deg2_c_d = 0; deg2_c_d <= 1; deg2_c_d++) {
-                    for (int deg3 = 0; deg3 <= 1; deg3++) {
-                        for(int dangling_n3_a = 0; dangling_n3_a <= 1; dangling_n3_a++){
-                            for(int dangling_n3_c = 0; dangling_n3_c <= 1; dangling_n3_c++){
-                                Region R(4, a, c);
-                                
-                                for (int i = 0; i < deg2_a_b; i++) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(b, node);
+    for(int dangling_n3_a = 0; dangling_n3_a <= 1; dangling_n3_a++){
+        for(int dangling_n3_c = 0; dangling_n3_c <= 1; dangling_n3_c++){
+            for (int deg2_a_b = 0; deg2_a_b <= 1; deg2_a_b++) {
+                for (int deg2_b_c = 0; deg2_b_c <= 1; deg2_b_c++) {
+                    for (int deg2_a_d = 0; deg2_a_d <= 1; deg2_a_d++) {
+                        for (int deg2_c_d = 0; deg2_c_d <= 1; deg2_c_d++) {
+                            
+                            for (int deg3_a_b_c = 0; deg3_a_b_c <= 1; deg3_a_b_c++) {
+                                for (int deg3_a_c_d = 0; deg3_a_c_d <= 1; deg3_a_c_d++) {
+                                    for (int deg2_a_c = 0; deg2_a_c <= 1; deg2_a_c++) {
+                                        Region R(4, a, c);
+                                        
+                                        for (int i = 0; i < deg2_a_b; i++) {
+                                            int node = R.addNode();
+                                            R.addEdge(a, node);
+                                            R.addEdge(b, node);
+                                        }
+                                        
+                                        for (int i = 0; i < deg2_b_c; i++) {
+                                            int node = R.addNode();
+                                            R.addEdge(b, node);
+                                            R.addEdge(c, node);
+                                        }
+                                        
+                                        for (int i = 0; i < deg2_c_d; i++) {
+                                            int node = R.addNode();
+                                            R.addEdge(c, node);
+                                            R.addEdge(d, node);
+                                        }
+                                        
+                                        for (int i = 0; i < deg2_a_d; i++) {
+                                            int node = R.addNode();
+                                            R.addEdge(a, node);
+                                            R.addEdge(d, node);
+                                        }
+                                        
+                                        //TODO: check symmetri
+                                        for (int i = 0; i < deg3_a_b_c; i++) {
+                                            int node = R.addNode();
+                                            R.addEdge(a, node);
+                                            R.addEdge(b, node);
+                                            R.addEdge(c, node);
+                                        }
+                                        
+                                        for (int i = 0; i < deg3_a_c_d; i++) {
+                                            int node = R.addNode();
+                                            R.addEdge(a, node);
+                                            R.addEdge(c, node);
+                                            R.addEdge(d, node);
+                                        }
+                                        
+                                        for (int i = 0; i < deg2_a_c; i++) {
+                                            int node = R.addNode();
+                                            R.addEdge(a, node);
+                                            R.addEdge(c, node);
+                                        }
+                                        
+                                        if(dangling_n3_a) {
+                                            int node = R.addNode();
+                                            R.addEdge(a, node);
+                                        }
+                                        
+                                        if(dangling_n3_c) {
+                                            int node = R.addNode();
+                                            R.addEdge(c, node);
+                                        }
+                                        
+                                        store_sign(R, signature_minimal);
+                                    }
+                                    
                                 }
                                 
-                                for (int i = 0; i < deg2_b_c; i++) {
-                                    int node = R.addNode();
-                                    R.addEdge(b, node);
-                                    R.addEdge(c, node);
-                                }
-                                
-                                for (int i = 0; i < deg2_c_d; i++) {
-                                    int node = R.addNode();
-                                    R.addEdge(c, node);
-                                    R.addEdge(d, node);
-                                }
-                                
-                                for (int i = 0; i < deg2_a_d; i++) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(d, node);
-                                }
-                                
-                                //TODO: check symmetri
-                                for (int i = 0; i < deg3; i++) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(b, node);
-                                    R.addEdge(c, node);
-                                }
-                                
-                                if(dangling_n3_a) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                }
-                                
-                                if(dangling_n3_c) {
-                                    int node = R.addNode();
-                                    R.addEdge(c, node);
-                                }
-                                
-                                store_sign(R, signature_minimal);
                             }
                         }
                         
@@ -208,7 +228,7 @@ void generate_4_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     }
     cout << "---------------- |S| > 1 + w ----------------" << endl;
     
-    // At least one node connected to w
+    // At least one node connected to c
     for(std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat_a = regions_5hat.begin(); it_5hat_a != regions_5hat.end(); ++it_5hat_a){
         for(std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat_b = regions_5hat.begin(); it_5hat_b != regions_5hat.end(); ++it_5hat_b){
             Region R(4, a,c);
@@ -249,6 +269,28 @@ void generate_4_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             store_sign_if_valid(R, signature_minimal);
         }
     }
+    
+//    // Add symmetries
+//    cout << "find symmetries"<< endl;
+//    std::map<vector<int>,BaseRegion> signature_minimal_copy(signature_minimal.begin(), signature_minimal.end());
+//    
+//    for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy.begin(); it != signature_minimal_copy.end(); ++it) {
+//        Region R(4,a,c);
+//        
+//        R.addLabelToNode(a, a);
+//        R.addLabelToNode(b, b);
+//        R.addLabelToNode(c, c);
+//        R.addLabelToNode(d, d);
+//        
+//        BaseRegion copy = it->second;
+//        copy.addLabelToNode(c, 0);
+//        copy.addLabelToNode(b, 1);
+//        copy.addLabelToNode(a, 2);
+//        copy.addLabelToNode(d, 3);
+//        R.glue(&copy);
+//        
+//        store_sign(R, signature_minimal);
+//    }
     
     cout << "done with 4_regions" << endl;
 }

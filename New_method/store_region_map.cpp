@@ -32,6 +32,7 @@ void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fi
 
 
 void load_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string filename){
+    std::cout << "loading map from file " << filename << std::endl;
     std::ifstream file;
     file.open(filename);
     map.clear();

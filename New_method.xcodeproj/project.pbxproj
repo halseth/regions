@@ -14,7 +14,7 @@
 		0423A9DD1B0CD5FA00449DB6 /* 3hat_b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938331AFB752600C01262 /* 3hat_b_regions.cpp */; };
 		0423A9DF1B0CD81F00449DB6 /* EmptyRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418F81B0349F10064638C /* EmptyRegion.cpp */; };
 		0423A9E61B0CDE9E00449DB6 /* 4hat_ab_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 045938351AFB7C7B00C01262 /* 4hat_ab_regions.cpp */; };
-		043716511B14C57900D4E1AD /* 6hat_a_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0437164F1B14C57900D4E1AD /* 6hat_a_regions.cpp */; };
+		043716511B14C57900D4E1AD /* 6hat_b_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0437164F1B14C57900D4E1AD /* 6hat_b_regions.cpp */; };
 		043716541B14DB6E00D4E1AD /* 6hat_regions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 043716521B14DB6E00D4E1AD /* 6hat_regions.cpp */; };
 		043716571B151CBD00D4E1AD /* testRegionFromAndToString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 043716551B151BC600D4E1AD /* testRegionFromAndToString.cpp */; };
 		0437165A1B1522C800D4E1AD /* store_region_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 043716581B1522C800D4E1AD /* store_region_map.cpp */; };
@@ -85,8 +85,8 @@
 		0423A9DE1B0CD6C700449DB6 /* 3hat_b_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3hat_b_regions.h; sourceTree = "<group>"; };
 		0423A9E01B0CD8A000449DB6 /* EmptyRegion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyRegion.h; sourceTree = "<group>"; };
 		0423A9E81B0CE0BA00449DB6 /* 4hat_ab_regions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 4hat_ab_regions.h; sourceTree = "<group>"; };
-		0437164F1B14C57900D4E1AD /* 6hat_a_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 6hat_a_regions.cpp; sourceTree = "<group>"; };
-		043716501B14C57900D4E1AD /* 6hat_a_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 6hat_a_regions.h; sourceTree = "<group>"; };
+		0437164F1B14C57900D4E1AD /* 6hat_b_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 6hat_b_regions.cpp; sourceTree = "<group>"; };
+		043716501B14C57900D4E1AD /* 6hat_b_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 6hat_b_regions.h; sourceTree = "<group>"; };
 		043716521B14DB6E00D4E1AD /* 6hat_regions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 6hat_regions.cpp; sourceTree = "<group>"; };
 		043716531B14DB6E00D4E1AD /* 6hat_regions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 6hat_regions.h; sourceTree = "<group>"; };
 		043716551B151BC600D4E1AD /* testRegionFromAndToString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testRegionFromAndToString.cpp; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 		0415BD211B14C52500DA42ED /* 6regions */ = {
 			isa = PBXGroup;
 			children = (
-				0437164F1B14C57900D4E1AD /* 6hat_a_regions.cpp */,
-				043716501B14C57900D4E1AD /* 6hat_a_regions.h */,
+				0437164F1B14C57900D4E1AD /* 6hat_b_regions.cpp */,
+				043716501B14C57900D4E1AD /* 6hat_b_regions.h */,
 				043716521B14DB6E00D4E1AD /* 6hat_regions.cpp */,
 				043716531B14DB6E00D4E1AD /* 6hat_regions.h */,
 				04F0E6FC1BC51ED600B68076 /* 6_regions.cpp */,
@@ -411,7 +411,7 @@
 				049229031B0DF5C70032E4B9 /* 5hat_b_regions.cpp in Sources */,
 				0443190B1AF7D65C00E3FC06 /* subsets.cpp in Sources */,
 				04857F3D1B135C6500B8762C /* 5hat_regions.cpp in Sources */,
-				043716511B14C57900D4E1AD /* 6hat_a_regions.cpp in Sources */,
+				043716511B14C57900D4E1AD /* 6hat_b_regions.cpp in Sources */,
 				04F0E6F51BC2AC3800B68076 /* 4_regions.cpp in Sources */,
 				0403F0DE1B15DFA200000E5D /* 7hat_a_regions.cpp in Sources */,
 				04F418FD1B04CE120064638C /* BaseRegion.cpp in Sources */,
