@@ -14,11 +14,8 @@ using namespace std;
 
 #include "BaseRegion.h"
 
-#include "EmptyRegion.h"
 #include "3hat_b_regions.h"
-#include "3hat_ab_regions.h"
 #include "3_regions.hpp"
-#include "4hat_ab_regions.h"
 #include "3hat_regions.h"
 #include "4hat_b_regions.h"
 #include "4hat_regions.h"
@@ -30,23 +27,15 @@ using namespace std;
 #include "6hat_b_regions.h"
 #include "6hat_regions.h"
 #include "6_regions.hpp"
-#include "7hat_a_regions.h"
 
 #include "store_region_map.h"
 #include "store_sign.h"
-
-
-#define FILENAME_EMPTY "region_empty.txt"
-map<vector<int>, BaseRegion> region_empty;
 
 #define FILENAME_3HAT_B "regions_3hat_b.txt"
 map<vector<int>, BaseRegion> regions_3hat_b;
 
 #define OLD_FILENAME_3HAT_B "old_regions_3hat_b.txt"
 map<vector<int>, BaseRegion> old_regions_3hat_b;
-
-//#define FILENAME_3HAT_AB "regions_3hat_ab.txt"
-//map<vector<int>, BaseRegion> regions_3hat_ab;
 
 #define FILENAME_3HAT "regions_3hat.txt"
 map<vector<int>, BaseRegion> regions_3hat;
@@ -105,22 +94,12 @@ map<vector<int>, BaseRegion> regions_6hat;
 #define FILENAME_6 "regions_6.txt"
 map<vector<int>, BaseRegion> regions_6;
 
-#define FILENAME_7HAT_A "regions_7hat_a.txt"
-map<vector<int>, BaseRegion> regions_7hat_a;
-
  
 int main(){
     
     bool load_old_files = false;
     bool load_from_file = true;
     bool save_to_file = true;
-    
-//    if (load_from_file) load_region_map(region_empty, FILENAME_EMPTY);
-//    if (region_empty.empty()) {
-//        generate_Empty_regions(region_empty);
-//        if (save_to_file) store_region_map(region_empty, FILENAME_EMPTY);
-//    }
-//
     
     if (load_old_files) load_region_map(old_regions_3hat_b, OLD_FILENAME_3HAT_B);
     if (load_from_file) load_region_map(regions_3hat_b, FILENAME_3HAT_B);
@@ -286,12 +265,6 @@ int main(){
         generate_6_regions(regions_6, regions_3hat, regions_4hat, regions_4star, regions_5, regions_5hat, regions_6hat);
         if (save_to_file) store_region_map(regions_6, FILENAME_6);
     }
-    
-//    if (load_from_file) load_region_map(regions_7hat_a, FILENAME_7HAT_A);
-//    if (regions_7hat_a.empty()) {
-//        generate_7hat_a_regions(regions_7hat_a);
-//        if (save_to_file) store_region_map(regions_7hat_a, FILENAME_7HAT_A);
-//    }
     
     //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
     
