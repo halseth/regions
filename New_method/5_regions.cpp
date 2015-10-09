@@ -135,6 +135,8 @@ void generate_5_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     
     // Node between b and e
     cout << "---------------- b-e node ----------------" << endl;
+    int local_total = regions_4hat.size();
+    int local_counter = 0;
     for(map<vector<int>,BaseRegion>::const_iterator it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat){
         for(map<vector<int>,BaseRegion>::const_iterator it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat){
             Region R(5,a,d);
@@ -170,6 +172,8 @@ void generate_5_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             // Since node might not be connected to an endpoint
             store_sign_if_valid(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- b-e node: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // ---------------- |S| = 0 ----------------
@@ -319,6 +323,8 @@ void generate_5_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     cout << "---------------- |S| > 1 + w ----------------" << endl;
     
     // At least one node connected to w
+    local_total = regions_5hat.size();
+    local_counter = 0;
     for(std::map<std::vector<int>,BaseRegion>::const_iterator it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat){
         for(std::map<std::vector<int>,BaseRegion>::const_iterator it_6hat = regions_6hat.begin(); it_6hat != regions_6hat.end(); ++it_6hat){
             Region R(5, a,d);
@@ -360,6 +366,8 @@ void generate_5_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             // will lead to invalid regions, so only store those that are valid
             store_sign_if_valid(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- |S| > 1 + w: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // Add symmetries

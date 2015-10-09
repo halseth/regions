@@ -270,27 +270,27 @@ void generate_4_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
         }
     }
     
-//    // Add symmetries
-//    cout << "find symmetries"<< endl;
-//    std::map<vector<int>,BaseRegion> signature_minimal_copy(signature_minimal.begin(), signature_minimal.end());
-//    
-//    for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy.begin(); it != signature_minimal_copy.end(); ++it) {
-//        Region R(4,a,c);
-//        
-//        R.addLabelToNode(a, a);
-//        R.addLabelToNode(b, b);
-//        R.addLabelToNode(c, c);
-//        R.addLabelToNode(d, d);
-//        
-//        BaseRegion copy = it->second;
-//        copy.addLabelToNode(c, 0);
-//        copy.addLabelToNode(b, 1);
-//        copy.addLabelToNode(a, 2);
-//        copy.addLabelToNode(d, 3);
-//        R.glue(&copy);
-//        
-//        store_sign(R, signature_minimal);
-//    }
+    // Add symmetries
+    cout << "find symmetries"<< endl;
+    std::map<vector<int>,BaseRegion> signature_minimal_copy(signature_minimal.begin(), signature_minimal.end());
+    
+    for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy.begin(); it != signature_minimal_copy.end(); ++it) {
+        Region R(4,a,c);
+        
+        R.addLabelToNode(a, a);
+        R.addLabelToNode(b, b);
+        R.addLabelToNode(c, c);
+        R.addLabelToNode(d, d);
+        
+        BaseRegion copy = it->second;
+        copy.addLabelToNode(c, 0);
+        copy.addLabelToNode(b, 1);
+        copy.addLabelToNode(a, 2);
+        copy.addLabelToNode(d, 3);
+        R.glue(&copy);
+        
+        store_sign(R, signature_minimal);
+    }
     
     cout << "done with 4_regions" << endl;
 }

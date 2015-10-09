@@ -36,6 +36,8 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     // ---------------- S any size ----------------
     
     cout << "---------------- a-c edge ----------------" << endl;
+    int local_total = regions_3hat.size();
+    int local_counter = 0;
     for(std::map<std::vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
         for(std::map<std::vector<int>,BaseRegion>::const_iterator it_5 = regions_5.begin(); it_5 != regions_5.end(); ++it_5){
             Region R(6,a,d);
@@ -67,10 +69,14 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             
             store_sign(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- a-c edge: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // a-d edge
     cout << "---------------- a-d edge ----------------" << endl;
+    local_total = regions_4star.size();
+    local_counter = 0;
     for(map<vector<int>,BaseRegion>::const_iterator it_4star_a = regions_4star.begin(); it_4star_a != regions_4star.end(); ++it_4star_a){
         for(map<vector<int>,BaseRegion>::const_iterator it_4star_b = regions_4star.begin(); it_4star_b != regions_4star.end(); ++it_4star_b){
             Region R(6,a,d);
@@ -102,10 +108,14 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             
             store_sign(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- a-d edge: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // b-e edge
     cout << "---------------- b-e edge ----------------" << endl;
+    local_total = regions_4hat.size();
+    local_counter = 0;
     for(map<vector<int>,BaseRegion>::const_iterator it_4hat_a = regions_4hat.begin(); it_4hat_a != regions_4hat.end(); ++it_4hat_a){
         for(map<vector<int>,BaseRegion>::const_iterator it_4hat_b = regions_4hat.begin(); it_4hat_b != regions_4hat.end(); ++it_4hat_b){
             Region R(6,a,d);
@@ -137,10 +147,14 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             
             store_sign(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- b-e edge: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // b-f edge
     cout << "---------------- b-f edge ----------------" << endl;
+    local_total = regions_3hat.size();
+    local_counter = 0;
     for(map<vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
         for(map<vector<int>,BaseRegion>::const_iterator it_5hat = regions_5hat.begin(); it_5hat != regions_5hat.end(); ++it_5hat){
             Region R(6,a,d);
@@ -172,10 +186,14 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             
             store_sign(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- b-f edge: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // Node between b and e
     cout << "---------------- b-e node ----------------" << endl;
+    local_total = regions_5hat.size();
+    local_counter = 0;
     for(map<vector<int>,BaseRegion>::const_iterator it_5hat_a = regions_5hat.begin(); it_5hat_a != regions_5hat.end(); ++it_5hat_a){
         for(map<vector<int>,BaseRegion>::const_iterator it_5hat_b = regions_5hat.begin(); it_5hat_b != regions_5hat.end(); ++it_5hat_b){
             Region R(6,a,d);
@@ -213,10 +231,14 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             // Since node might not be connected to an endpoint
             store_sign_if_valid(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- b-e node: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // Node between b and f
     cout << "---------------- b-f node ----------------" << endl;
+    local_total = regions_4hat.size();
+    local_counter = 0;
     for(map<vector<int>,BaseRegion>::const_iterator it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat){
         for(map<vector<int>,BaseRegion>::const_iterator it_6hat = regions_6hat.begin(); it_6hat != regions_6hat.end(); ++it_6hat){
             Region R(6,a,d);
@@ -254,10 +276,14 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             // Since node might not be connected to an endpoint
             store_sign_if_valid(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- b-f node: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // Node between a and d
     cout << "---------------- a-d node ----------------" << endl;
+    local_total = regions_5.size();
+    local_counter = 0;
     for(map<vector<int>,BaseRegion>::const_iterator it_5_a = regions_5.begin(); it_5_a != regions_5.end(); ++it_5_a){
         for(map<vector<int>,BaseRegion>::const_iterator it_5_b = regions_5.begin(); it_5_b != regions_5.end(); ++it_5_b){
             Region R(6,a,d);
@@ -295,6 +321,8 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             // Since node might not be connected to an endpoint
             store_sign_if_valid(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- a-d node: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // ---------------- |S| = 0 ----------------
@@ -443,6 +471,8 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     cout << "---------------- |S| > 1 + w ----------------" << endl;
     
     // At least one node connected to w
+    local_total = regions_6hat.size();
+    local_counter = 0;
     for(std::map<std::vector<int>,BaseRegion>::const_iterator it_6hat_a = regions_6hat.begin(); it_6hat_a != regions_6hat.end(); ++it_6hat_a){
         for(std::map<std::vector<int>,BaseRegion>::const_iterator it_6hat_b = regions_6hat.begin(); it_6hat_b != regions_6hat.end(); ++it_6hat_b){
             Region R(6, a,d);
@@ -486,6 +516,8 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
             // will lead to invalid regions, so only store those that are valid
             store_sign_if_valid(R, signature_minimal);
         }
+        local_counter++;
+        cout << "---------------- |S| > 1 + w: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
     // Add symmetries
