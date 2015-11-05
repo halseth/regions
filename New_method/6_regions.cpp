@@ -9,7 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
-#include <omp.h>
+//#include <omp.h>
 using namespace std;
 
 #include "store_sign.h"
@@ -52,8 +52,8 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
 #pragma omp parallel
     {
         std::map<vector<int>,BaseRegion> priv_signature_minimal;
-        int tid = omp_get_thread_num();
-        int nthreads = omp_get_num_threads();
+        int tid = 0;//omp_get_thread_num();
+        int nthreads = 1;//omp_get_num_threads();
         cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
         
