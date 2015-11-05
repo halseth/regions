@@ -8,6 +8,8 @@
 
 #include "6hat_b_regions.h"
 #include "store_sign.h"
+#include "HatABCRegion.h"
+#include <stdlib.h>
 #include <iostream>
 using namespace std;
 

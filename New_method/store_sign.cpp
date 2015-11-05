@@ -3,6 +3,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <stdlib.h>
 #include "store_sign.h"
 using namespace std;
 

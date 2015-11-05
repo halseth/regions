@@ -9,7 +9,11 @@
 #ifndef __New_method__5hat_regions__
 #define __New_method__5hat_regions__
 
-#include "HatRegion.h"
+#include <vector>
+#include <map>
+
+#include "BaseRegion.h"
+using namespace std;
 
 void generate_5hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std::map<vector<int>,BaseRegion> &regions_3hat, std::map<vector<int>,BaseRegion> &regions_4hat, std::map<vector<int>,BaseRegion> &regions_4hat_b, std::map<vector<int>,BaseRegion> &regions_5hat_b);
 

@@ -8,12 +8,13 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 #include "store_region_map.h"
 #include "store_sign.h"
 
 void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string filename){
     std::ofstream file;
-    file.open(filename);
+    file.open(filename.c_str());
     
     if (!file.is_open()) {
         std::cerr << "ERROR opening file " << filename << std::endl;
@@ -34,7 +35,7 @@ void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fi
 void load_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string filename){
     std::cout << "loading map from file " << filename << std::endl;
     std::ifstream file;
-    file.open(filename);
+    file.open(filename.c_str());
     map.clear();
     
     if (!file.is_open()) {

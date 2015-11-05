@@ -9,6 +9,12 @@
 #ifndef New_method_6_regions_hpp
 #define New_method_6_regions_hpp
 
-void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std::map<std::vector<int>,BaseRegion> &regions_3hat, std::map<std::vector<int>,BaseRegion> &regions_4hat, std::map<std::vector<int>,BaseRegion> &regions_4star, std::map<std::vector<int>,BaseRegion> &regions_5, std::map<std::vector<int>,BaseRegion> &regions_5hat, std::map<std::vector<int>,BaseRegion> &regions_6hat);
+#include <vector>
+#include <map>
+
+#include "BaseRegion.h"
+using namespace std;
+
+void generate_6_regions(std::map<std::vector<int>,BaseRegion> &signature_minimal,std::map<std::vector<int>,BaseRegion> &regions_3hat, std::map<std::vector<int>,BaseRegion> &regions_4hat, std::map<std::vector<int>,BaseRegion> &regions_4star, std::map<std::vector<int>,BaseRegion> &regions_5, std::map<std::vector<int>,BaseRegion> &regions_5hat, std::map<std::vector<int>,BaseRegion> &regions_6hat);
 
 #endif /* __regions_hpp */

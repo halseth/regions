@@ -6,10 +6,12 @@
 //  Copyright (c) 2015 Johan Torås Halseth. All rights reserved.
 //
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 #include "5hat_regions.h"
 #include "store_sign.h"
+#include "HatRegion.h"
 
 void generate_5hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std::map<vector<int>,BaseRegion> &regions_3hat, std::map<vector<int>,BaseRegion> &regions_4hat, std::map<vector<int>,BaseRegion> &regions_4hat_b, std::map<vector<int>,BaseRegion> &regions_5hat_b){
     cout << "in generate_5hat_regions" << endl;

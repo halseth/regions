@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Johan Torås Halseth. All rights reserved.
 //
 
+
 #include <lemon/planarity.h>
 #include <lemon/connectivity.h>
+#include <stdlib.h>
 #include <fstream>
 #include "BaseRegion.h"
 #include "subsets.hpp"

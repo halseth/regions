@@ -9,6 +9,12 @@
 #ifndef New_method_3hat_a_regions_h
 #define New_method_3hat_a_regions_h
 
-void generate_3hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
+#include <vector>
+#include <map>
+
+#include "BaseRegion.h"
+using namespace std;
+
+void generate_3hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_minimal);
 
 #endif

@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 #include "store_sign.h"

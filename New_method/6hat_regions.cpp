@@ -8,7 +8,9 @@
 
 #include "6hat_regions.h"
 #include "store_sign.h"
+#include "HatRegion.h"
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 void generate_6hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std::map<vector<int>,BaseRegion> &regions_3hat, std::map<vector<int>,BaseRegion> &regions_4hat, std::map<vector<int>,BaseRegion> &regions_4hat_b, std::map<vector<int>,BaseRegion> &regions_5hat_b, std::map<vector<int>,BaseRegion> &regions_5hat, std::map<vector<int>,BaseRegion> &regions_6hat_b){

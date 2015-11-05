@@ -7,10 +7,12 @@
 //
 
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 #include "5hat_b_regions.h"
 #include "store_sign.h"
+#include "HatABCRegion.h"
 
 void generate_5hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_3hat_b, std::map<std::vector<int>,BaseRegion> &regions_4hat_b){
     cout << "in generate_5hat_b_regions" << endl;

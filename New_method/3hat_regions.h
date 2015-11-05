@@ -9,8 +9,11 @@
 #ifndef New_method_3hat_regions_h
 #define New_method_3hat_regions_h
 
+#include <vector>
 #include <map>
+
 #include "BaseRegion.h"
+using namespace std;
 
 void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal);
 

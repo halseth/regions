@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <iostream>
+#include <stdlib.h>
+#include <omp.h>
 using namespace std;
 
 #include "store_sign.h"
@@ -33,6 +35,84 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
     int d = 3;
     int e = 4;
     int f = 5;
+    
+    // Putting this first since it is heaviest task
+    // Node between a and d
+    cout << "---------------- a-d node ----------------" << endl;
+    
+    // Add to a vector for parallel for
+    vector<BaseRegion> vec_5regions;
+    for(map<vector<int>,BaseRegion>::const_iterator it_5_a = regions_5.begin(); it_5_a != regions_5.end(); ++it_5_a){
+        vec_5regions.push_back(it_5_a->second);
+    }
+    
+    
+    
+    
+#pragma omp parallel
+    {
+        std::map<vector<int>,BaseRegion> priv_signature_minimal;
+        int tid = omp_get_thread_num();
+        int nthreads = omp_get_num_threads();
+        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
+        
+        
+#pragma omp for
+        for(int i = 0; i < vec_5regions.size(); i++){
+            for(map<vector<int>,BaseRegion>::const_iterator it_5_b = regions_5.begin(); it_5_b != regions_5.end(); ++it_5_b){
+                Region R(6,a,d);
+                int node = R.addNode();
+                R.addEdge(a,node);
+                R.addEdge(d,node);
+                R.addLabelToNode(a, a);
+                R.addLabelToNode(b, b);
+                R.addLabelToNode(c, c);
+                R.addLabelToNode(d, d);
+                R.addLabelToNode(e, e);
+                R.addLabelToNode(f, f);
+                R.addLabelToNode(node, node);
+                
+                std::vector<BaseRegion*> toGLue;
+                
+                BaseRegion R_5_a = vec_5regions[i];
+                R_5_a.addLabelToNode(a, 0);
+                R_5_a.addLabelToNode(b, 1);
+                R_5_a.addLabelToNode(c, 2);
+                R_5_a.addLabelToNode(d, 3);
+                R_5_a.addLabelToNode(node, 4);
+                toGLue.push_back(&R_5_a);
+                
+                BaseRegion R_5_b = it_5_b->second;
+                R_5_b.addLabelToNode(d, 0);
+                R_5_b.addLabelToNode(e, 1);
+                R_5_b.addLabelToNode(f, 2);
+                R_5_b.addLabelToNode(a, 3);
+                R_5_b.addLabelToNode(node, 4);
+                toGLue.push_back(&R_5_b);
+                
+                R.glue(toGLue);
+                
+                // Since node might not be connected to an endpoint
+                store_sign_if_valid(R, priv_signature_minimal);
+            }
+            cout << "---------------- a-d node: Thread " << tid <<  " / " << nthreads << " done with " << i <<" ----------------" << endl;
+        }
+        
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to map " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+    } // parallel region over
+    
+    
+    
+    
+    // Then do the rest
+    
     // ---------------- S any size ----------------
     
     cout << "---------------- a-c edge ----------------" << endl;
@@ -280,50 +360,50 @@ void generate_6_regions(std::map<vector<int>,BaseRegion> &signature_minimal,std:
         cout << "---------------- b-f node: " << local_counter << " / " << local_total << " ----------------" << endl;
     }
     
-    // Node between a and d
-    cout << "---------------- a-d node ----------------" << endl;
-    local_total = regions_5.size();
-    local_counter = 0;
-    for(map<vector<int>,BaseRegion>::const_iterator it_5_a = regions_5.begin(); it_5_a != regions_5.end(); ++it_5_a){
-        for(map<vector<int>,BaseRegion>::const_iterator it_5_b = regions_5.begin(); it_5_b != regions_5.end(); ++it_5_b){
-            Region R(6,a,d);
-            int node = R.addNode();
-            R.addEdge(a,node);
-            R.addEdge(d,node);
-            R.addLabelToNode(a, a);
-            R.addLabelToNode(b, b);
-            R.addLabelToNode(c, c);
-            R.addLabelToNode(d, d);
-            R.addLabelToNode(e, e);
-            R.addLabelToNode(f, f);
-            R.addLabelToNode(node, node);
-            
-            std::vector<BaseRegion*> toGLue;
-            
-            BaseRegion R_5_a = it_5_a->second;
-            R_5_a.addLabelToNode(a, 0);
-            R_5_a.addLabelToNode(b, 1);
-            R_5_a.addLabelToNode(c, 2);
-            R_5_a.addLabelToNode(d, 3);
-            R_5_a.addLabelToNode(node, 4);
-            toGLue.push_back(&R_5_a);
-            
-            BaseRegion R_5_b = it_5_b->second;
-            R_5_b.addLabelToNode(d, 0);
-            R_5_b.addLabelToNode(e, 1);
-            R_5_b.addLabelToNode(f, 2);
-            R_5_b.addLabelToNode(a, 3);
-            R_5_b.addLabelToNode(node, 4);
-            toGLue.push_back(&R_5_b);
-            
-            R.glue(toGLue);
-            
-            // Since node might not be connected to an endpoint
-            store_sign_if_valid(R, signature_minimal);
-        }
-        local_counter++;
-        cout << "---------------- a-d node: " << local_counter << " / " << local_total << " ----------------" << endl;
-    }
+//    // Node between a and d
+//    cout << "---------------- a-d node ----------------" << endl;
+//    local_total = regions_5.size();
+//    local_counter = 0;
+//    for(map<vector<int>,BaseRegion>::const_iterator it_5_a = regions_5.begin(); it_5_a != regions_5.end(); ++it_5_a){
+//        for(map<vector<int>,BaseRegion>::const_iterator it_5_b = regions_5.begin(); it_5_b != regions_5.end(); ++it_5_b){
+//            Region R(6,a,d);
+//            int node = R.addNode();
+//            R.addEdge(a,node);
+//            R.addEdge(d,node);
+//            R.addLabelToNode(a, a);
+//            R.addLabelToNode(b, b);
+//            R.addLabelToNode(c, c);
+//            R.addLabelToNode(d, d);
+//            R.addLabelToNode(e, e);
+//            R.addLabelToNode(f, f);
+//            R.addLabelToNode(node, node);
+//            
+//            std::vector<BaseRegion*> toGLue;
+//            
+//            BaseRegion R_5_a = it_5_a->second;
+//            R_5_a.addLabelToNode(a, 0);
+//            R_5_a.addLabelToNode(b, 1);
+//            R_5_a.addLabelToNode(c, 2);
+//            R_5_a.addLabelToNode(d, 3);
+//            R_5_a.addLabelToNode(node, 4);
+//            toGLue.push_back(&R_5_a);
+//            
+//            BaseRegion R_5_b = it_5_b->second;
+//            R_5_b.addLabelToNode(d, 0);
+//            R_5_b.addLabelToNode(e, 1);
+//            R_5_b.addLabelToNode(f, 2);
+//            R_5_b.addLabelToNode(a, 3);
+//            R_5_b.addLabelToNode(node, 4);
+//            toGLue.push_back(&R_5_b);
+//            
+//            R.glue(toGLue);
+//            
+//            // Since node might not be connected to an endpoint
+//            store_sign_if_valid(R, signature_minimal);
+//        }
+//        local_counter++;
+//        cout << "---------------- a-d node: " << local_counter << " / " << local_total << " ----------------" << endl;
+//    }
     
     // ---------------- |S| = 0 ----------------
     cout << "---------------- |S| = 0 ----------------" << endl;

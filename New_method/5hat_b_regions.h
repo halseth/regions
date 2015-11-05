@@ -9,7 +9,11 @@
 #ifndef __New_method_5hat_b_regions__
 #define __New_method_5hat_b_regions__
 
-#include "HatABCRegion.h"
+#include <vector>
+#include <map>
+
+#include "BaseRegion.h"
+using namespace std;
 
 // Generates 5hat regions where all internal are dominated by a
 void generate_5hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_minimal, std::map<std::vector<int>,BaseRegion> &regions_3hat_b, std::map<std::vector<int>,BaseRegion> &regions_4hat_b);

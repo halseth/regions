@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Johan Torås Halseth. All rights reserved.
 //
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 #include "4hat_b_regions.h"
