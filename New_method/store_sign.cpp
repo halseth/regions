@@ -46,6 +46,23 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
     store_sign_if_valid(R, signature_minimal);
 }
 
+void inner_region_store_sign(InnerRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
+    
+    // All possible subsets of boundary edges
+    int boundary_size = R.getBoundarySize();
+    
+    int max_edges = (1 << boundary_size) - 1;
+    for (int edges = 0; edges <= max_edges; edges++) {
+        InnerRegion R2 = R;
+        for(int i = 0; i < R2.getBoundarySize(); i++){
+            if ((edges & (1 << i)) != 0) {
+                R2.addEdge(i, (i+1)%R2.getBoundarySize());
+            }
+        }
+        store_sign(R2, signature_minimal);
+    }
+}
+
 void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
     
     // Check if it is valid for it's subclass type

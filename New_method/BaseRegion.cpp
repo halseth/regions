@@ -95,6 +95,11 @@ void BaseRegion::addEdge(int from, int to){
     adj[to][from] = true;
 }
 
+void BaseRegion::removeEdge(int from, int to){
+    adj[from][to] = false;
+    adj[to][from] = false;
+}
+
 int BaseRegion::getSize() const{
     return Boundary.size() + num_internal_nodes;
 }
