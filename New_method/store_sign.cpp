@@ -59,7 +59,7 @@ void inner_region_store_sign(InnerRegion &R, std::map<std::vector<int>,BaseRegio
                 R2.addEdge(i, (i+1)%R2.getBoundarySize());
             }
         }
-        store_sign(R2, signature_minimal);
+        store_sign_if_valid(R2, signature_minimal);
     }
 }
 

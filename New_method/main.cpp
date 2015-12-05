@@ -30,6 +30,9 @@ using namespace std;
 #include "6hat_regions.h"
 #include "6_regions.hpp"
 
+#include "enumerate_inner.hpp"
+#include "generate_from_inner.hpp"
+
 #include "store_region_map.h"
 #include "store_sign.h"
 
@@ -98,9 +101,66 @@ map<vector<int>, BaseRegion> regions_6;
 
 
 int main(){
+    
+//    
+//    load_region_map(regions_6, "inner_6regions.txt");
+//    
+//    return 0;
+//    
+    std::vector<BaseRegion> inner_2regions;
+    load_region_vector(inner_2regions, "inner_2regions.txt");
+    std::vector<BaseRegion> inner_3regions;
+    load_region_vector(inner_3regions, "inner_3regions.txt");
+    std::vector<BaseRegion> inner_4regions;
+    load_region_vector(inner_4regions, "inner_4regions.txt");
+    std::vector<BaseRegion> inner_4starregions;
+    load_region_vector(inner_4starregions, "inner_4starregions.txt");
+    std::vector<BaseRegion> inner_5regions;
+    load_region_vector(inner_5regions, "inner_5regions.txt");
+    std::vector<BaseRegion> inner_6regions;
+    load_region_vector(inner_6regions, "inner_6regions.txt");
+//    enumerate_inner_2regions(inner_2regions);
+//    store_region_vector(inner_2regions, "inner_2regions.txt");
+//    
+////    return 0;
+//    
+//    std::vector<BaseRegion> inner_3regions;
+//    enumerate_inner_3regions(inner_3regions);
+//    store_region_vector(inner_3regions, "inner_3regions.txt");
+//    
+////    return 0;
+//    
+//    std::vector<BaseRegion> inner_4regions;
+//    enumerate_inner_4regions(inner_4regions);
+//    store_region_vector(inner_4regions, "inner_4regions.txt");
+//    
+////    return 0;
+//    
+//    std::vector<BaseRegion> inner_4starregions;
+//    enumerate_inner_4starregions(inner_4starregions);
+//    store_region_vector(inner_4starregions, "inner_4regions.txt");
+//    
+////    return 0;
+//    
+//    std::vector<BaseRegion> inner_5regions;
+//    enumerate_inner_5regions(inner_5regions);
+//    store_region_vector(inner_5regions, "inner_5regions.txt");
+//    
+////    return 0;
+//    
+//    std::vector<BaseRegion> inner_6regions;
+//    enumerate_inner_6regions(inner_6regions);
+//    store_region_vector(inner_6regions, "inner_6regions.txt");
+//    
+//    return 0;
+    
+    
+    generate_from_inner(regions_6, inner_2regions, inner_3regions, inner_4regions, inner_4starregions, inner_5regions, inner_6regions, regions_3hat, regions_4hat);
 
+    return 0;
+    
     bool load_old_files = false;
-    bool load_from_file = true;
+    bool load_from_file = false;
     bool save_to_file = true;
     
     if (load_old_files) load_region_map(old_regions_3hat_b, OLD_FILENAME_3HAT_B);
@@ -169,7 +229,7 @@ int main(){
             exit(1);
         }
     }
-
+/*
     if (load_old_files) load_region_map(old_regions_5hat_b, OLD_FILENAME_5HAT_B);
     if (load_from_file) load_region_map(regions_5hat_b, FILENAME_5HAT_B);
     if (regions_5hat_b.empty()) {
@@ -269,7 +329,7 @@ int main(){
     }
     
     //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
-    
+    */
     /*
     int id = 0;
     for(std::map<vector<int>, BaseRegion>::iterator it = signature_minimal_3hat_a_regions.begin() ; it != signature_minimal_3hat_a_regions.end(); it++){

@@ -11,7 +11,7 @@ using namespace std;
 
 #include "4hat_b_regions.h"
 #include "store_sign.h"
-#include "HatABCRegion.h"
+#include "InnerHatABCRegion.hpp"
 
 
 
@@ -37,7 +37,7 @@ void generate_4hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_mi
     for (map<vector<int>,BaseRegion>::const_iterator it_3hat_b = regions_3hat_b.begin(); it_3hat_b != regions_3hat_b.end(); ++it_3hat_b) {
         std::vector<int> boundaryDominator;
         boundaryDominator.push_back(b);
-        HatABCRegion R(4, a, boundaryDominator);
+        InnerHatABCRegion R(4, a, boundaryDominator);
         R.addEdge(a, c);
         
         R.addLabelToNode(a, a);
@@ -54,7 +54,7 @@ void generate_4hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_mi
         toGlue.push_back(&R_3hat_b);
         
         R.glue(toGlue);
-        store_sign(R, signature_minimal);
+        inner_region_store_sign(R, signature_minimal);
         
     }
     
@@ -62,7 +62,7 @@ void generate_4hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_mi
     for (map<vector<int>,BaseRegion>::const_iterator it_3hat_b = regions_3hat_b.begin(); it_3hat_b != regions_3hat_b.end(); ++it_3hat_b) {
         std::vector<int> boundaryDominator;
         boundaryDominator.push_back(b);
-        HatABCRegion R(4, a, boundaryDominator);
+        InnerHatABCRegion R(4, a, boundaryDominator);
         R.addEdge(b, d);
         
         R.addLabelToNode(a, a);
@@ -79,7 +79,7 @@ void generate_4hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_mi
         toGlue.push_back(&R_3hat_b);
         
         R.glue(toGlue);
-        store_sign(R, signature_minimal);
+        inner_region_store_sign(R, signature_minimal);
         
     }
     
@@ -92,7 +92,7 @@ void generate_4hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_mi
                 
                 std::vector<int> boundaryDominator;
                 boundaryDominator.push_back(b);
-                HatABCRegion R(4, a, boundaryDominator);
+                InnerHatABCRegion R(4, a, boundaryDominator);
                 
                 // To keep last node added
                 int node = -1;
@@ -115,7 +115,7 @@ void generate_4hat_b_regions(std::map<std::vector<int>,BaseRegion> &signature_mi
                     R.addEdge(node, d);
                 }
                 
-                store_sign(R, signature_minimal);
+                inner_region_store_sign(R, signature_minimal);
             }
         }
     }

@@ -42,6 +42,8 @@ public:
     bool operator==(const BaseRegion& b) const {return isEqual(b);};
     
     virtual bool isValid();
+    bool isConnected();
+    bool isPlanar();
     int getSize() const;
     int addNode();
     void addEdge(int from, int to);

@@ -7,6 +7,7 @@
 //
 
 #include "InnerRegion.hpp"
+#include <iostream>
 
 InnerRegion::InnerRegion(int boundarySize, int endpoint1, int endpoint2) : BaseRegion(boundarySize){
     
@@ -20,11 +21,13 @@ InnerRegion::InnerRegion(int boundarySize, int endpoint1, int endpoint2) : BaseR
 }
 
 bool InnerRegion::isValid(){
-    bool valid = BaseRegion::isValid();
+    bool valid = BaseRegion::isPlanar();
+    std::cout << "BaseRegion::isPlanar():" << valid << std::endl;
     
     // All internal vertices must be dominated by the two endpoints
     for (int i = getBoundarySize(); i < getSize(); i++) {
         valid &= isAdjacent(i, endpoint1) || isAdjacent(i, endpoint2);
     }
+    std::cout << "Inernal vertices dominated:" << valid << std::endl;
     return valid;
 }

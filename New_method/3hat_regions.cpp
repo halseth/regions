@@ -13,7 +13,7 @@ using namespace std;
 
 #include "3hat_regions.h"
 #include "store_sign.h"
-#include "HatRegion.h"
+#include "InnerHatRegion.hpp"
 
 void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
     int a = 0;
@@ -26,7 +26,7 @@ void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
         for (int deg2_a_b = 0; deg2_a_b <= 1; deg2_a_b++) {
             for (int deg2_a_c = 0; deg2_a_c <= 1; deg2_a_c++) {
                 for (int deg3 = 0; deg3 <= 1; deg3++) {
-                    HatRegion R(3,a);
+                    InnerHatRegion R(3,a);
                     
                     for (int i = 0; i < dangling_n3; i++) {
                         int node = R.addNode();
@@ -52,7 +52,7 @@ void generate_3hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal){
                         R.addEdge(c, node);
                     }
                     
-                    store_sign(R, signature_minimal);
+                    inner_region_store_sign(R, signature_minimal);
                 }
             }
         }

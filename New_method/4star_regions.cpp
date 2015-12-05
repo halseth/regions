@@ -12,7 +12,7 @@
 using namespace std;
 
 #include "store_sign.h"
-#include "Region.h"
+#include "InnerRegion.hpp"
 
 #include "4star_regions.hpp"
 
@@ -39,7 +39,7 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
     cout << "---------------- a-c edge ----------------" << endl;
     for(std::map<std::vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat){
         for(std::map<std::vector<int>,BaseRegion>::const_iterator it_3 = regions_3.begin(); it_3 != regions_3.end(); ++it_3){
-            Region R(4,a,d);
+            InnerRegion R(4,a,d);
             R.addEdge(a, c);
             R.addLabelToNode(a, a);
             R.addLabelToNode(b, b);
@@ -62,7 +62,7 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
             
             R.glue(toGLue);
             
-            store_sign(R, signature_minimal);
+            inner_region_store_sign(R, signature_minimal);
         }
     }
     
@@ -89,7 +89,7 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
                                                 
                                                 int max_deg4 = deg2_a_c || deg3_a_b_c || deg2_b_d || deg3_b_c_d || deg3_a_b_d || deg3_a_c_d ? 0 : 1;
                                                 for (int deg4 = 0; deg4 <= max_deg4; deg4++) {
-                                                    Region R(4, a, d);
+                                                    InnerRegion R(4, a, d);
                                                     
                                                     for (int i = 0; i < deg2_a_b; i++) {
                                                         int node = R.addNode();
@@ -169,7 +169,7 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
                                                         R.addEdge(d, node);
                                                     }
                                                     
-                                                    store_sign(R, signature_minimal);
+                                                    inner_region_store_sign(R, signature_minimal);
                                                 }
                                             }
                                         }
@@ -190,14 +190,14 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
     // No node connected to d is handled by adding 4hat regions
     for(std::map<std::vector<int>,BaseRegion>::const_iterator it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat){
         BaseRegion R = it_4hat->second;
-        store_sign(R, signature_minimal);
+        store_sign(R, signature_minimal); // TODO?
     }
     cout << "---------------- |S| > 1 + w ----------------" << endl;
 
     // At least one node connected to d
     for(std::map<std::vector<int>,BaseRegion>::const_iterator it_4hat = regions_4hat.begin(); it_4hat != regions_4hat.end(); ++it_4hat){
         for(std::map<std::vector<int>,BaseRegion>::const_iterator it_6hat = regions_6hat.begin(); it_6hat != regions_6hat.end(); ++it_6hat){
-            Region R(4, a,d);
+            InnerRegion R(4, a,d);
             int s = R.addNode();
             R.addEdge(a, s);
             
@@ -232,7 +232,8 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
             R.glue(toGLue);
             
             // will lead to invalid regions, so only store those that are valid
-            store_sign_if_valid(R, signature_minimal);
+            // store_sign_if_valid(R, signature_minimal);
+            inner_region_store_sign(R, signature_minimal);
         }
     }
     
@@ -241,7 +242,7 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
     std::map<vector<int>,BaseRegion> signature_minimal_copy(signature_minimal.begin(), signature_minimal.end());
     
     for (map<vector<int>,BaseRegion>::const_iterator it = signature_minimal_copy.begin(); it != signature_minimal_copy.end(); ++it) {
-        Region R(4,a,d);
+        InnerRegion R(4,a,d);
         
         R.addLabelToNode(a, a);
         R.addLabelToNode(b, b);
@@ -255,7 +256,7 @@ void generate_4star_regions(std::map<vector<int>,BaseRegion> &signature_minimal,
         copy.addLabelToNode(a, 3);
         R.glue(&copy);
         
-        store_sign(R, signature_minimal);
+        inner_region_store_sign(R, signature_minimal);
     }
     
     cout << "done with 4star_regions" << endl;

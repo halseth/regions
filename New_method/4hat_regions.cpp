@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "store_sign.h"
-#include "HatRegion.h"
+#include "InnerHatRegion.hpp"
 #include "4hat_regions.h"
 
 void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, std::map<vector<int>,BaseRegion> &regions_3hat, std::map<vector<int>,BaseRegion> &regions_4hat_b){
@@ -30,7 +30,7 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
     // a-c edge
     for (map<vector<int>,BaseRegion>::const_iterator it_3hat_1 = regions_3hat.begin(); it_3hat_1 != regions_3hat.end(); ++it_3hat_1) {
         for (map<vector<int>,BaseRegion>::const_iterator it_3hat_2 = regions_3hat.begin(); it_3hat_2 != regions_3hat.end(); ++it_3hat_2) {
-            HatRegion R(4, a);
+            InnerHatRegion R(4, a);
             R.addEdge(a, c);
             R.addLabelToNode(a, a);
             R.addLabelToNode(b, b);
@@ -53,14 +53,14 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
             
             R.glue(toGlue);
             
-            store_sign(R, signature_minimal);
+            inner_region_store_sign(R, signature_minimal);
             
         }
     }
     
     // b-d edge
     for (map<vector<int>,BaseRegion>::const_iterator it_3hat = regions_3hat.begin(); it_3hat != regions_3hat.end(); ++it_3hat) {
-        HatRegion R(4, a);
+        InnerHatRegion R(4, a);
         R.addEdge(b, d);
         R.addLabelToNode(a, a);
         R.addLabelToNode(b, b);
@@ -77,14 +77,15 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
         
         R.glue(toGlue);
         
-        store_sign(R, signature_minimal);
+        inner_region_store_sign(R, signature_minimal);
     }
+    std::cout << "b-d" << std::endl;
     
     // b-d node
     for (map<vector<int>,BaseRegion>::const_iterator it_3hat_1 = regions_3hat.begin(); it_3hat_1 != regions_3hat.end(); ++it_3hat_1) {
         for (map<vector<int>,BaseRegion>::const_iterator it_3hat_2 = regions_3hat.begin(); it_3hat_2 != regions_3hat.end(); ++it_3hat_2) {
             for (int edge_node_c = 0; edge_node_c <= 1; edge_node_c++) {
-                HatRegion R(4, a);
+                InnerHatRegion R(4, a);
                 int node = R.addNode();
                 R.addEdge(b, node);
                 R.addEdge(node, d);
@@ -115,13 +116,13 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
                 
                 R.glue(toGlue);
                 
-                store_sign(R, signature_minimal);
+                inner_region_store_sign(R, signature_minimal);
             }
             
             
         }
     }
-    
+    std::cout << "S= 0" << std::endl;
     // |S| = 0
     for (int dangling_n3 = 0; dangling_n3 <= 1; dangling_n3++) {
         for (int deg2_a_b = 0; deg2_a_b <= 1; deg2_a_b++) {
@@ -131,7 +132,7 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
                     for (int deg3_a_b_c = 0; deg3_a_b_c <= 1; deg3_a_b_c++) {
                         for (int deg3_a_c_d = 0; deg3_a_c_d <= 1; deg3_a_c_d++) {
                             
-                            HatRegion R(4,a);
+                            InnerHatRegion R(4,a);
                             
                             for (int i = 0; i < dangling_n3; i++) {
                                 int node = R.addNode();
@@ -170,7 +171,7 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
                                 R.addEdge(node, d);
                             }
                             
-                            store_sign(R, signature_minimal);
+                            inner_region_store_sign(R, signature_minimal);
                             
                         }
                     }
@@ -179,10 +180,11 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
         }
     }
     
+    std::cout << "S> 0" << std::endl;
     // |S| > 0, s connected to c, or a is as good
     for (map<vector<int>,BaseRegion>::const_iterator it_4hat_b_1 = regions_4hat_b.begin(); it_4hat_b_1 != regions_4hat_b.end(); ++it_4hat_b_1) {
         for (map<vector<int>,BaseRegion>::const_iterator it_4hat_b_2 = regions_4hat_b.begin(); it_4hat_b_2 != regions_4hat_b.end(); ++it_4hat_b_2) {
-            HatRegion R(4, a);
+            InnerHatRegion R(4, a);
             int s = R.addNode();
             R.addEdge(a, s);
             R.addEdge(c, s);
@@ -211,7 +213,7 @@ void generate_4hat_regions(std::map<vector<int>,BaseRegion> &signature_minimal, 
             
             R.glue(toGlue);
             
-            store_sign(R, signature_minimal);
+            inner_region_store_sign(R, signature_minimal);
             
         }
     }

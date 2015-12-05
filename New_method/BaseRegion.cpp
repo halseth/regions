@@ -111,6 +111,32 @@ bool BaseRegion::isAdjacent(int a, int b){
 bool BaseRegion::isValid(){
     // The region must be planar and connected
     
+    bool valid = true;
+    
+    // It must be connected
+    if (!isConnected()) {
+        //std::cout << "Not connected" << std::endl;
+        valid = false;
+#ifndef TEST
+        //printRegion();
+        //exit(0);
+#endif
+    }
+    
+    if(!isPlanar()){
+        //std::cout << "Not planar" << std::endl;
+        valid = false;
+#ifndef TEST
+       // printRegion();
+       // exit(0);
+#endif
+    }
+    
+    return valid;
+}
+
+bool BaseRegion::isConnected(){
+    // Check connectivity
     lemon::ListGraph g;
     std::vector<lemon::ListGraph::Node> gnodes;
     
@@ -126,35 +152,37 @@ bool BaseRegion::isValid(){
         }
     }
     
-    bool valid = true;
-    
     // It must be connected
-    if (!connected(g)) {
-        std::cout << "Not connected" << std::endl;
-        valid = false;
-#ifndef TEST
-        printRegion();
-        exit(0);
-#endif
+    return connected(g);
+}
+
+bool BaseRegion::isPlanar(){
+    // The region must be planar
+    
+    lemon::ListGraph g;
+    std::vector<lemon::ListGraph::Node> gnodes;
+    
+    for(int i = 0; i < getSize(); i++){
+        gnodes.push_back(g.addNode());
     }
-   
+    
+    for(int node = 0; node < getSize(); node++){
+        for(int i = node+1; i < adj[node].size(); i++){
+            if(adj[node][i]){
+                g.addEdge(gnodes[node], gnodes[i]);
+            }
+        }
+    }
+    
     // It must be planar with all internal vertices drawn on the inside
     lemon::ListGraph::Node gadget = g.addNode();
     for(int i = 0; i < Boundary.size(); i++){
         g.addEdge(gadget, g.nodeFromId(Boundary[i]));
     }
     
-    if(!checkPlanarity(g)){
-        std::cout << "Not planar" << std::endl;
-        valid = false;
-#ifndef TEST
-        printRegion();
-        exit(0);
-#endif
-    }
-    
-    return valid;
+    return checkPlanarity(g);
 }
+
 
 
 int BaseRegion::getBoundarySize() const{
