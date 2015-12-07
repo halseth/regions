@@ -27,8 +27,8 @@ void generate_from_inner(map<vector<int>,BaseRegion> &signature_minimal,
                          vector<BaseRegion> &inner_4starregions,
                          vector<BaseRegion> &inner_5regions,
                          vector<BaseRegion> &inner_6regions,
-                         map<vector<int>, BaseRegion> &regions_3hat,
-                         map<vector<int>, BaseRegion> &regions_4hat
+                         vector<BaseRegion> &outer_non_dom_3regions,
+                         vector<BaseRegion> &outer_non_dom_4regions
                          );
 
 #endif /* generate_from_inner_hpp */

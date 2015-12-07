@@ -73,7 +73,7 @@ void load_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fil
 }
 
 void load_region_vector(std::vector<BaseRegion> &vec, std::string filename){
-    std::cout << "loading map from file " << filename << std::endl;
+    std::cout << "loading vector from file " << filename << std::endl;
     std::ifstream file;
     file.open(filename.c_str());
     vec.clear();
