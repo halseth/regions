@@ -30,7 +30,7 @@ void generate_3hat_b_regions(std::map<vector<int>,BaseRegion> &signature_minimal
                 R.addEdge(c, node);
             }
             //store_sign(R, signature_minimal);
-            inner_region_store_sign(R, signature_minimal);
+//            inner_region_store_sign(R, signature_minimal);
         }
     }
     

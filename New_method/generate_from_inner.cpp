@@ -53,7 +53,7 @@ void generate_from_inner(map<vector<int>,BaseRegion> &signature_minimal,
         cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
         // Inner 6-regions. This is a WIP. Outer regions not considered
-#pragma omp for nowait
+#pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_6regions.size(); i++) {
             for (int inner_boundary_edges = 0; inner_boundary_edges <= 0b111111; inner_boundary_edges++) {
                 

@@ -9,8 +9,10 @@
 #include "catch.hpp"
 #include <iostream>
 #include "BaseRegion.h"
-#include "4hat_a_regions.h"
+#include "HatRegion.h"
+#include "4hat_b_regions.h"
 #include "store_region_map.h"
+#include "enumerate_inner.hpp"
 
 TEST_CASE( "Testing signature method1", "[Signature1]" ) {
     
@@ -98,6 +100,15 @@ TEST_CASE( "Testing signature method1", "[Signature1]" ) {
         ss2 << sign2[i] << " ";
     }
     REQUIRE(ss2.str() == "1 1 1 0 1 0 0 0 1 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 1 1 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 1 1 1 0 1 0 0 0 1 0 1 1 0 0 1 0 0 0 1 0 0 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 ");
+    
+    std::stringstream ss3;
+    std::vector<int> sign3;
+    R.getSignature3(sign3);
+    
+    for(int i = 0; i < sign3.size(); i++){
+        ss3 << sign3[i] << " ";
+    }
+    REQUIRE(ss3.str() == "1 1 1 0 1 0 0 0 1 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 1 1 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 1 1 1 0 1 0 0 0 1 0 1 1 0 0 1 0 0 0 1 0 0 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 ");
 }
 
 TEST_CASE( "Testing signature method2", "[Signature2]" ) {
@@ -185,6 +196,16 @@ TEST_CASE( "Testing signature method2", "[Signature2]" ) {
     }
     
     REQUIRE(sign == sign2);
+    
+    std::stringstream ss3;
+    std::vector<int> sign3;
+    R.getSignature3(sign3);
+    
+    for(int i = 0; i < sign3.size(); i++){
+        ss3 << sign3[i] << " ";
+    }
+    
+    REQUIRE(sign == sign3);
 }
 
 TEST_CASE( "Testing signature equivalence", "[Signature3]" ) {
@@ -248,4 +269,57 @@ TEST_CASE( "Testing signature equivalence", "[Signature3]" ) {
     }
     
     REQUIRE(sign == sign2);
+    
+    std::stringstream ss3;
+    std::vector<int> sign3;
+    R2.getSignature3(sign3);
+    
+    for(int i = 0; i < sign3.size(); i++){
+        ss3 << sign3[i] << " ";
+    }
+    
+    REQUIRE(sign == sign3);
+}
+
+TEST_CASE( "Testing signatures on dataset", "[Signature4]" ) {
+    
+    std::vector<BaseRegion> inner_regions;
+    
+    // Uncomment the one to test
+    enumerate_inner_2regions(inner_regions);
+    //enumerate_inner_3regions(inner_regions);
+    //enumerate_inner_4regions(inner_regions);
+    //enumerate_inner_5regions(inner_regions);
+    //enumerate_inner_6regions(inner_regions); // NB: Very slow!
+    
+    
+    for (std::vector<BaseRegion>::iterator it = inner_regions.begin(); it != inner_regions.end(); it++) {
+        std::stringstream ss;
+        std::vector<int> sign;
+        it->getSignature2(sign);
+        
+        for(int i = 0; i < sign.size(); i++){
+            ss << sign[i] << " ";
+        }
+        
+        std::stringstream ss2;
+        std::vector<int> sign2;
+        it->getSignature2(sign2);
+        
+        for(int i = 0; i < sign2.size(); i++){
+            ss2 << sign2[i] << " ";
+        }
+        
+        REQUIRE(sign == sign2);
+        
+        std::stringstream ss3;
+        std::vector<int> sign3;
+        it->getSignature3(sign3);
+        
+        for(int i = 0; i < sign3.size(); i++){
+            ss3 << sign3[i] << " ";
+        }
+        
+        REQUIRE(sign == sign3);
+    }
 }

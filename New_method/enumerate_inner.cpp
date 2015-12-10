@@ -12,6 +12,7 @@ using namespace std;
 
 #include "enumerate_inner.hpp"
 #include "Region.h"
+#include "store_sign.h"
 
 void enumerate_inner_2regions(std::vector<BaseRegion> &inner_2regions) {
     
@@ -682,7 +683,49 @@ void enumerate_inner_5regions(std::vector<BaseRegion> &inner_5regions) {
     
 }
 
-void enumerate_inner_6regions(std::vector<BaseRegion> &inner_6regions) {
+//void store_inner_sign(BaseRegion &region, map<vector<int>, BaseRegion> &sign_minimal) {
+//    int a = 0;
+//    int b = 1;
+//    int c = 2;
+//    int d = 3;
+//    int e = 4;
+//    int f = 5;
+//    
+//    // TODO: make this part of outer loop, to make better parallelization
+//    for (int inner_boundary_edges = 0; inner_boundary_edges <= 0b111111; inner_boundary_edges++) {
+//        
+//        BaseRegion inner = region;
+//        inner.removeEdge(a, b);
+//        inner.removeEdge(b, c);
+//        inner.removeEdge(c, d);
+//        inner.removeEdge(d, e);
+//        inner.removeEdge(e, f);
+//        inner.removeEdge(f, a);
+//        
+//        if ( (inner_boundary_edges & (0b100000)) != 0) {
+//            inner.addEdge(a, b);
+//        }
+//        if ( (inner_boundary_edges & (0b010000)) != 0) {
+//            inner.addEdge(b, c);
+//        }
+//        if ( (inner_boundary_edges & (0b001000)) != 0) {
+//            inner.addEdge(c, d);
+//        }
+//        if ( (inner_boundary_edges & (0b000100)) != 0) {
+//            inner.addEdge(d, e);
+//        }
+//        if ( (inner_boundary_edges & (0b000010)) != 0) {
+//            inner.addEdge(e, f);
+//        }
+//        if ( (inner_boundary_edges & (0b000001)) != 0) {
+//            inner.addEdge(f, a);
+//        }
+//        store_sign_if_valid(inner, sign_minimal);
+//    }
+//
+//}
+
+void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
   
     int a = 0;
     int b = 1;
@@ -693,12 +736,14 @@ void enumerate_inner_6regions(std::vector<BaseRegion> &inner_6regions) {
    
    
     // edges among nodes on boundary
-    const int mmax = 0b111111111+1;
+    const int mmax = 0b111111111111111+1;
     int current = 0;
+//    map<vector<int>, BaseRegion> sign_minimal;
     
 #pragma omp parallel
     {
-        vector<BaseRegion> priv_regions;
+//        vector<BaseRegion> priv_regions;
+        map<vector<int>, BaseRegion> priv_sign_minimal;
         int tid = 0;//omp_get_thread_num();
         int nthreads = 1;//omp_get_num_threads();
         cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
@@ -706,39 +751,61 @@ void enumerate_inner_6regions(std::vector<BaseRegion> &inner_6regions) {
         int num_valid = 0;
         
         
-#pragma omp for
+#pragma omp for schedule(dynamic) nowait
     
-    // Boundary neighbors, in this order: (a-c)(a-d)(a-e)(b-d)(b-e)(b-f)(c-e)(c-f)(d-f)
-    for (int boundary_neighbors = 0; boundary_neighbors <= 0b111111111; boundary_neighbors++) {
+    // Boundary neighbors, in this order: (a-b)(a-c)(a-d)(a-e)(a-f)(b-c)(b-d)(b-e)(b-f)(c-d)(c-e)(c-f)(d-e)(d-f)(e-f)
+    for (int boundary_neighbors = 0; boundary_neighbors <= 0b111111111111111; boundary_neighbors++) {
         
         Region R(6, a, d);
+        // Remove all edges on boundary
+        for (int i = 0; i < 6; i++) {
+            R.removeEdge(i, (i+1)%6);
+        }
         
-        if ( (boundary_neighbors & 0b100000000) != 0 ) {
+        if ( (boundary_neighbors & 0b100000000000000) != 0 ) {
+            R.addEdge(a, b);
+        }
+        if ( (boundary_neighbors & 0b010000000000000) != 0 ) {
             R.addEdge(a, c);
         }
-        if ( (boundary_neighbors & 0b010000000) != 0 ) {
+        if ( (boundary_neighbors & 0b001000000000000) != 0 ) {
             R.addEdge(a, d);
         }
-        if ( (boundary_neighbors & 0b001000000) != 0 ) {
+        if ( (boundary_neighbors & 0b000100000000000) != 0 ) {
             R.addEdge(a, e);
         }
-        if ( (boundary_neighbors & 0b000100000) != 0 ) {
+        if ( (boundary_neighbors & 0b000010000000000) != 0 ) {
+            R.addEdge(a, f);
+        }
+        if ( (boundary_neighbors & 0b000001000000000) != 0 ) {
+            R.addEdge(b, c);
+        }
+        if ( (boundary_neighbors & 0b000000100000000) != 0 ) {
             R.addEdge(b, d);
         }
-        if ( (boundary_neighbors & 0b000010000) != 0 ) {
+        if ( (boundary_neighbors & 0b000000010000000) != 0 ) {
             R.addEdge(b, e);
         }
-        if ( (boundary_neighbors & 0b000001000) != 0 ) {
+        if ( (boundary_neighbors & 0b000000001000000) != 0 ) {
             R.addEdge(b, f);
         }
-        if ( (boundary_neighbors & 0b000000100) != 0 ) {
+        if ( (boundary_neighbors & 0b000000000100000) != 0 ) {
+            R.addEdge(c, d);
+        }
+        if ( (boundary_neighbors & 0b000000000010000) != 0 ) {
             R.addEdge(c, e);
         }
-        if ( (boundary_neighbors & 0b000000010) != 0 ) {
+        if ( (boundary_neighbors & 0b000000000001000) != 0 ) {
             R.addEdge(c, f);
         }
-        if ( (boundary_neighbors & 0b000000001) != 0 ) {
+        if ( (boundary_neighbors & 0b000000000000100) != 0 ) {
+            R.addEdge(d, e);
+        }
+        if ( (boundary_neighbors & 0b000000000000010) != 0 ) {
             R.addEdge(d, f);
+        }
+        if ( (boundary_neighbors & 0b000000000000001) != 0 ) {
+            R.addEdge(e, f);
         }
         
         if(!R.isValid()) {
@@ -814,7 +881,8 @@ void enumerate_inner_6regions(std::vector<BaseRegion> &inner_6regions) {
                                         }
                                         
                                         if (R2.isValid()) {
-                                            priv_regions.push_back(R2);
+                                            store_sign(R2, priv_sign_minimal);
+                                            //priv_regions.push_back(R2);
                                             num_valid++;
                                         }
                                     }
@@ -886,7 +954,8 @@ void enumerate_inner_6regions(std::vector<BaseRegion> &inner_6regions) {
                                             }
                                             
                                             if (R3.isValid()) {
-                                                priv_regions.push_back(R3);
+//                                                priv_regions.push_back(R3);
+                                                store_sign(R3, priv_sign_minimal);
                                                 //inner_6regions.push_back(R3);
                                                 num_valid++;
                                                 //std::cout << "Num valid: " << num_valid << std::endl;
@@ -913,14 +982,103 @@ void enumerate_inner_6regions(std::vector<BaseRegion> &inner_6regions) {
         
 #pragma omp critical
         {
-            cout << "Thread " << tid << " done and now adding to vector " << endl;
-            for (vector<BaseRegion>::const_iterator it = priv_regions.begin(); it != priv_regions.end(); ++it) {
-                BaseRegion R = *it;
-                inner_6regions.push_back(R);
+//            cout << "Thread " << tid << " done and now adding to vector " << endl;
+//            for (vector<BaseRegion>::const_iterator it = priv_regions.begin(); it != priv_regions.end(); ++it) {
+//                BaseRegion R = *it;
+//                inner_6regions.push_back(R);
+//            }
+            cout << "Thread " << tid << " done and now adding to sign minimal " << endl;
+            for (map<vector<int>, BaseRegion>::const_iterator it = priv_sign_minimal.begin(); it != priv_sign_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, sign_minimal);
             }
+
         }
     } // parallel region over
     
-    cout << "All threads done. Enumerating over. Total size: " << inner_6regions.size() << endl;
+    cout << "Total sign minimal size: " << sign_minimal.size() << endl;
     
+//    cout << "All threads done. Enumerating over. Total size: " << inner_6regions.size() << endl;
+    
+}
+
+
+
+bool can_apply_rule1(BaseRegion &R){
+    
+    vector<int> internal_nodes;
+    for (int i = R.getBoundarySize(); i < R.getSize(); i++) {
+        internal_nodes.push_back(i);
+    }
+    
+    // Check if any edges
+    bool edge = false;
+    for (int i = 0; i < internal_nodes.size(); i++) {
+        for (int j = i+1; j < internal_nodes.size(); j++) {
+            int node1 = internal_nodes[i];
+            int node2 = internal_nodes[j];
+            
+            if(R.isAdjacent(node1, node2)){
+                edge = true;
+                break;
+            }
+        }
+    }
+    
+    // If no edge, then cannot apply reduction rule
+    if (!edge) {
+        return  false;
+    }
+    
+    // There are edges, need at least one intenal that dominates all other internal
+    bool found_dominator = false;
+    for (int i = 0; i < internal_nodes.size(); i++) {
+        bool dominates_all = true;
+        for (int j = 0; j < internal_nodes.size(); j++) {
+            if (i == j) {
+                continue;
+            }
+            int dominator = internal_nodes[i];
+            int node = internal_nodes[j];
+            
+            if(!R.isAdjacent(dominator, node)){
+                dominates_all = false;
+                break;
+            }
+        }
+        if (dominates_all) {
+            found_dominator = true;
+            break;
+        }
+    }
+    
+    // We found a dominator, so cannot apply rule
+    if (found_dominator) {
+        return false;
+    }
+    
+    return true;
+}
+
+//bool can_apply_rule2(BaseRegion &R){
+//    vector<int> internal_nodes;
+//    for (int i = R.getBoundarySize(); i < R.getSize(); i++) {
+//        internal_nodes.push_back(i);
+//    }
+//    
+//    // Check if for any two internal nodes, the neighborhood of one is a subset of the other
+//}
+
+void filter_on_red_rules(vector<BaseRegion> &regions) {
+    cout << "Unfiltered size: " << regions.size() << endl;
+    vector<BaseRegion> filtered;
+    for (int i = 0; i < regions.size(); i++) {
+        BaseRegion R = regions[i];
+        if (can_apply_rule1(R)) {
+            // Ignore this one
+            continue;
+        }
+        filtered.push_back(R);
+    }
+    cout << "Filtered size: " << filtered.size() << endl;
 }

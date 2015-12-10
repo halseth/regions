@@ -17,6 +17,7 @@ void enumerate_inner_3regions(std::vector<BaseRegion> &inner_3regions);
 void enumerate_inner_4regions(std::vector<BaseRegion> &inner_4regions);
 void enumerate_inner_4starregions(std::vector<BaseRegion> &inner_4regions);
 void enumerate_inner_5regions(std::vector<BaseRegion> &inner_5regions);
-void enumerate_inner_6regions(std::vector<BaseRegion> &inner_6regions);
+void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal);
+void filter_on_red_rules(vector<BaseRegion> &regions);
 
 #endif /* enumerate_inner_hpp */

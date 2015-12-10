@@ -431,6 +431,65 @@ int BaseRegion::signature2(std::vector<int> X, std::vector<int> S){
     return best - X.size();
 }
 
+
+// Check if the set D dominates region \ S
+bool BaseRegion::dominates(std::vector<int> D, std::vector<int> S) {
+    
+    bool dominated[this->getSize()];
+    for(int j = 0; j < this->getSize(); j++){
+        dominated[j] = false;
+    }
+    for(int j = 0; j < D.size(); j++){
+        int d = D[j];
+        dominated[d] = true;
+    }
+    
+    // Check if it is a dominating set of V(R)\S
+    for(int j = 0; j < S.size(); j++){
+        int s = S[j];
+        dominated[s] = true;
+    }
+    
+    for(int j = 0; j < D.size(); j++){
+        int d = D[j];
+        for(int l = 0; l < this->getSize(); l++){
+            if(adj[d][l]) dominated[l] = true;
+        }
+    }
+    
+    bool valid = true;
+    for(int v = 0; v < this->getSize(); v++){
+        valid &= dominated[v];
+    }
+    
+    return valid;
+}
+
+// Optimized signature function. NB: only valid if {u,v} dominates the whole regions (included boundary)
+int BaseRegion::signature3(std::vector<int> X, std::vector<int> S){
+    
+    // Check if X already dominates region
+    if(dominates(X, S)) {
+        // Don't need any additional nodes
+        return 0;
+    }
+    
+    // Try picking one vertex in addition to X
+    for (int i = 0; i < this->getSize(); i++) {
+        std::vector<int> dominators(X);
+        dominators.push_back(i);
+        
+        if (dominates(dominators, S)) {
+            // Enough with on extra
+            return 1;
+        }
+    }
+    
+    // If not we can always just pick u and v. NB: If we get this far we know that u or v cannot already be in X
+    return 2;
+}
+
+
 void BaseRegion::getSignature(std::vector<int> &signature){
     signature.clear();
 //    std::cout << "Sign1" << std::endl;
@@ -468,6 +527,26 @@ void BaseRegion::getSignature2(std::vector<int> &signature){
             }
             
             signature.push_back(this->signature2(X, S));
+        }
+    }
+}
+
+void BaseRegion::getSignature3(std::vector<int> &signature){
+    signature.clear();
+    //    std::cout << "Sign2" << std::endl;
+    for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
+        for(int x_set = 0; x_set <= std::pow(2, Boundary.size())-1; x_set++){
+            if((s_set & x_set) != 0) continue; // overlaps
+            
+            std::vector<int> X;
+            std::vector<int> S;
+            
+            for(int i = 0; i < Boundary.size(); i++){
+                if(s_set & (1 << i)) S.push_back(i);
+                if(x_set & (1 << i)) X.push_back(i);
+            }
+            
+            signature.push_back(this->signature3(X, S));
         }
     }
 }
