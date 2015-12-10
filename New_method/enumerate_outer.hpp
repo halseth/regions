@@ -15,7 +15,7 @@ using namespace std;
 
 #include "BaseRegion.h"
 
-void enumerate_non_dominator_outer_3regions(vector<BaseRegion> &outer_non_dom_3regions);
-void enumerate_non_dominator_outer_4regions(vector<BaseRegion> &outer_non_dom_4regions);
+void enumerate_non_dominator_outer_3regions(vector<BaseRegion> &outer_non_dom_3regions, bool removeEdge);
+void enumerate_non_dominator_outer_4regions(vector<BaseRegion> &outer_non_dom_4regions, bool removeEdge);
 
 #endif /* enumerate_outer_hpp */

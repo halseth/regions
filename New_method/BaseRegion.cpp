@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <fstream>
 #include "BaseRegion.h"
-#include "subsets.hpp"
 
 BaseRegion::BaseRegion(int boundarySize){
     init(boundarySize);
@@ -189,249 +188,6 @@ int BaseRegion::getBoundarySize() const{
     return Boundary.size();
 }
 
-// Calculates the signature zeta(X,S) of a region
-// TODO: Most likely wrong
-int BaseRegion::signature(std::vector<int> X, std::vector<int> S){
-    
-    //Helper array to calculate indexes of vertices
-    int xs[this->getSize()];
-    for(int i = 0; i < this->getSize(); i++){
-        xs[i] = 0;
-    }
-    
-    // Set indices in X to 1
-    for(int i = 0; i < X.size(); i++){
-        xs[X[i]] = 1;
-    }
-    
-    // The first elements in the array will point to the elements not in X
-    int item = 0;
-    for(int i = 0; i < this->getSize(); i++){
-        if(xs[i] == 0){
-            xs[item++] = i;
-        }
-    }
-    
-    int best = this->getSize();
-    // Try all possible dominating sets and check if they are good
-    int x_size = X.size();
-    
-    // Size of set in addition to X is max 2 (we can always pick v and w)
-    for(int k = 0; k <= 2; k++){
-        std::vector<std::vector<int> > d_subsets;
-        gen_subsets(this->getSize()-1-x_size, k, d_subsets);
-        for(int i = 0; i < d_subsets.size(); i++){
-            std::vector<int> D;
-            for(int j = 0; j < X.size();j++){
-                D.push_back(X[j]);
-            }
-            std::vector<int> additional = d_subsets[i];
-            for(int j = 0; j < additional.size(); j++){
-                int a = additional[j];
-                D.push_back(xs[a]);
-            }
-            
-            bool valid = true;
-            
-            bool dominated[this->getSize()];
-            for(int j = 0; j < this->getSize(); j++){
-                dominated[j] = false;
-            }
-            for(int j = 0; j < D.size(); j++){
-                int d = D[j];
-                dominated[d] = true;
-            }
-            
-            
-            //Check if X is part of D
-            for(int j = 0; j < X.size(); j++){
-                int x = X[j];
-                valid &= dominated[x];
-            }
-            
-            if(!valid){
-                std::cerr << "ERROR in signature calculation!. X not part of D." << std::endl;
-                exit(0);
-            }
-            
-            // Check if it is a dominating set of V(R)\S
-            for(int j = 0; j < S.size(); j++){
-                int s = S[j];
-                dominated[s] = true;
-            }
-            for(int j = 0; j < D.size(); j++){
-                int d = D[j];
-                for(int l = 0; l < adj[d].size(); l++){
-                    if(adj[d][l]) dominated[l] = true;
-                }
-            }
-            
-            for(int v = 0; v < this->getSize(); v++){
-                valid &= dominated[v];
-            }
-            
-            //Check if valid and smallest possible
-            if(valid && D.size() < best){
-                best = D.size();
-            } 
-            
-        }
-    }
-   /* std::cout << "For x=";
-    for(int i = 0; i<X.size(); i++){
-        std::cout << X[i] << " ";
-    }
-    std::cout << "and s=";
-    for(int i = 0; i<S.size(); i++){
-        std::cout << S[i] << " ";
-    }*/
-//    std::cout << "we return " << (best - X.size()) << "for X=";
-//    for (int i = 0; i < X.size(); i++) {
-//        std::cout << X[i] << " ";
-//    }
-//    std::cout << "S=";
-//    for (int i = 0; i < S.size(); i++) {
-//        std::cout << S[i] << " ";
-//    }
-//    std::cout << std::endl;
-    return best - X.size();
-}
-
-int BaseRegion::signature2(std::vector<int> X, std::vector<int> S){
-    
-    //Helper array to calculate indexes of vertices
-    int xs[this->getBoundarySize()];
-    for(int i = 0; i < this->getBoundarySize(); i++){
-        xs[i] = 0;
-    }
-    for(int i = 0; i < X.size(); i++){
-        xs[X[i]] = 1;
-    }
-    int item = 0;
-    for(int i = 0; i < this->getBoundarySize(); i++){
-        if(xs[i] == 0){
-            xs[item++] = i;
-        }
-    }
-    
-    int best = this->getSize();
-    // Try all possible dominating sets and check if they are good
-    int x_size = X.size();
-    
-    // Size of set in addition to X is max 2 (we can always pick v and w)
-    for(int k = 0; k <= 2; k++){
-        std::vector<std::vector<int> > d_subsets;
-//        std::cout << "k=" << k << std::endl;
-        // Pick boundary nodes
-        gen_subsets(this->getBoundarySize()-1-x_size, k, d_subsets);
-        for(int i = 0; i < d_subsets.size(); i++){
-            std::vector<int> D;
-            for(int j = 0; j < X.size();j++){
-                D.push_back(X[j]);
-            }
-            std::vector<int> additional = d_subsets[i];
-//            std::cout << "Additional :";
-            for(int j = 0; j < additional.size(); j++){
-                int a = additional[j];
-//                std::cout << " " << a;
-                D.push_back(xs[a]);
-            }
-//            std::cout << std::endl;
-            
-            bool valid = true;
-            
-            bool dominated[this->getSize()];
-            for(int j = 0; j < this->getSize(); j++){
-                dominated[j] = false;
-            }
-            for(int j = 0; j < D.size(); j++){
-                int d = D[j];
-                dominated[d] = true;
-            }
-            
-            
-            //Check if X is part of D
-            for(int j = 0; j < X.size(); j++){
-                int x = X[j];
-                valid &= dominated[x];
-            }
-            
-            if(!valid){
-                std::cerr << "ERROR in signature calculation!. X not part of D." << std::endl;
-                exit(0);
-            }
-            
-            // Check if it is a dominating set of V(R)\S
-            for(int j = 0; j < S.size(); j++){
-                int s = S[j];
-                dominated[s] = true;
-            }
-            
-            for(int j = 0; j < D.size(); j++){
-                int d = D[j];
-                for(int l = 0; l < adj[d].size(); l++){
-                    if(adj[d][l]) dominated[l] = true;
-                }
-            }
-            
-            std::vector<int> not_dominated;
-            for(int v = 0; v < this->getSize(); v++){
-                valid &= dominated[v];
-                if(!dominated[v]){
-                    not_dominated.push_back(v);
-                }
-            }
-            
-            if (!valid) {
-                // Try to pick one extra internal vertex to make it valid
-                for(int internal = getBoundarySize(); internal < getSize(); internal++){
-                    bool fix_domination = true;
-                    for(int v = 0; v < not_dominated.size(); v++){
-                        if (not_dominated[v] == internal) {
-                            continue;
-                        }
-                        fix_domination &= isAdjacent(not_dominated[v], internal);
-                    }
-                    // Found vertex to fix domination, add to D
-                    if (fix_domination) {
-//                        std::cout << "Fixed" << std::endl;
-                        D.push_back(internal);
-                        valid = true;
-                        break;
-                    }
-                }
-            }
-            
-            //Check if valid and smallest possible
-            if(valid && D.size() < best){
-                best = D.size();
-            }
-            
-        }
-    }
-    /* std::cout << "For x=";
-     for(int i = 0; i<X.size(); i++){
-     std::cout << X[i] << " ";
-     }
-     std::cout << "and s=";
-     for(int i = 0; i<S.size(); i++){
-     std::cout << S[i] << " ";
-     }
-     */
-    
-//    std::cout << "we return " << (best - X.size()) << "for X=";
-//    for (int i = 0; i < X.size(); i++) {
-//        std::cout << X[i] << " ";
-//    }
-//    std::cout << "S=";
-//    for (int i = 0; i < S.size(); i++) {
-//        std::cout << S[i] << " ";
-//    }
-//    std::cout << std::endl;
-    return best - X.size();
-}
-
-
 // Check if the set D dominates region \ S
 bool BaseRegion::dominates(std::vector<int> D, std::vector<int> S) {
     
@@ -465,8 +221,9 @@ bool BaseRegion::dominates(std::vector<int> D, std::vector<int> S) {
     return valid;
 }
 
+// Calculates the signature zeta(X,S) of a region
 // Optimized signature function. NB: only valid if {u,v} dominates the whole regions (included boundary)
-int BaseRegion::signature3(std::vector<int> X, std::vector<int> S){
+int BaseRegion::signature(std::vector<int> X, std::vector<int> S){
     
     // Check if X already dominates region
     if(dominates(X, S)) {
@@ -489,49 +246,7 @@ int BaseRegion::signature3(std::vector<int> X, std::vector<int> S){
     return 2;
 }
 
-
 void BaseRegion::getSignature(std::vector<int> &signature){
-    signature.clear();
-//    std::cout << "Sign1" << std::endl;
-    
-    for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
-        for(int x_set = 0; x_set <= std::pow(2, Boundary.size())-1; x_set++){
-            if((s_set & x_set) != 0) continue; // overlaps
-            
-            std::vector<int> X;
-            std::vector<int> S;
-            
-            for(int i = 0; i < Boundary.size(); i++){
-                if(s_set & (1 << i)) S.push_back(i);
-                if(x_set & (1 << i)) X.push_back(i);
-            }
-            
-            signature.push_back(this->signature(X, S));
-        }
-    }
-}
-
-void BaseRegion::getSignature2(std::vector<int> &signature){
-    signature.clear();
-//    std::cout << "Sign2" << std::endl;
-    for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
-        for(int x_set = 0; x_set <= std::pow(2, Boundary.size())-1; x_set++){
-            if((s_set & x_set) != 0) continue; // overlaps
-            
-            std::vector<int> X;
-            std::vector<int> S;
-            
-            for(int i = 0; i < Boundary.size(); i++){
-                if(s_set & (1 << i)) S.push_back(i);
-                if(x_set & (1 << i)) X.push_back(i);
-            }
-            
-            signature.push_back(this->signature2(X, S));
-        }
-    }
-}
-
-void BaseRegion::getSignature3(std::vector<int> &signature){
     signature.clear();
     //    std::cout << "Sign2" << std::endl;
     for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
@@ -546,7 +261,7 @@ void BaseRegion::getSignature3(std::vector<int> &signature){
                 if(x_set & (1 << i)) X.push_back(i);
             }
             
-            signature.push_back(this->signature3(X, S));
+            signature.push_back(this->signature(X, S));
         }
     }
 }

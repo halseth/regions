@@ -6,11 +6,14 @@
 //  Copyright © 2015 Johan Torås Halseth. All rights reserved.
 //
 
+#include <sstream>
+
 #include "enumerate_outer.hpp"
 #include "HatRegion.h"
 #include "BaseRegion.h"
+#include "store_sign.h"
 
-void enumerate_non_dominator_outer_3regions(vector<BaseRegion> &outer_non_dom_3regions) {
+void enumerate_non_dominator_outer_3regions(vector<BaseRegion> &outer_non_dom_3regions, bool removeEdge) {
     
     int a = 0;
     int b = 1;
@@ -34,10 +37,8 @@ void enumerate_non_dominator_outer_3regions(vector<BaseRegion> &outer_non_dom_3r
                 R.addEdge(c, node);
             }
             
-            if (!R.isValid()) {
-                cout << "not valid"<< endl;
-                R.printRegion();
-                exit(0);
+            if (removeEdge) {
+                R.removeEdge(a, c);
             }
             
             outer_non_dom_3regions.push_back(R);
@@ -49,7 +50,7 @@ void enumerate_non_dominator_outer_3regions(vector<BaseRegion> &outer_non_dom_3r
     cout << "Done enumeratin non-dominating outer 3regions: " << outer_non_dom_3regions.size() << endl;
 }
 
-void enumerate_non_dominator_outer_4regions(vector<BaseRegion> &outer_non_dom_4regions) {
+void enumerate_non_dominator_outer_4regions(vector<BaseRegion> &outer_non_dom_4regions, bool removeEdge) {
     
     int a = 0;
     int b = 1;
@@ -115,10 +116,8 @@ void enumerate_non_dominator_outer_4regions(vector<BaseRegion> &outer_non_dom_4r
                                     R.addEdge(d, node);
                                 }
                                 
-                                if (!R.isValid()) {
-                                    cout << "not valid"<< endl;
-                                    R.printRegion();
-                                    exit(0);
+                                if (removeEdge) {
+                                    R.removeEdge(a, d);
                                 }
                                 
                                 outer_non_dom_4regions.push_back(R);

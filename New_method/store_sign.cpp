@@ -26,11 +26,6 @@ void print_map(const std::map<vector<int>,BaseRegion > &map){
     cout << "Biggest: " << big << endl;
 }
 
-// Flips dangling N3 vertices outside region by removing them
-void flip_n3(BaseRegion &R){
-    
-}
-
 void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
     
     // Check if it is valid for it's subclass type
@@ -43,7 +38,7 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
 		return;
 	}
     
-    store_sign_if_valid3(R, signature_minimal);
+    store_sign_if_valid(R, signature_minimal);
 }
 
 //void inner_region_store_sign(InnerRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
@@ -63,6 +58,7 @@ void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_
 //    }
 //}
 
+
 void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
     
     // Check if it is valid for it's subclass type
@@ -71,40 +67,7 @@ void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &s
     }
     
     vector<int> sign;
-    R.getSignature2(sign);
-    if(signature_minimal.count(sign) == 0 )
-    {
-        //cout << "Saving new signature because (signature_minimal.count(sign) == 0)" << endl;
-        if(R.getSize() > biggest) biggest = R.getSize();
-        signature_minimal.insert(pair<vector<int>, BaseRegion>(sign, R));
-    }
-    else if( signature_minimal.at(sign).getSize() > R.getSize() )
-    {
-        //cout << "Saving new signature because signature_minimal.at(sign).size() =" << signature_minimal.at(sign).size() << " and R.size()=" << R.size() << endl;
-        if(R.getSize() > biggest) biggest = R.getSize();
-        signature_minimal.erase(sign);
-        signature_minimal.insert(pair<vector<int>, BaseRegion>(sign, R));
-    }
-    else
-    {
-        return;
-    }
-    
-    cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << "). Biggest=" << biggest << endl;
-    print_map(signature_minimal);
-    
-    cout << endl;
-}
-
-void store_sign_if_valid3(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal){
-    
-    // Check if it is valid for it's subclass type
-    if(!R.isValid()){
-        return;
-    }
-    
-    vector<int> sign;
-    R.getSignature3(sign);
+    R.getSignature(sign);
     if(signature_minimal.count(sign) == 0 )
     {
         //cout << "Saving new signature because (signature_minimal.count(sign) == 0)" << endl;
@@ -131,7 +94,7 @@ void store_sign_if_valid3(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &
 
 bool contains_sign(std::map<std::vector<int>,BaseRegion> &regions, BaseRegion &region){
     vector<int> sign;
-    region.getSignature2(sign);
+    region.getSignature(sign);
     if(regions.count(sign) == 0 )
     {
         return false;

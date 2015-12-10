@@ -27,8 +27,6 @@ private:
     // Private methods
     bool dominates(std::vector<int> dominators, std::vector<int> S);
     int signature(std::vector<int> X, std::vector<int> S);
-    int signature2(std::vector<int> X, std::vector<int> S);
-    int signature3(std::vector<int> X, std::vector<int> S);
     void init(int boundarySize);
     
 protected:
@@ -52,8 +50,6 @@ public:
     void removeEdge(int from, int to);
     bool isAdjacent(int a, int b);
     void getSignature(std::vector<int> &signature);
-    void getSignature2(std::vector<int> &signature);
-    void getSignature3(std::vector<int> &signature);
     int getBoundarySize() const;
     
     void printRegion();

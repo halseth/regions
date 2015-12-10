@@ -12,12 +12,9 @@
 #include <vector>
 #include <map>
 #include "BaseRegion.h"
-#include "InnerRegion.hpp"
 
 void store_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal);
 void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal);
-void store_sign_if_valid3(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal);
 bool contains_sign(std::map<std::vector<int>,BaseRegion> &regions, BaseRegion &region);
-//void inner_region_store_sign(InnerRegion &R, std::map<std::vector<int>,BaseRegion> &signature_minimal);
 
 #endif
