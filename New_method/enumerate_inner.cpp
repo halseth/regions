@@ -738,17 +738,13 @@ void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
     // edges among nodes on boundary
     const int mmax = 0b111111111111111+1;
     int current = 0;
-//    map<vector<int>, BaseRegion> sign_minimal;
     
 #pragma omp parallel
     {
-//        vector<BaseRegion> priv_regions;
         map<vector<int>, BaseRegion> priv_sign_minimal;
         int tid = 0;//omp_get_thread_num();
         int nthreads = 1;//omp_get_num_threads();
         cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
-        
-        int num_valid = 0;
         
         
 #pragma omp for schedule(dynamic) nowait
@@ -813,7 +809,6 @@ void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
             {
                 current++;
                 std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
-                std::cout << "Num valid found: " << num_valid << std::endl;
             }
             continue;
         }
@@ -882,8 +877,6 @@ void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
                                         
                                         if (R2.isValid()) {
                                             store_sign(R2, priv_sign_minimal);
-                                            //priv_regions.push_back(R2);
-                                            num_valid++;
                                         }
                                     }
                                 }
@@ -954,12 +947,7 @@ void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
                                             }
                                             
                                             if (R3.isValid()) {
-//                                                priv_regions.push_back(R3);
                                                 store_sign(R3, priv_sign_minimal);
-                                                //inner_6regions.push_back(R3);
-                                                num_valid++;
-                                                //std::cout << "Num valid: " << num_valid << std::endl;
-                                                //if(num_valid > 10) return;
                                             }
                                         }
                                     }
@@ -975,18 +963,12 @@ void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
         {
             current++;
             std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
-            std::cout << "Num valid found: " << num_valid << std::endl;
         }
     }
-    std::cout << "End. Num valid: " << num_valid << std::endl;
+    std::cout << "Thread end." << std::endl;
         
 #pragma omp critical
         {
-//            cout << "Thread " << tid << " done and now adding to vector " << endl;
-//            for (vector<BaseRegion>::const_iterator it = priv_regions.begin(); it != priv_regions.end(); ++it) {
-//                BaseRegion R = *it;
-//                inner_6regions.push_back(R);
-//            }
             cout << "Thread " << tid << " done and now adding to sign minimal " << endl;
             for (map<vector<int>, BaseRegion>::const_iterator it = priv_sign_minimal.begin(); it != priv_sign_minimal.end(); ++it) {
                 BaseRegion R = it->second;
@@ -996,69 +978,67 @@ void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
         }
     } // parallel region over
     
-    cout << "Total sign minimal size: " << sign_minimal.size() << endl;
-    
-//    cout << "All threads done. Enumerating over. Total size: " << inner_6regions.size() << endl;
-    
+    cout << "Total sign minimal size: " << sign_minimal.size() << "Final map:" << endl;
+    print_map(sign_minimal);
 }
 
 
 
-bool can_apply_rule1(BaseRegion &R){
-    
-    vector<int> internal_nodes;
-    for (int i = R.getBoundarySize(); i < R.getSize(); i++) {
-        internal_nodes.push_back(i);
-    }
-    
-    // Check if any edges
-    bool edge = false;
-    for (int i = 0; i < internal_nodes.size(); i++) {
-        for (int j = i+1; j < internal_nodes.size(); j++) {
-            int node1 = internal_nodes[i];
-            int node2 = internal_nodes[j];
-            
-            if(R.isAdjacent(node1, node2)){
-                edge = true;
-                break;
-            }
-        }
-    }
-    
-    // If no edge, then cannot apply reduction rule
-    if (!edge) {
-        return  false;
-    }
-    
-    // There are edges, need at least one intenal that dominates all other internal
-    bool found_dominator = false;
-    for (int i = 0; i < internal_nodes.size(); i++) {
-        bool dominates_all = true;
-        for (int j = 0; j < internal_nodes.size(); j++) {
-            if (i == j) {
-                continue;
-            }
-            int dominator = internal_nodes[i];
-            int node = internal_nodes[j];
-            
-            if(!R.isAdjacent(dominator, node)){
-                dominates_all = false;
-                break;
-            }
-        }
-        if (dominates_all) {
-            found_dominator = true;
-            break;
-        }
-    }
-    
-    // We found a dominator, so cannot apply rule
-    if (found_dominator) {
-        return false;
-    }
-    
-    return true;
-}
+//bool can_apply_rule1(BaseRegion &R){
+//    
+//    vector<int> internal_nodes;
+//    for (int i = R.getBoundarySize(); i < R.getSize(); i++) {
+//        internal_nodes.push_back(i);
+//    }
+//    
+//    // Check if any edges
+//    bool edge = false;
+//    for (int i = 0; i < internal_nodes.size(); i++) {
+//        for (int j = i+1; j < internal_nodes.size(); j++) {
+//            int node1 = internal_nodes[i];
+//            int node2 = internal_nodes[j];
+//            
+//            if(R.isAdjacent(node1, node2)){
+//                edge = true;
+//                break;
+//            }
+//        }
+//    }
+//    
+//    // If no edge, then cannot apply reduction rule
+//    if (!edge) {
+//        return  false;
+//    }
+//    
+//    // There are edges, need at least one intenal that dominates all other internal
+//    bool found_dominator = false;
+//    for (int i = 0; i < internal_nodes.size(); i++) {
+//        bool dominates_all = true;
+//        for (int j = 0; j < internal_nodes.size(); j++) {
+//            if (i == j) {
+//                continue;
+//            }
+//            int dominator = internal_nodes[i];
+//            int node = internal_nodes[j];
+//            
+//            if(!R.isAdjacent(dominator, node)){
+//                dominates_all = false;
+//                break;
+//            }
+//        }
+//        if (dominates_all) {
+//            found_dominator = true;
+//            break;
+//        }
+//    }
+//    
+//    // We found a dominator, so cannot apply rule
+//    if (found_dominator) {
+//        return false;
+//    }
+//    
+//    return true;
+//}
 
 //bool can_apply_rule2(BaseRegion &R){
 //    vector<int> internal_nodes;
@@ -1069,16 +1049,16 @@ bool can_apply_rule1(BaseRegion &R){
 //    // Check if for any two internal nodes, the neighborhood of one is a subset of the other
 //}
 
-void filter_on_red_rules(vector<BaseRegion> &regions) {
-    cout << "Unfiltered size: " << regions.size() << endl;
-    vector<BaseRegion> filtered;
-    for (int i = 0; i < regions.size(); i++) {
-        BaseRegion R = regions[i];
-        if (can_apply_rule1(R)) {
-            // Ignore this one
-            continue;
-        }
-        filtered.push_back(R);
-    }
-    cout << "Filtered size: " << filtered.size() << endl;
-}
+//void filter_on_red_rules(vector<BaseRegion> &regions) {
+//    cout << "Unfiltered size: " << regions.size() << endl;
+//    vector<BaseRegion> filtered;
+//    for (int i = 0; i < regions.size(); i++) {
+//        BaseRegion R = regions[i];
+//        if (can_apply_rule1(R)) {
+//            // Ignore this one
+//            continue;
+//        }
+//        filtered.push_back(R);
+//    }
+//    cout << "Filtered size: " << filtered.size() << endl;
+//}

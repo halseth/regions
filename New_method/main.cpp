@@ -33,34 +33,32 @@ int main(){
     
 //    benchmark();
 //    return 0;
-    vector<BaseRegion> outer_non_dom_3regions_with_edge;
-    vector<BaseRegion> outer_non_dom_3regions_without_edge;
-    vector<BaseRegion> outer_non_dom_4regions_with_edge;
-    vector<BaseRegion> outer_non_dom_4regions_without_edge;
+//    vector<BaseRegion> outer_non_dom_3regions_with_edge;
+//    vector<BaseRegion> outer_non_dom_3regions_without_edge;
+//    vector<BaseRegion> outer_non_dom_4regions_with_edge;
+//    vector<BaseRegion> outer_non_dom_4regions_without_edge;
+//    
+//    enumerate_non_dominator_outer_3regions(outer_non_dom_3regions_without_edge, true);
+//    enumerate_non_dominator_outer_4regions(outer_non_dom_4regions_without_edge, true);
+//    enumerate_non_dominator_outer_3regions(outer_non_dom_3regions_with_edge, false);
+//    enumerate_non_dominator_outer_4regions(outer_non_dom_4regions_with_edge, false);
+//
+//    std::vector<BaseRegion> inner_2regions;
+//    load_region_vector(inner_2regions, "inner_2regions.txt");
+//    std::vector<BaseRegion> inner_3regions;
+//    load_region_vector(inner_3regions, "inner_3regions.txt");
+//    std::vector<BaseRegion> inner_4regions;
+//    load_region_vector(inner_4regions, "inner_4regions.txt");
+//    std::vector<BaseRegion> inner_4starregions;
+//    load_region_vector(inner_4starregions, "inner_4starregions.txt");
+//    std::vector<BaseRegion> inner_5regions;
+//    load_region_vector(inner_5regions, "inner_5regions.txt");
+//    std::vector<BaseRegion> inner_6regions;
+//    load_region_vector(inner_6regions, "inner_6regions.txt");
     
-    enumerate_non_dominator_outer_3regions(outer_non_dom_3regions_without_edge, true);
-    enumerate_non_dominator_outer_4regions(outer_non_dom_4regions_without_edge, true);
-    enumerate_non_dominator_outer_3regions(outer_non_dom_3regions_with_edge, false);
-    enumerate_non_dominator_outer_4regions(outer_non_dom_4regions_with_edge, false);
-
-    std::vector<BaseRegion> inner_2regions;
-    load_region_vector(inner_2regions, "inner_2regions.txt");
-    std::vector<BaseRegion> inner_3regions;
-    load_region_vector(inner_3regions, "inner_3regions.txt");
-    std::vector<BaseRegion> inner_4regions;
-    load_region_vector(inner_4regions, "inner_4regions.txt");
-    std::vector<BaseRegion> inner_4starregions;
-    load_region_vector(inner_4starregions, "inner_4starregions.txt");
-    std::vector<BaseRegion> inner_5regions;
-    load_region_vector(inner_5regions, "inner_5regions.txt");
-    std::vector<BaseRegion> inner_6regions;
-    load_region_vector(inner_6regions, "inner_6regions.txt");
-    
-//    map<vector<int>, BaseRegion> inner_regions_6;
-//    enumerate_inner_6regions(inner_regions_6);
-//    store_region_map(inner_regions_6, "sign_minimal_inner6.txt");
-//    return 0;
-
+    map<vector<int>, BaseRegion> inner_regions_6;
+    enumerate_inner_6regions(inner_regions_6);
+    store_region_map(inner_regions_6, "sign_minimal_inner6.txt");
 
     cout << "main done" << endl;
     return 0;
