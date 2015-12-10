@@ -60,7 +60,6 @@ int main(){
 //    enumerate_inner_6regions(inner_regions_6);
 //    store_region_map(inner_regions_6, "sign_minimal_inner6.txt");
 //    return 0;
-    
 
 
     cout << "main done" << endl;

@@ -156,8 +156,7 @@ bool BaseRegion::isConnected(){
 }
 
 bool BaseRegion::isPlanar(){
-    // The region must be planar
-    
+    // The region must be planar when all boundary edges are there
     lemon::ListGraph g;
     std::vector<lemon::ListGraph::Node> gnodes;
     
@@ -170,6 +169,14 @@ bool BaseRegion::isPlanar(){
             if(adj[node][i]){
                 g.addEdge(gnodes[node], gnodes[i]);
             }
+        }
+    }
+    
+    // Add boundary edges if not already added
+    for(int node = 0; node < getBoundarySize(); node++){
+        int neighbor = (node+1) % getBoundarySize();
+        if (!isAdjacent(node, neighbor)) {
+            g.addEdge(gnodes[node], gnodes[neighbor]);
         }
     }
     
