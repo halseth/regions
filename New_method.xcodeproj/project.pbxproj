@@ -32,6 +32,7 @@
 		04F4192E1B0648180064638C /* testBaseRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F4192C1B0648180064638C /* testBaseRegion.cpp */; };
 		04F419301B09F4BD0064638C /* BaseRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418FB1B04CE120064638C /* BaseRegion.cpp */; };
 		04F419311B09F4C00064638C /* HatRegion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04F418FE1B04D3A00064638C /* HatRegion.cpp */; };
+		04FF51681C219501008EE66A /* generate_empty_inner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FF51671C219501008EE66A /* generate_empty_inner.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -88,6 +89,8 @@
 		04F419211B0645EB0064638C /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		04F419221B0646870064638C /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		04F4192C1B0648180064638C /* testBaseRegion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testBaseRegion.cpp; sourceTree = "<group>"; };
+		04FF51671C219501008EE66A /* generate_empty_inner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = generate_empty_inner.cpp; sourceTree = "<group>"; };
+		04FF51691C21951D008EE66A /* generate_empty_inner.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = generate_empty_inner.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +169,8 @@
 			isa = PBXGroup;
 			children = (
 				049A6F261C105C6400F3E2B6 /* enumerate_inner.cpp */,
+				04FF51671C219501008EE66A /* generate_empty_inner.cpp */,
+				04FF51691C21951D008EE66A /* generate_empty_inner.hpp */,
 				049A6F271C105C6400F3E2B6 /* enumerate_inner.hpp */,
 				04D879D51C1305E100431DB4 /* generate_from_inner.cpp */,
 				04D879D61C1305E100431DB4 /* generate_from_inner.hpp */,
@@ -297,6 +302,7 @@
 				049A6F281C105C6400F3E2B6 /* enumerate_inner.cpp in Sources */,
 				04F418FD1B04CE120064638C /* BaseRegion.cpp in Sources */,
 				047028201C183FC300758198 /* signature_benchmark.cpp in Sources */,
+				04FF51681C219501008EE66A /* generate_empty_inner.cpp in Sources */,
 				04F419001B04D3A00064638C /* HatRegion.cpp in Sources */,
 				04A5AE9A1B0B24D90057572D /* Region.cpp in Sources */,
 			);

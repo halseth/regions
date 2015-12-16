@@ -9,7 +9,6 @@
 #include "catch.hpp"
 #include <iostream>
 #include "BaseRegion.h"
-#include "4hat_b_regions.h"
 #include "store_region_map.h"
 
 TEST_CASE( "Testing region map reading an saving", "[Region map to file]" ) {

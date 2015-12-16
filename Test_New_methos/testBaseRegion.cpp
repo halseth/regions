@@ -50,6 +50,27 @@ TEST_CASE( "Testin BaseRegion", "[BaseRegion]" ) {
     
 }
 
+TEST_CASE( "Planarity of inner region", "[BaseRegion]" ) {
+    BaseRegion R(6);
+    
+    REQUIRE( R.isValid());
+    
+    R.addEdge(0, 2);
+    R.addEdge(1, 3);
+    
+    REQUIRE( !R.isValid() );
+    
+    R.removeEdge(0, 1);
+    R.removeEdge(1, 2);
+    
+    REQUIRE( !R.isValid() );
+    
+    R.removeEdge(2, 3);
+    
+    REQUIRE( !R.isValid() );
+    
+}
+
 TEST_CASE( "Testing Reduction Rules", "[BaseRegion]" ) {
     BaseRegion b1(6);
     
