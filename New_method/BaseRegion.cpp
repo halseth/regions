@@ -28,6 +28,11 @@ BaseRegion::BaseRegion(std::string string_rep){
     
     init(boundary_size);
     
+    // Remove all edges implicitly added
+    for (int i = 0; i < boundary_size; i++) {
+        removeEdge(i, (i+1)%boundary_size);
+    }
+    
     int internal_nodes;
     ss >> internal_nodes;
    // std::cout << "internal nodes is " << internal_nodes << std::endl;
@@ -156,6 +161,7 @@ bool BaseRegion::isConnected(){
 }
 
 bool BaseRegion::isPlanar(){
+//    std::cout << "check planar" << std::endl;
     // The region must be planar when all boundary edges are there
     lemon::ListGraph g;
     std::vector<lemon::ListGraph::Node> gnodes;
@@ -186,6 +192,7 @@ bool BaseRegion::isPlanar(){
         g.addEdge(gadget, g.nodeFromId(Boundary[i]));
     }
     
+//    std::cout << "done building" << std::endl;
     return checkPlanarity(g);
 }
 

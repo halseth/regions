@@ -31,6 +31,15 @@ void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fi
     
 }
 
+std::vector<BaseRegion> toVector(std::map<std::vector<int>,BaseRegion> &map){
+    std::vector<BaseRegion> vec;
+    std::map<std::vector<int>,BaseRegion>::iterator it;
+    for(it = map.begin(); it != map.end(); ++it){
+        vec.push_back(it->second);
+    }
+    return vec;
+}
+
 void store_region_vector(std::vector<BaseRegion> vec, std::string filename){
     std::ofstream file;
     file.open(filename.c_str());

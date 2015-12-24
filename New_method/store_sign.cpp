@@ -59,7 +59,7 @@ void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &s
     }
     
     cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << ")." << endl;
-    print_map(signature_minimal);
+//    print_map(signature_minimal);
 }
 
 bool contains_sign(std::map<std::vector<int>,BaseRegion> &regions, BaseRegion &region){

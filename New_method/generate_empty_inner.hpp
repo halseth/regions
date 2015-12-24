@@ -11,4 +11,7 @@
 
 #include <stdio.h>
 
+void generate_empty_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int endpoint1, int endpoint2);
+void generate_empty_inner6(map<vector<int>, BaseRegion> &sign_minimal);
+
 #endif /* generate_empty_inner_hpp */

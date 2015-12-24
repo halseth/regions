@@ -135,3 +135,9 @@ void enumerate_non_dominator_outer_4regions(vector<BaseRegion> &outer_non_dom_4r
     
     cout << "Done enumeratin non-dominating outer 4regions: " << outer_non_dom_4regions.size() << endl;
 }
+
+void generate_4star_regions(map<vector<int>,BaseRegion> &signature_minimal) {
+    
+}
+
+
