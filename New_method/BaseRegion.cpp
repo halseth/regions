@@ -251,7 +251,7 @@ int BaseRegion::signature(std::vector<int> X, std::vector<int> S){
         dominators.push_back(i);
         
         if (dominates(dominators, S)) {
-            // Enough with on extra
+            // Enough with one extra
             return 1;
         }
     }
@@ -445,4 +445,59 @@ BaseRegion::BaseRegion(const BaseRegion &obj)
 //        }
 //        this->nodeToLabels[map_it->first] = labels;
 //    }
+}
+
+// Calculates the signature zeta(X,S) of a region where {u,v} not necessarily dominates the whole region (included boundary)
+int BaseRegion::generalSignature(std::vector<int> X, std::vector<int> S){
+    
+    // Check if X already dominates region
+    if(dominates(X, S)) {
+        // Don't need any additional nodes
+        return 0;
+    }
+    
+    // Try picking subsets of size k in addition
+    int n = getSize();
+    for (int k = 1; k <= n; k++) {
+        
+        // Gosper's hack: http://stackoverflow.com/questions/15932237/iterating-over-all-subsets-of-a-given-size
+        int c = (1<<k)-1;
+        while (c < (1<<n)) {
+            
+            std::vector<int> dominators(X);
+            
+            for (int i = 0; i < n; i++) {
+                if(c & (1 << i)) dominators.push_back(i);
+            }
+            
+            if (dominates(dominators, S)) {
+                return k;
+            }
+            
+            int a = c&-c, b = c+a;
+            c = (c^b)/4/a|b;
+        }
+    }
+
+    return n;
+}
+
+void BaseRegion::getGeneralSignature(std::vector<int> &signature){
+    signature.clear();
+    //    std::cout << "Sign2" << std::endl;
+    for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
+        for(int x_set = 0; x_set <= std::pow(2, Boundary.size())-1; x_set++){
+            if((s_set & x_set) != 0) continue; // overlaps
+            
+            std::vector<int> X;
+            std::vector<int> S;
+            
+            for(int i = 0; i < Boundary.size(); i++){
+                if(s_set & (1 << i)) S.push_back(i);
+                if(x_set & (1 << i)) X.push_back(i);
+            }
+            
+            signature.push_back(this->generalSignature(X, S));
+        }
+    }
 }

@@ -67,6 +67,7 @@ void load_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string fil
     
     if (!file.is_open()) {
         std::cerr << "ERROR opening file " << filename << std::endl;
+        exit(1);
     } else {
         std::string line;
         int ll = 0;
@@ -89,6 +90,7 @@ void load_region_vector(std::vector<BaseRegion> &vec, std::string filename){
     
     if (!file.is_open()) {
         std::cerr << "ERROR opening file " << filename << std::endl;
+        exit(1);
     } else {
         std::string line;
         int ll = 0;

@@ -14,7 +14,7 @@ using namespace std;
 #include "Region.h"
 #include "store_sign.h"
 
-void enumerate_inner_2regions(std::vector<BaseRegion> &inner_2regions) {
+void enumerate_inner_2regions(map<vector<int>, BaseRegion> &inner_2regions) {
     
     int a = 0;
     int b = 1;
@@ -62,7 +62,7 @@ void enumerate_inner_2regions(std::vector<BaseRegion> &inner_2regions) {
                     }
                     
                     if (R3.isValid()) {
-                        inner_2regions.push_back(R3);
+                        store_sign(R3, inner_2regions);
                         num_valid++;
                     }                    
                 }
@@ -74,7 +74,7 @@ void enumerate_inner_2regions(std::vector<BaseRegion> &inner_2regions) {
     
 }
 
-void enumerate_inner_3regions(std::vector<BaseRegion> &inner_3regions) {
+void enumerate_inner_3regions(map<vector<int>, BaseRegion> &inner_3regions) {
     
     int a = 0;
     int b = 1;
@@ -130,7 +130,7 @@ void enumerate_inner_3regions(std::vector<BaseRegion> &inner_3regions) {
                         }
                         
                         if (R3.isValid()) {
-                            inner_3regions.push_back(R3);
+                            store_sign(R3, inner_3regions);
                             num_valid++;
                         }
                     }
@@ -143,7 +143,7 @@ void enumerate_inner_3regions(std::vector<BaseRegion> &inner_3regions) {
     
 }
 
-void enumerate_inner_4regions(std::vector<BaseRegion> &inner_4regions) {
+void enumerate_inner_4regions(map<vector<int>, BaseRegion> &inner_4regions) {
     
     cout << "Starting gnerating inner 4regions" << endl;
     
@@ -228,7 +228,7 @@ void enumerate_inner_4regions(std::vector<BaseRegion> &inner_4regions) {
                                 }
                                 
                                 if (R2.isValid()) {
-                                    inner_4regions.push_back(R2);
+                                    store_sign(R2, inner_4regions);
                                     num_valid++;
                                 }
                             }
@@ -284,7 +284,7 @@ void enumerate_inner_4regions(std::vector<BaseRegion> &inner_4regions) {
                                     }
                                     
                                     if (R3.isValid()) {
-                                        inner_4regions.push_back(R3);
+                                        store_sign(R3, inner_4regions);
                                         num_valid++;
                                     }
                                 }
@@ -304,7 +304,7 @@ void enumerate_inner_4regions(std::vector<BaseRegion> &inner_4regions) {
     cout << "All threads done. Enumerating over. Total size: " << inner_4regions.size() << endl;
 }
 
-void enumerate_inner_4starregions(std::vector<BaseRegion> &inner_4starregions) {
+void enumerate_inner_4starregions(map<vector<int>, BaseRegion> &inner_4starregions) {
     
     cout << "Starting generating inner 4star regions" << endl;
     
@@ -389,7 +389,7 @@ void enumerate_inner_4starregions(std::vector<BaseRegion> &inner_4starregions) {
                                 }
                                 
                                 if (R2.isValid()) {
-                                    inner_4starregions.push_back(R2);
+                                    store_sign(R2, inner_4starregions);
                                     num_valid++;
                                 }
                             }
@@ -446,7 +446,7 @@ void enumerate_inner_4starregions(std::vector<BaseRegion> &inner_4starregions) {
                                     }
                                     
                                     if (R3.isValid()) {
-                                        inner_4starregions.push_back(R3);
+                                        store_sign(R3, inner_4starregions);
                                         num_valid++;
                                     }
                                 }
@@ -466,7 +466,7 @@ void enumerate_inner_4starregions(std::vector<BaseRegion> &inner_4starregions) {
     cout << "All threads done. Enumerating over. Total size: " << inner_4starregions.size() << endl;
 }
 
-void enumerate_inner_5regions(std::vector<BaseRegion> &inner_5regions) {
+void enumerate_inner_5regions(map<vector<int>, BaseRegion> &inner_5regions) {
     
     int a = 0;
     int b = 1;
@@ -481,7 +481,7 @@ void enumerate_inner_5regions(std::vector<BaseRegion> &inner_5regions) {
     
 #pragma omp parallel
     {
-        vector<BaseRegion> priv_regions;
+        map<vector<int>, BaseRegion> priv_regions;
         int tid = 0;//omp_get_thread_num();
         int nthreads = 1;//omp_get_num_threads();
         cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
@@ -590,7 +590,7 @@ void enumerate_inner_5regions(std::vector<BaseRegion> &inner_5regions) {
                                             }
                                             
                                             if (R2.isValid()) {
-                                                priv_regions.push_back(R2);
+                                                store_sign(R2, priv_regions);
                                                 num_valid++;
                                             }
                                             
@@ -643,12 +643,8 @@ void enumerate_inner_5regions(std::vector<BaseRegion> &inner_5regions) {
                                             }
                                             
                                             if (R3.isValid()) {
-                                                priv_regions.push_back(R3);
-                                                //inner_6regions.push_back(R3);
+                                                store_sign(R3, priv_regions);
                                                 num_valid++;
-                                                //std::cout << "Num valid: " << num_valid << std::endl;
-                                                //if(num_valid > 10) return;
-                                                
                                             }
                                             
                                         }
@@ -671,10 +667,10 @@ void enumerate_inner_5regions(std::vector<BaseRegion> &inner_5regions) {
         
         #pragma omp critical
         {
-            cout << "Thread " << tid << " done and now adding to vector " << endl;
-            for (vector<BaseRegion>::const_iterator it = priv_regions.begin(); it != priv_regions.end(); ++it) {
-                BaseRegion R = *it;
-                inner_5regions.push_back(R);
+            cout << "Thread " << tid << " done and now adding to signminimal " << endl;
+            for (map<vector<int>, BaseRegion>::const_iterator it = priv_regions.begin(); it != priv_regions.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, inner_5regions);
             }
         }
     } // parallel region over

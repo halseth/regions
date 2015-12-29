@@ -285,7 +285,7 @@ TEST_CASE( "Testing signatures on dataset", "[Signature4]" ) {
     std::vector<BaseRegion> inner_regions;
     
     // Uncomment the one to test
-    enumerate_inner_2regions(inner_regions);
+//    enumerate_inner_2regions(inner_regions);
     //enumerate_inner_3regions(inner_regions);
     //enumerate_inner_4regions(inner_regions);
     //enumerate_inner_5regions(inner_regions);
@@ -321,4 +321,82 @@ TEST_CASE( "Testing signatures on dataset", "[Signature4]" ) {
 //        
 //        REQUIRE(sign == sign3);
 //    }
+}
+
+TEST_CASE( "Testing general signature", "[Signature5]" ) {
+    
+    int v = 0;
+    int a = 1;
+    int b = 3;
+    int c = 2; // TODO
+    int deg2_v_a = 0;
+    int deg2_v_b = 0;
+    int deg3_v_a_c = 0;
+    int deg3_v_b_c = 0;
+    int deg2_v_c = 0;
+    int deg3_v_a_b = 0;
+    int deg4 = 1;
+    int v_c_edge = 0;
+    int a_b_edge = 0;
+    
+    HatRegion R(4, v);
+    for (int i = 0; i < deg2_v_a; i++) {
+        int node = R.addNode();
+        R.addEdge(node, v);
+        R.addEdge(node, a);
+    }
+    for (int i = 0; i < deg2_v_b; i++) {
+        int node = R.addNode();
+        R.addEdge(node, v);
+        R.addEdge(node, b);
+    }
+    for (int i = 0; i < deg3_v_a_c; i++) {
+        int node = R.addNode();
+        R.addEdge(node, v);
+        R.addEdge(node, a);
+        R.addEdge(node, c);
+    }
+    for (int i = 0; i < deg3_v_b_c; i++) {
+        int node = R.addNode();
+        R.addEdge(node, v);
+        R.addEdge(node, b);
+        R.addEdge(node, c);
+    }
+    
+    for (int i = 0; i < deg2_v_c; i++) {
+        int node = R.addNode();
+        R.addEdge(node, v);
+        R.addEdge(node, c);
+    }
+    
+    for(int i = 0; i < deg3_v_a_b; i++){
+        int node = R.addNode();
+        R.addEdge(node, v);
+        R.addEdge(node, a);
+        R.addEdge(node, b);
+    }
+    for (int i = 0; i < deg4; i++) {
+        int node = R.addNode();
+        R.addEdge(node, v);
+        R.addEdge(node, a);
+        R.addEdge(node, b);
+        R.addEdge(node, c);
+    }
+    
+    if(v_c_edge){
+        R.addEdge(v, c);
+    }
+    if(a_b_edge){
+        R.addEdge(a, b);
+    }
+    
+    REQUIRE(R.isValid());
+    std::stringstream ss;
+    std::vector<int> sign;
+    R.getGeneralSignature(sign);
+    
+    for(int i = 0; i < sign.size(); i++){
+        ss << sign[i] << " ";
+    }
+    REQUIRE(ss.str() == "1 1 1 0 1 0 0 0 1 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 1 1 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 1 1 1 0 1 0 0 0 1 0 1 1 0 0 1 0 0 0 1 0 0 0 1 1 1 0 1 0 1 0 0 0 1 0 1 0 1 ");
 }

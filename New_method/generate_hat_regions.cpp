@@ -17,12 +17,12 @@ const int e = 4;
 const int f = 5;
 
 void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
-                                  bool with_edge
+                                  bool with_ac_edge
                                   ){
     
     // 5 is the max number of internal nodes
     HatRegion R(3,a);
-    if (!with_edge) {
+    if (!with_ac_edge) {
         R.removeEdge(a, c);
     }
     
