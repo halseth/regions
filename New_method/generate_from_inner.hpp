@@ -60,5 +60,11 @@ vector<BaseRegion> choose_outer_regions(bool edge,
                                         const vector<BaseRegion> &regions_with_edge,
                                         const vector<BaseRegion> &regions_without_edge
                                         );
+vector<BaseRegion> choose_outer_regions(int size, bool edge,
+                                        const vector<BaseRegion> &outer_3regions_with_edge,
+                                        const vector<BaseRegion> &outer_3regions_without_edge,
+                                        const vector<BaseRegion> &outer_4regions_with_edge,
+                                        const vector<BaseRegion> &outer_4regions_without_edge
+                                        );
 
 #endif /* generate_from_inner_hpp */
