@@ -20,17 +20,51 @@ using namespace std;
 #include "Region.h"
 #include "store_sign.h"
 
-void generate_from_nonempty_inner(map<vector<int>,BaseRegion> &signature_minimal,
-                                  const vector<BaseRegion> &inner_2regions,
-                                  const vector<BaseRegion> &inner_3regions,
-                                  const vector<BaseRegion> &inner_4regions,
-                                  const vector<BaseRegion> &inner_4starregions,
-                                  const vector<BaseRegion> &inner_5regions,
-                                  const vector<BaseRegion> &inner_6regions,
-                                  const vector<BaseRegion> &outer_non_dom_3regions_with_edge,
-                                  const vector<BaseRegion> &outer_non_dom_4regions_with_edge,
-                                  const vector<BaseRegion> &outer_non_dom_3regions_without_edge,
-                                  const vector<BaseRegion> &outer_non_dom_4regions_without_edge
-                                  );
+void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_minimal,
+                                        const vector<BaseRegion> &empty_inner_2regions,
+                                        const vector<BaseRegion> &empty_inner_3regions,
+                                        const vector<BaseRegion> &empty_inner_4regions,
+                                        const vector<BaseRegion> &empty_inner_4starregions,
+                                        const vector<BaseRegion> &empty_inner_5regions,
+                                        const vector<BaseRegion> &empty_inner_6regions,
+                                        const vector<BaseRegion> &outer_general_3regions_with_edge,
+                                        const vector<BaseRegion> &outer_general_4regions_with_edge,
+                                        const vector<BaseRegion> &outer_general_3regions_without_edge,
+                                        const vector<BaseRegion> &outer_general_4regions_without_edge,
+                                        const vector<BaseRegion> &outer_general_4starregions_with_edge,
+                                        const vector<BaseRegion> &outer_general_4starregions_without_edge
+                                        );
+void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signature_minimal,
+                                            const vector<BaseRegion> &inner_2regions,
+                                            const vector<BaseRegion> &inner_3regions,
+                                            const vector<BaseRegion> &inner_4regions,
+                                            const vector<BaseRegion> &inner_4starregions,
+                                            const vector<BaseRegion> &inner_5regions,
+                                            const vector<BaseRegion> &inner_6regions,
+                                            const vector<BaseRegion> &outer_non_dom_3regions_with_edge,
+                                            const vector<BaseRegion> &outer_non_dom_4regions_with_edge,
+                                            const vector<BaseRegion> &outer_non_dom_3regions_without_edge,
+                                            const vector<BaseRegion> &outer_non_dom_4regions_without_edge,
+                                            const vector<BaseRegion> &outer_non_dom_4starregions_without_edge,
+                                            const vector<BaseRegion> &outer_non_dom_4starregions_with_edge
+                                            );
+
+void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_minimal,
+                                     const vector<BaseRegion> &regions_3hat_with_edges,
+                                     const vector<BaseRegion> &regions_4hat_with_edges,
+                                     const vector<BaseRegion> &regions_5hat_with_edges,
+                                     const vector<BaseRegion> &regions_6hat_with_edges
+                                     );
+
+vector<BaseRegion> choose_outer_regions(bool edge,
+                                        const vector<BaseRegion> &regions_with_edge,
+                                        const vector<BaseRegion> &regions_without_edge
+                                        );
+vector<BaseRegion> choose_outer_regions(int size, bool edge,
+                                        const vector<BaseRegion> &outer_3regions_with_edge,
+                                        const vector<BaseRegion> &outer_3regions_without_edge,
+                                        const vector<BaseRegion> &outer_4regions_with_edge,
+                                        const vector<BaseRegion> &outer_4regions_without_edge
+                                        );
 
 #endif /* generate_from_inner_hpp */

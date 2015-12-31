@@ -19,4 +19,6 @@ void enumerate_inner_4starregions(std::map<std::vector<int>, BaseRegion> &inner_
 void enumerate_inner_5regions(std::map<std::vector<int>, BaseRegion> &inner_5regions);
 void enumerate_inner_6regions(std::map<std::vector<int>, BaseRegion> &sign_minimal);
 
+void generate_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int endpoint1, int endpoint2);
+
 #endif /* enumerate_inner_hpp */

@@ -637,55 +637,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         
         store_sign(R, signature_minimal);
     }
-    
-    // Symmetries
-    cout << "Finding symmetries"<< endl;
-    
-    // Flip around vertical
-    vector<BaseRegion> regs;
-    for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
-        regs.push_back(it->second);
-    }
-    
-    for (int i = 0; i < regs.size(); i++) {
-        
-        BaseRegion sym(4);
-        for (int j = 0; j < sym.getSize(); j++) {
-            sym.removeEdge(j, (j+1)%sym.getSize());
-        }
-        BaseRegion reg = regs[i];
-        sym.addLabelToNode(0, a); reg.addLabelToNode(0, d);
-        sym.addLabelToNode(1, b); reg.addLabelToNode(1, b);
-        sym.addLabelToNode(2, c); reg.addLabelToNode(2, c);
-        sym.addLabelToNode(3, d); reg.addLabelToNode(3, a);
-        
-        sym.glue(&reg);
-        
-        store_sign(sym, signature_minimal);
-    }
-    
-    // Flip around horisontal
-    regs.clear();
-    for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
-        regs.push_back(it->second);
-    }
-    
-    for (int i = 0; i < regs.size(); i++) {
-        
-        BaseRegion sym(4);
-        for (int j = 0; j < sym.getSize(); j++) {
-            sym.removeEdge(j, (j+1)%sym.getSize());
-        }
-        BaseRegion reg = regs[i];
-        sym.addLabelToNode(0, a); reg.addLabelToNode(0, a);
-        sym.addLabelToNode(1, b); reg.addLabelToNode(1, c);
-        sym.addLabelToNode(2, c); reg.addLabelToNode(2, b);
-        sym.addLabelToNode(3, d); reg.addLabelToNode(3, d);
-        
-        sym.glue(&reg);
-        
-        store_sign(sym, signature_minimal);
-    }
 
     
     cout << "done with 4-regions" << endl;
