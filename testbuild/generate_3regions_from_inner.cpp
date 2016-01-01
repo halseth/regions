@@ -43,7 +43,6 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4starregions.size(); i++) {
@@ -146,7 +145,6 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_3regions.size(); i++) {
@@ -259,6 +257,29 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         }
         
         store_sign(R, signature_minimal);
+    }
+    
+    // Symmetries
+    cout << "Finding symmetries"<< endl;
+    vector<BaseRegion> regs;
+    for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
+        regs.push_back(it->second);
+    }
+    
+    for (int i = 0; i < regs.size(); i++) {
+        
+        BaseRegion sym(3);
+        for (int j = 0; j < sym.getSize(); j++) {
+            sym.removeEdge(j, (j+1)%sym.getSize());
+        }
+        BaseRegion reg = regs[i];
+        sym.addLabelToNode(0, a); reg.addLabelToNode(0, c);
+        sym.addLabelToNode(1, b); reg.addLabelToNode(1, b);
+        sym.addLabelToNode(2, c); reg.addLabelToNode(2, a);
+        
+        sym.glue(&reg);
+        
+        store_sign(sym, signature_minimal);
     }
     
     cout << "Done with 3-regions" << endl;

@@ -9,6 +9,25 @@
 #ifndef generate_5regions_from_inner_hpp
 #define generate_5regions_from_inner_hpp
 
-#include <stdio.h>
+#include <vector>
+#include <map>
+using namespace std;
+
+#include "BaseRegion.h"
+
+void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal,
+                                  const vector<BaseRegion> &inner_2regions,
+                                  const vector<BaseRegion> &inner_3regions,
+                                  const vector<BaseRegion> &inner_4regions,
+                                  const vector<BaseRegion> &inner_4starregions,
+                                  const vector<BaseRegion> &inner_5regions,
+                                  const vector<BaseRegion> &inner_6regions,
+                                  const vector<BaseRegion> &regions_3hat_with_edges,
+                                  const vector<BaseRegion> &regions_3hat_without_ac_edge,
+                                  const vector<BaseRegion> &regions_4hat_with_edges,
+                                  const vector<BaseRegion> &regions_4hat_without_ad_edge,
+                                  const vector<BaseRegion> &regions_3,
+                                  const vector<BaseRegion> &regions_4
+                                  );
 
 #endif /* generate_5regions_from_inner_hpp */

@@ -315,6 +315,10 @@ bool BaseRegion::isEqual(const BaseRegion &b) const{
 
 
 void BaseRegion::addLabelToNode(int label, int node){
+    if (node > getSize()) {
+        std::cout << "Tried to add label " << label << " to node " << node << " but size of region is " << getSize() << std::endl;
+        exit(1);
+    }
     labelToNode[label] = node;
     nodeToLabels[node].insert(label);
 }

@@ -125,7 +125,6 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             int priv_current = 0;
             int tid = THREAD_ID;
             int nthreads = NUM_THREADS;
-            cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
             
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4starregions.size(); i++) {

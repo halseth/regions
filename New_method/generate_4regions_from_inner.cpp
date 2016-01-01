@@ -131,7 +131,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_6regions.size(); i++){
@@ -198,13 +197,13 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                             BaseRegion lower_left = *it_lower_left;
                             lower_left.addLabelToNode(0, a);
                             lower_left.addLabelToNode(3, b);
-                            lower_left.addLabelToNode(6, c);
+                            lower_left.addLabelToNode(7, c);
                             toGlue.push_back(&lower_left);
                             
                             BaseRegion lower_right = *it_lower_right;
                             lower_right.addLabelToNode(2, a);
                             lower_right.addLabelToNode(3, b);
-                            lower_right.addLabelToNode(7, c);
+                            lower_right.addLabelToNode(6, c);
                             toGlue.push_back(&lower_right);
                             
                             R2.glue(toGlue);
@@ -246,7 +245,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_5regions.size(); i++){
@@ -356,7 +354,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4regions.size(); i++){
@@ -462,7 +459,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4starregions.size(); i++){
@@ -549,7 +545,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_3regions.size(); i++){

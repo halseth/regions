@@ -69,7 +69,6 @@ void generate_from_inner2(map<vector<int>,BaseRegion> &signature_minimal,
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_2regions.size(); i++) {
@@ -132,7 +131,6 @@ void generate_from_inner3(map<vector<int>,BaseRegion> &signature_minimal,
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_3regions.size(); i++) {
@@ -249,7 +247,6 @@ void generate_from_inner4(map<vector<int>,BaseRegion> &signature_minimal,
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4regions.size(); i++) {
@@ -403,7 +400,6 @@ void generate_from_inner4star(map<vector<int>,BaseRegion> &signature_minimal,
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4starregions.size(); i++) {
@@ -536,7 +532,6 @@ void generate_from_inner5(map<vector<int>,BaseRegion> &signature_minimal,
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_5regions.size(); i++) {
@@ -706,7 +701,6 @@ void generate_from_inner6(map<vector<int>,BaseRegion> &signature_minimal,
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_6regions.size(); i++) {

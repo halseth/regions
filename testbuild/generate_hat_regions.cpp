@@ -20,6 +20,8 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                                   bool with_ac_edge
                                   ){
     
+    cout << "Starting generate_3hat_regions with ac_edge: " << with_ac_edge << endl;
+    
     // 5 is the max number of internal nodes
     HatRegion R(3,a);
     if (!with_ac_edge) {
@@ -92,6 +94,7 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                            bool with_bc_edge,
                            bool with_ad_edge
                            ){
+    cout << "Starting generate_4hat_regions with_bc_edge: " << with_bc_edge << ", with_ad_edge: " << with_ad_edge << endl;
     
     HatRegion R(4,a);
     

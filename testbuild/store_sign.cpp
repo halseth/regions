@@ -62,7 +62,7 @@ void store_general_sign(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &si
         return;
     }
     
-    cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << ")." << endl;
+//    cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << ")." << endl;
     //    print_map(signature_minimal);
 
 }
@@ -93,7 +93,7 @@ void store_sign_if_valid(BaseRegion &R, std::map<std::vector<int>,BaseRegion> &s
         return;
     }
     
-    cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << ")." << endl;
+//    cout << endl << endl << "Current found signatures ("<< signature_minimal.size() << ")." << endl;
 //    print_map(signature_minimal);
 }
 

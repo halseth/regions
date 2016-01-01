@@ -486,7 +486,6 @@ void enumerate_inner_5regions(map<vector<int>, BaseRegion> &inner_5regions) {
         map<vector<int>, BaseRegion> priv_regions;
         int tid = 0;//omp_get_thread_num();
         int nthreads = 1;//omp_get_num_threads();
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
         int num_valid = 0;
         
@@ -754,7 +753,6 @@ void generate_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int en
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
         
 #pragma omp for schedule(dynamic) nowait
@@ -809,18 +807,24 @@ void generate_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int en
                     R1.addEdge(node+1, node+3);
                     
                     for (int a_to_internal_edges = 0; a_to_internal_edges <= 0b1111; a_to_internal_edges++) {
-                        for (int b_to_internal_edges = 0; b_to_internal_edges <= 0b11; b_to_internal_edges++) {
+                        
+                        int max_b_edges = endpoint2 == b ? 0b1111 : 0b11;
+                        for (int b_to_internal_edges = 0; b_to_internal_edges <= max_b_edges; b_to_internal_edges++) {
                             
-                            int max_c_to_internal_edges = size >= 3 ? 0b11 : 0;
+                            int max_c_edges = endpoint2 == c ? 0b1111 : 0b11;
+                            int max_c_to_internal_edges = size >= 3 ? max_c_edges : 0;
                             for (int c_to_internal_edges = 0; c_to_internal_edges <= max_c_to_internal_edges; c_to_internal_edges++) {
                                 
-                                int max_d_to_internal_edges = size >= 4 ? 0b1111 : 0;
+                                int max_d_edges = endpoint2 == d ? 0b1111 : 0b11;
+                                int max_d_to_internal_edges = size >= 4 ? max_d_edges : 0;
                                 for (int d_to_internal_edges = 0; d_to_internal_edges <= max_d_to_internal_edges; d_to_internal_edges++) {
                                     
-                                    int max_e_to_internal_edges = size >= 5 ? 0b11 : 0;
+                                    int max_e_edges = endpoint2 == e ? 0b1111 : 0b11;
+                                    int max_e_to_internal_edges = size >= 5 ? max_e_edges : 0;
                                     for (int e_to_internal_edges = 0; e_to_internal_edges <= max_e_to_internal_edges; e_to_internal_edges++) {
                                         
-                                        int max_f_to_internal_edges = size >= 6 ? 0b11 : 0;
+                                        int max_f_edges = endpoint2 == f ? 0b1111 : 0b11;
+                                        int max_f_to_internal_edges = size >= 6 ? max_f_edges : 0;
                                         for (int f_to_internal_edges = 0; f_to_internal_edges <= max_f_to_internal_edges; f_to_internal_edges++) {
                                             
                                             Region R2(R1);
@@ -997,7 +1001,6 @@ void enumerate_inner_6regions(map<vector<int>, BaseRegion> &sign_minimal) {
         map<vector<int>, BaseRegion> priv_sign_minimal;
         int tid = 0;//omp_get_thread_num();
         int nthreads = 1;//omp_get_num_threads();
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
         
 #pragma omp for schedule(dynamic) nowait

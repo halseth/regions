@@ -47,7 +47,6 @@ void generate_empty_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, 
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
         
 #pragma omp for schedule(dynamic) nowait
@@ -122,7 +121,6 @@ void generate_empty_inner6(map<vector<int>, BaseRegion> &sign_minimal) {
         int priv_current = 0;
         int tid = THREAD_ID;
         int nthreads = NUM_THREADS;
-        cout << "Thread " << tid << " / " << nthreads << " starting" << endl;
         
         
 #pragma omp for schedule(dynamic) nowait
