@@ -8,6 +8,7 @@
 
 #include "generate_hat_regions.hpp"
 #include "generate_from_inner.hpp"
+#include "parallization.h"
 
 const int a = 0;
 const int b = 1;
@@ -546,7 +547,8 @@ void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                            const vector<BaseRegion> &regions_5hat_with_edges,
                            const vector<BaseRegion> &regions_5hat_without_de_edge
                            ){
-    
+
+    cout << "Starting generate_6hat_regions"<< endl;
     HatRegion R(6,a);
     
     
@@ -608,89 +610,124 @@ void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     }
     
     cout << "a-d noose" << endl;
-    for (vector<BaseRegion>::const_iterator it_upper = regions_4hat_without_ad_edge.begin(); it_upper != regions_4hat_without_ad_edge.end(); it_upper++) {
-        for (vector<BaseRegion>::const_iterator it_lower = regions_5hat_without_de_edge.begin(); it_lower != regions_5hat_without_de_edge.end(); it_lower++) {
-            HatRegion R2(R);
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, c);
-            R2.addLabelToNode(3, d);
-            R2.addLabelToNode(4, e);
-            R2.addLabelToNode(5, f);
-            
-            vector<BaseRegion*> toGlue;
-            
-            BaseRegion upper = *it_upper;
-            upper.addLabelToNode(0, a);
-            upper.addLabelToNode(1, b);
-            upper.addLabelToNode(2, c);
-            upper.addLabelToNode(3, d);
-            toGlue.push_back(&upper);
-            
-            BaseRegion lower = *it_lower;
-            lower.addLabelToNode(0, a);
-            lower.addLabelToNode(5, b);
-            lower.addLabelToNode(4, c);
-            lower.addLabelToNode(3, d);
-            toGlue.push_back(&lower);
-            
-            R2.glue(toGlue);
-            
-            store_sign(R2, signature_minimal);
-        }
-
-    }
     
-    cout << "a-d node" << endl;
-    for (vector<BaseRegion>::const_iterator it_upper = regions_5hat_without_de_edge.begin(); it_upper != regions_5hat_without_de_edge.end(); it_upper++) {
-        for (vector<BaseRegion>::const_iterator it_lower = regions_5hat_without_de_edge.begin(); it_lower != regions_5hat_without_de_edge.end(); it_lower++) {
-            HatRegion R2(R);
-            int node = R2.addNode();
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, c);
-            R2.addLabelToNode(3, d);
-            R2.addLabelToNode(4, e);
-            R2.addLabelToNode(5, f);
-            R2.addLabelToNode(6, node);
-            
-            
-            vector<BaseRegion*> toGlue;
-            
-            BaseRegion upper = *it_upper;
-            upper.addLabelToNode(0, a);
-            upper.addLabelToNode(1, b);
-            upper.addLabelToNode(2, c);
-            upper.addLabelToNode(3, d);
-            upper.addLabelToNode(6, e);
-            toGlue.push_back(&upper);
-            
-            BaseRegion lower = *it_lower;
-            lower.addLabelToNode(0, a);
-            lower.addLabelToNode(5, b);
-            lower.addLabelToNode(4, c);
-            lower.addLabelToNode(3, d);
-            lower.addLabelToNode(6, e);
-            toGlue.push_back(&lower);
-            
-            R2.glue(toGlue);
-            
-            //sanity checks
-            if (!R2.isAdjacent(a, node)) {
-                cout << "a-node not adj" << endl;
-                exit(1);
+#pragma omp parallel
+    {
+        map<vector<int>,BaseRegion> priv_signature_minimal;
+        int priv_current = 0;
+        int tid = THREAD_ID;
+        int nthreads = NUM_THREADS;
+        
+#pragma omp for schedule(dynamic) nowait
+        for (int i = 0; i < regions_4hat_without_ad_edge.size(); i++){
+            for (int j = 0; j < regions_5hat_without_de_edge.size(); j++) {
+                HatRegion R2(R);
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, c);
+                R2.addLabelToNode(3, d);
+                R2.addLabelToNode(4, e);
+                R2.addLabelToNode(5, f);
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion upper = regions_4hat_without_ad_edge[i];
+                upper.addLabelToNode(0, a);
+                upper.addLabelToNode(1, b);
+                upper.addLabelToNode(2, c);
+                upper.addLabelToNode(3, d);
+                toGlue.push_back(&upper);
+                
+                BaseRegion lower = regions_5hat_without_de_edge[j];
+                lower.addLabelToNode(0, a);
+                lower.addLabelToNode(5, b);
+                lower.addLabelToNode(4, c);
+                lower.addLabelToNode(3, d);
+                toGlue.push_back(&lower);
+                
+                R2.glue(toGlue);
+                
+                store_sign(R2, priv_signature_minimal);
             }
-            if (R2.isAdjacent(node, d)) {
-                cout << "node-d adj" << endl;
-                upper.printRegion();
-                lower.printRegion();
-                R2.printRegion();
-                exit(1);
-            }
-            
-            store_sign(R2, signature_minimal);
         }
         
-    }
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+    } // parallel over
     
+    cout << "a-d node" << endl;
+#pragma omp parallel
+    {
+        map<vector<int>,BaseRegion> priv_signature_minimal;
+        int priv_current = 0;
+        int tid = THREAD_ID;
+        int nthreads = NUM_THREADS;
+        
+#pragma omp for schedule(dynamic) nowait
+        for (int i = 0; i < regions_5hat_without_de_edge.size(); i++){
+            for (int j = 0; j < regions_5hat_without_de_edge.size(); j++) {
+                HatRegion R2(R);
+                int node = R2.addNode();
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, c);
+                R2.addLabelToNode(3, d);
+                R2.addLabelToNode(4, e);
+                R2.addLabelToNode(5, f);
+                R2.addLabelToNode(6, node);
+                
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion upper = regions_5hat_without_de_edge[i];
+                upper.addLabelToNode(0, a);
+                upper.addLabelToNode(1, b);
+                upper.addLabelToNode(2, c);
+                upper.addLabelToNode(3, d);
+                upper.addLabelToNode(6, e);
+                toGlue.push_back(&upper);
+                
+                BaseRegion lower = regions_5hat_without_de_edge[j];
+                lower.addLabelToNode(0, a);
+                lower.addLabelToNode(5, b);
+                lower.addLabelToNode(4, c);
+                lower.addLabelToNode(3, d);
+                lower.addLabelToNode(6, e);
+                toGlue.push_back(&lower);
+                
+                R2.glue(toGlue);
+                
+                //sanity checks
+                if (!R2.isAdjacent(a, node)) {
+                    cout << "a-node not adj" << endl;
+                    exit(1);
+                }
+                if (R2.isAdjacent(node, d)) {
+                    cout << "node-d adj" << endl;
+                    upper.printRegion();
+                    lower.printRegion();
+                    R2.printRegion();
+                    exit(1);
+                }
+                
+                store_sign(R2, priv_signature_minimal);
+            }
+        }
+        
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+    }// parallel over
+    cout << "Done generate_6hat_regions"<< endl;
 }

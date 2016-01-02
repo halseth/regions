@@ -11,15 +11,7 @@
 #include <iostream>
 using namespace std;
 
-// without OMP
-#define THREAD_ID 0
-#define NUM_THREADS 1
-
-// with OMP
-//#include <omp.h>
-//#define THREAD_ID omp_get_thread_num()
-//#define NUM_THREADS omp_get_num_threads()
-
+#include "parallization.h"
 #include "BaseRegion.h"
 #include "Region.h"
 #include "generate_empty_inner.hpp"

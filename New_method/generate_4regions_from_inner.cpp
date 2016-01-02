@@ -208,6 +208,22 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                             
                             R2.glue(toGlue);
                             
+                            if (!R2.isValid()) {
+                                cout << "inner:";
+                                inner.printRegion();
+                                cout << "upLeft:";
+                                upper_left.printRegion();
+                                cout << "upRight:";
+                                upper_right.printRegion();
+                                cout << "lowLeft:";
+                                lower_left.printRegion();
+                                cout << "lowRight:";
+                                lower_right.printRegion();
+                                
+                                cout << "final:";
+                                R2.printRegion();
+                            }
+                            
                             store_sign(R2, priv_signature_minimal);
                         }
                     }
@@ -626,7 +642,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         Region R(4,a,c);
         
         R.addLabelToNode(0, a);
-        R.addLabelToNode(2, c);
+        R.addLabelToNode(1, c);
         
         R.glue(&inner);
         
@@ -649,9 +665,9 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             sym.removeEdge(j, (j+1)%sym.getSize());
         }
         BaseRegion reg = regs[i];
-        sym.addLabelToNode(0, a); reg.addLabelToNode(0, d);
+        sym.addLabelToNode(0, a); reg.addLabelToNode(0, c);
         sym.addLabelToNode(1, b); reg.addLabelToNode(1, b);
-        sym.addLabelToNode(2, c); reg.addLabelToNode(2, c);
+        sym.addLabelToNode(2, c); reg.addLabelToNode(2, d);
         sym.addLabelToNode(3, d); reg.addLabelToNode(3, a);
         
         sym.glue(&reg);
