@@ -246,16 +246,16 @@ int main(){
     load_region_vector(regions_3_without_ac_edge_vec, "3regions_without_ac_edge.txt");
 //
 //    // Generate 4-regions
-    map<vector<int>, BaseRegion> regions_4_map;
-    generate_4regions_from_inner(regions_4_map, inner_2regions_vec, inner_3regions_vec, inner_4regions_vec, inner_4starregions_vec, inner_5regions_vec, inner_6regions_vec, regions_3hat_with_edges_vec, regions_3hat_without_ac_edge_vec, regions_4hat_with_edges_vec);
-    store_region_map(regions_4_map, "4regions.txt");
+//    map<vector<int>, BaseRegion> regions_4_map;
+//    generate_4regions_from_inner(regions_4_map, inner_2regions_vec, inner_3regions_vec, inner_4regions_vec, inner_4starregions_vec, inner_5regions_vec, inner_6regions_vec, regions_3hat_with_edges_vec, regions_3hat_without_ac_edge_vec, regions_4hat_with_edges_vec);
+//    store_region_map(regions_4_map, "4regions.txt");
     vector<BaseRegion> regions_4_vec;
     load_region_vector(regions_4_vec, "4regions.txt");
 //
 //    // Generate 4*-regions
-    map<vector<int>, BaseRegion> regions_4star_with_edges_map;
-    generate_4starregions_from_inner(regions_4star_with_edges_map, inner_2regions_vec, inner_3regions_vec, inner_4regions_vec, inner_4starregions_vec, inner_5regions_vec, inner_6regions_vec, regions_3hat_with_edges_vec, regions_3hat_without_ac_edge_vec, regions_4hat_with_edges_vec, regions_4hat_without_ad_edge_vec, regions_3_with_edges_vec, regions_3_without_ac_edge_vec, false);
-    store_region_map(regions_4star_with_edges_map, "4star_regions_with_edges.txt");
+//    map<vector<int>, BaseRegion> regions_4star_with_edges_map;
+//    generate_4starregions_from_inner(regions_4star_with_edges_map, inner_2regions_vec, inner_3regions_vec, inner_4starregions_vec, regions_3hat_with_edges_vec, regions_3hat_without_ac_edge_vec, regions_4hat_with_edges_vec, regions_4hat_without_ad_edge_vec, regions_3_with_edges_vec, regions_3_without_ac_edge_vec, false);
+//    store_region_map(regions_4star_with_edges_map, "4star_regions_with_edges.txt");
     vector<BaseRegion> regions_4star_with_edges_vec;
     load_region_vector(regions_4star_with_edges_vec, "4star_regions_with_edges.txt");
     

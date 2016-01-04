@@ -997,6 +997,8 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                                      const vector<BaseRegion> &regions_5hat_with_edges,
                                      const vector<BaseRegion> &regions_6hat_with_edges
                                      ) {
+    cout << "Starting generate_6regions_with_no_inner" << endl;
+    
     
     if(!signature_minimal.empty()){
         cerr << "signminimal not empty";
@@ -1012,148 +1014,268 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
     
     cout << "c-e edge" << endl;
     
-    for (vector<BaseRegion>::const_iterator it_left = regions_5hat_with_edges.begin(); it_left != regions_5hat_with_edges.end(); it_left++) {
-        for (vector<BaseRegion>::const_iterator it_right = regions_3hat_with_edges.begin(); it_right != regions_3hat_with_edges.end(); it_right++) {
-            Region R2(R);
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, c);
-            R2.addLabelToNode(3, d);
-            R2.addLabelToNode(4, e);
-            R2.addLabelToNode(5, f);
+    int current = 0;
+    unsigned long mmax = regions_5hat_with_edges.size();
+    
+#pragma omp parallel
+    {
+        map<vector<int>,BaseRegion> priv_signature_minimal;
+        int priv_current = 0;
+        int tid = THREAD_ID;
+        int nthreads = NUM_THREADS;
+        
+#pragma omp for schedule(dynamic) nowait
+        for (int i = 0; i < regions_5hat_with_edges.size(); i++) {
+            for (int j = 0; j < regions_3hat_with_edges.size(); j++) {
+                Region R2(R);
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, c);
+                R2.addLabelToNode(3, d);
+                R2.addLabelToNode(4, e);
+                R2.addLabelToNode(5, f);
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion left5 = regions_5hat_with_edges[i];
+                left5.addLabelToNode(0, a);
+                left5.addLabelToNode(1, b);
+                left5.addLabelToNode(2, c);
+                left5.addLabelToNode(4, d);
+                left5.addLabelToNode(5, e);
+                toGlue.push_back(&left5);
+                
+                BaseRegion right3 = regions_3hat_with_edges[j];
+                right3.addLabelToNode(3, a);
+                right3.addLabelToNode(4, b);
+                right3.addLabelToNode(2, c);
+                toGlue.push_back(&right3);
+                
+                R2.glue(toGlue);
+                
+                store_sign(R2, priv_signature_minimal);
+            }
             
-            vector<BaseRegion*> toGlue;
             
-            BaseRegion left5 = *it_left;
-            left5.addLabelToNode(0, a);
-            left5.addLabelToNode(1, b);
-            left5.addLabelToNode(2, c);
-            left5.addLabelToNode(4, d);
-            left5.addLabelToNode(5, e);
-            toGlue.push_back(&left5);
-            
-            BaseRegion right3 = *it_right;
-            right3.addLabelToNode(3, a);
-            right3.addLabelToNode(4, b);
-            right3.addLabelToNode(2, c);
-            toGlue.push_back(&right3);
-            
-            R2.glue(toGlue);
-            
-            store_sign(R2, signature_minimal);
+            priv_current++;
+            if(priv_current%100 == 0) {
+#pragma omp critical
+                {
+                    current+=100;
+                    std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
+                }
+            }
         }
-    }
+        
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+        
+    } // parallel over
     
     cout << "b-e edge" << endl;
+    current = 0;
+    mmax = regions_4hat_with_edges.size();
     
-    for (vector<BaseRegion>::const_iterator it_left = regions_4hat_with_edges.begin(); it_left != regions_4hat_with_edges.end(); it_left++) {
-        for (vector<BaseRegion>::const_iterator it_right = regions_4hat_with_edges.begin(); it_right != regions_4hat_with_edges.end(); it_right++) {
-            Region R2(R);
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, c);
-            R2.addLabelToNode(3, d);
-            R2.addLabelToNode(4, e);
-            R2.addLabelToNode(5, f);
-            
-            vector<BaseRegion*> toGlue;
-            
-            BaseRegion left4 = *it_left;
-            left4.addLabelToNode(0, a);
-            left4.addLabelToNode(1, b);
-            left4.addLabelToNode(4, c);
-            left4.addLabelToNode(5, d);
-            toGlue.push_back(&left4);
-            
-            BaseRegion right4 = *it_right;
-            right4.addLabelToNode(3, a);
-            right4.addLabelToNode(4, b);
-            right4.addLabelToNode(1, c);
-            right4.addLabelToNode(2, d);
-            toGlue.push_back(&right4);
-            
-            R2.glue(toGlue);
-            
-            store_sign(R2, signature_minimal);
+#pragma omp parallel
+    {
+        map<vector<int>,BaseRegion> priv_signature_minimal;
+        int priv_current = 0;
+        int tid = THREAD_ID;
+        int nthreads = NUM_THREADS;
+        
+#pragma omp for schedule(dynamic) nowait
+        for (int i = 0; i < regions_4hat_with_edges.size(); i++) {
+            for (int j = 0; j < regions_4hat_with_edges.size(); j++) {
+                Region R2(R);
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, c);
+                R2.addLabelToNode(3, d);
+                R2.addLabelToNode(4, e);
+                R2.addLabelToNode(5, f);
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion left4 = regions_4hat_with_edges[i];
+                left4.addLabelToNode(0, a);
+                left4.addLabelToNode(1, b);
+                left4.addLabelToNode(4, c);
+                left4.addLabelToNode(5, d);
+                toGlue.push_back(&left4);
+                
+                BaseRegion right4 = regions_4hat_with_edges[j];
+                right4.addLabelToNode(3, a);
+                right4.addLabelToNode(4, b);
+                right4.addLabelToNode(1, c);
+                right4.addLabelToNode(2, d);
+                toGlue.push_back(&right4);
+                
+                R2.glue(toGlue);
+                
+                store_sign(R2, priv_signature_minimal);
+            }
+            priv_current++;
+            if(priv_current%100 == 0) {
+#pragma omp critical
+                {
+                    current+=100;
+                    std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
+                }
+            }
         }
-    }
+        
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+        
+    } // parallel over
     
     cout << "b-e node" << endl;
+    current = 0;
+    mmax = regions_5hat_with_edges.size();
     
-    for (vector<BaseRegion>::const_iterator it_left = regions_5hat_with_edges.begin(); it_left != regions_5hat_with_edges.end(); it_left++) {
-        for (vector<BaseRegion>::const_iterator it_right = regions_5hat_with_edges.begin(); it_right != regions_5hat_with_edges.end(); it_right++) {
-            Region R2(R);
-            int node = R2.addNode();
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, c);
-            R2.addLabelToNode(3, d);
-            R2.addLabelToNode(4, e);
-            R2.addLabelToNode(5, f);
-            R2.addLabelToNode(6, node);
-            
-            vector<BaseRegion*> toGlue;
-            
-            BaseRegion left5 = *it_left;
-            left5.addLabelToNode(0, a);
-            left5.addLabelToNode(1, b);
-            left5.addLabelToNode(6, c);
-            left5.addLabelToNode(4, d);
-            left5.addLabelToNode(5, e);
-            toGlue.push_back(&left5);
-            
-            BaseRegion right5 = *it_right;
-            right5.addLabelToNode(3, a);
-            right5.addLabelToNode(4, b);
-            right5.addLabelToNode(6, c);
-            right5.addLabelToNode(1, d);
-            right5.addLabelToNode(2, e);
-            toGlue.push_back(&right5);
-            
-            R2.glue(toGlue);
-            
-            
-            store_sign_if_valid(R2, signature_minimal);
+#pragma omp parallel
+    {
+        map<vector<int>,BaseRegion> priv_signature_minimal;
+        int priv_current = 0;
+        int tid = THREAD_ID;
+        int nthreads = NUM_THREADS;
+        
+#pragma omp for schedule(dynamic) nowait
+        for (int i = 0; i < regions_5hat_with_edges.size(); i++) {
+            for (int j = 0; j < regions_5hat_with_edges.size(); j++) {
+                Region R2(R);
+                int node = R2.addNode();
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, c);
+                R2.addLabelToNode(3, d);
+                R2.addLabelToNode(4, e);
+                R2.addLabelToNode(5, f);
+                R2.addLabelToNode(6, node);
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion left5 = regions_5hat_with_edges[i];
+                left5.addLabelToNode(0, a);
+                left5.addLabelToNode(1, b);
+                left5.addLabelToNode(6, c);
+                left5.addLabelToNode(4, d);
+                left5.addLabelToNode(5, e);
+                toGlue.push_back(&left5);
+                
+                BaseRegion right5 = regions_5hat_with_edges[j];
+                right5.addLabelToNode(3, a);
+                right5.addLabelToNode(4, b);
+                right5.addLabelToNode(6, c);
+                right5.addLabelToNode(1, d);
+                right5.addLabelToNode(2, e);
+                toGlue.push_back(&right5);
+                
+                R2.glue(toGlue);
+                
+                
+                store_sign_if_valid(R2, priv_signature_minimal);
+            }
+            priv_current++;
+            if(priv_current%100 == 0) {
+#pragma omp critical
+                {
+                    current+=100;
+                    std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
+                }
+            }
         }
-    }
+        
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+        
+    } // parallel over
     
     cout << "c-e node" << endl;
+    current = 0;
+    mmax = regions_6hat_with_edges.size();
     
-    for (vector<BaseRegion>::const_iterator it_left = regions_6hat_with_edges.begin(); it_left != regions_6hat_with_edges.end(); it_left++) {
-        for (vector<BaseRegion>::const_iterator it_right = regions_4hat_with_edges.begin(); it_right != regions_4hat_with_edges.end(); it_right++) {
-            Region R2(R);
-            int node = R2.addNode();
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, c);
-            R2.addLabelToNode(3, d);
-            R2.addLabelToNode(4, e);
-            R2.addLabelToNode(5, f);
-            R2.addLabelToNode(6, node);
+#pragma omp parallel
+    {
+        map<vector<int>,BaseRegion> priv_signature_minimal;
+        int priv_current = 0;
+        int tid = THREAD_ID;
+        int nthreads = NUM_THREADS;
+        
+#pragma omp for schedule(dynamic) nowait
+        for (int i = 0; i < regions_6hat_with_edges.size(); i++) {
+            for (int j = 0; j < regions_4hat_with_edges.size(); j++) {
+                Region R2(R);
+                int node = R2.addNode();
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, c);
+                R2.addLabelToNode(3, d);
+                R2.addLabelToNode(4, e);
+                R2.addLabelToNode(5, f);
+                R2.addLabelToNode(6, node);
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion left6 = regions_6hat_with_edges[i];
+                left6.addLabelToNode(0, a);
+                left6.addLabelToNode(1, b);
+                left6.addLabelToNode(2, c);
+                left6.addLabelToNode(6, d);
+                left6.addLabelToNode(4, e);
+                left6.addLabelToNode(5, f);
+                toGlue.push_back(&left6);
+                
+                BaseRegion right4 = regions_4hat_with_edges[j];
+                right4.addLabelToNode(3, a);
+                right4.addLabelToNode(4, b);
+                right4.addLabelToNode(5, c);
+                right4.addLabelToNode(2, d);
+                toGlue.push_back(&right4);
+                
+                R2.glue(toGlue);
+                
+                store_sign_if_valid(R2, priv_signature_minimal);
+            }
             
-            vector<BaseRegion*> toGlue;
-            
-            BaseRegion left6 = *it_left;
-            left6.addLabelToNode(0, a);
-            left6.addLabelToNode(1, b);
-            left6.addLabelToNode(2, c);
-            left6.addLabelToNode(6, d);
-            left6.addLabelToNode(4, e);
-            left6.addLabelToNode(5, f);
-            toGlue.push_back(&left6);
-            
-            BaseRegion right4 = *it_right;
-            right4.addLabelToNode(3, a);
-            right4.addLabelToNode(4, b);
-            right4.addLabelToNode(5, c);
-            right4.addLabelToNode(2, d);
-            toGlue.push_back(&right4);
-            
-            R2.glue(toGlue);
-            
-            store_sign_if_valid(R2, signature_minimal);
+            priv_current++;
+            if(priv_current%100 == 0) {
+#pragma omp critical
+                {
+                    current+=100;
+                    std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
+                }
+            }
         }
-    }
+        
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+        
+    } // parallel over
     
     cout << "Done generate_6regions_with_no_inner" << endl;
 }
@@ -1206,6 +1328,7 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
     cout << "Finding symmetries"<< endl;
     
     // Flip around vertical
+    cout << "Around vertical" << endl;
     vector<BaseRegion> regs;
     for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
         regs.push_back(it->second);
@@ -1231,6 +1354,7 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
     }
     
     // Flip around horisontal
+    cout << "Around horistontal" << endl;
     regs.clear();
     for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
         regs.push_back(it->second);

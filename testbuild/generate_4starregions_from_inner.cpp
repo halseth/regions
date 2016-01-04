@@ -20,10 +20,7 @@ const int f = 5;
 void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_minimal,
                                   const vector<BaseRegion> &inner_2regions,
                                   const vector<BaseRegion> &inner_3regions,
-                                  const vector<BaseRegion> &inner_4regions,
                                   const vector<BaseRegion> &inner_4starregions,
-                                  const vector<BaseRegion> &inner_5regions,
-                                  const vector<BaseRegion> &inner_6regions,
                                   const vector<BaseRegion> &regions_3hat_with_edges,
                                   const vector<BaseRegion> &regions_3hat_without_ac_edge,
                                   const vector<BaseRegion> &regions_4hat_with_edges,
@@ -39,7 +36,7 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
         exit(1);
     }
     
-    if(inner_2regions.empty() || inner_3regions.empty() || inner_4regions.empty() || inner_4starregions.empty() || inner_5regions.empty() || inner_6regions.empty() || regions_3hat_with_edges.empty() ||  regions_3hat_without_ac_edge.empty() || regions_4hat_with_edges.empty() || regions_3_with_edges.empty() || regions_3_without_ac_edge.empty() || regions_4hat_without_ad_edge.empty() ){
+    if(inner_2regions.empty() || inner_3regions.empty() || inner_4starregions.empty() || regions_3hat_with_edges.empty() ||  regions_3hat_without_ac_edge.empty() || regions_4hat_with_edges.empty() || regions_3_with_edges.empty() || regions_3_without_ac_edge.empty() || regions_4hat_without_ad_edge.empty() ){
         cerr << "needed regions empty" << endl;
         exit(1);
     }
@@ -58,7 +55,7 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             R2.addLabelToNode(0, a);
             R2.addLabelToNode(1, b);
             R2.addLabelToNode(2, c);
-            R2.addLabelToNode(4, d);
+            R2.addLabelToNode(3, d);
             
             vector<BaseRegion*> toGlue;
             
@@ -75,6 +72,22 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             toGlue.push_back(&right);
             
             R2.glue(toGlue);
+            
+            if (!R2.isAdjacent(a, c)) {
+                cout << "a-c not adj" << endl;
+                exit(1);
+            }
+            
+            if (!R2.isValid()) {
+                cout << "R:";
+                R.printRegion();
+                cout << "left:";
+                left.printRegion();
+                cout << "right:";
+                right.printRegion();
+                cout << "final:";
+                R2.printRegion();
+            }
             
             store_sign(R2, signature_minimal);
         }
@@ -114,10 +127,32 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
         }
     }
     
+    cout << "inner 2-regions" << endl;
+    for (vector<BaseRegion>::const_iterator it_inner = inner_2regions.begin(); it_inner != inner_2regions.end(); it_inner++){
+        BaseRegion inner = *it_inner;
+        
+        // check if compatible with edge
+        if (inner.isAdjacent(a, b) != with_ad_edge) {
+            continue;
+        }
+        
+        Region R2(R);
+        
+        R2.addLabelToNode(0, a);
+        R2.addLabelToNode(1, d);
+        
+        inner.addLabelToNode(0, a);
+        inner.addLabelToNode(1, b);
+        
+        R2.glue(&inner);
+        
+        store_sign(R2, signature_minimal);
+    }
+    
     for (int upper_right_size = 3; upper_right_size <= 4; upper_right_size++) {
         cout << "Inner 4*region with 3-" << upper_right_size << " outer" << endl;
         int current = 0;
-        unsigned long mmax = inner_6regions.size();
+        unsigned long mmax = inner_4starregions.size();
         
 #pragma omp parallel
         {

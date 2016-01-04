@@ -19,19 +19,16 @@ using namespace std;
 #include "Region.h"
 
 void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_minimal,
-                                  const vector<BaseRegion> &inner_2regions,
-                                  const vector<BaseRegion> &inner_3regions,
-                                  const vector<BaseRegion> &inner_4regions,
-                                  const vector<BaseRegion> &inner_4starregions,
-                                  const vector<BaseRegion> &inner_5regions,
-                                  const vector<BaseRegion> &inner_6regions,
-                                  const vector<BaseRegion> &regions_3hat_with_edges,
-                                  const vector<BaseRegion> &regions_3hat_without_ac_edge,
-                                  const vector<BaseRegion> &regions_4hat_with_edges,
-                                  const vector<BaseRegion> &regions_4hat_without_ad_edge,
-                                  const vector<BaseRegion> &regions_3_with_edges,
-                                  const vector<BaseRegion> &regions_3_without_ac_edge,
-                                  bool with_ad_edge
-                                  );
+                                      const vector<BaseRegion> &inner_2regions,
+                                      const vector<BaseRegion> &inner_3regions,
+                                      const vector<BaseRegion> &inner_4starregions,
+                                      const vector<BaseRegion> &regions_3hat_with_edges,
+                                      const vector<BaseRegion> &regions_3hat_without_ac_edge,
+                                      const vector<BaseRegion> &regions_4hat_with_edges,
+                                      const vector<BaseRegion> &regions_4hat_without_ad_edge,
+                                      const vector<BaseRegion> &regions_3_with_edges,
+                                      const vector<BaseRegion> &regions_3_without_ac_edge,
+                                      bool with_ad_edge
+                                      );
 
 #endif /* generate_4starregions_from_inner_hpp */

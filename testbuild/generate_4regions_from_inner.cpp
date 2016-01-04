@@ -653,6 +653,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     cout << "Finding symmetries"<< endl;
     
     // Flip around vertical
+    cout << "Around vertical" << endl;
     vector<BaseRegion> regs;
     for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
         regs.push_back(it->second);
@@ -667,8 +668,8 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         BaseRegion reg = regs[i];
         sym.addLabelToNode(0, a); reg.addLabelToNode(0, c);
         sym.addLabelToNode(1, b); reg.addLabelToNode(1, b);
-        sym.addLabelToNode(2, c); reg.addLabelToNode(2, d);
-        sym.addLabelToNode(3, d); reg.addLabelToNode(3, a);
+        sym.addLabelToNode(2, c); reg.addLabelToNode(2, a);
+        sym.addLabelToNode(3, d); reg.addLabelToNode(3, d);
         
         sym.glue(&reg);
         
@@ -676,6 +677,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     }
     
     // Flip around horisontal
+    cout << "Around horisontal" << endl;
     regs.clear();
     for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
         regs.push_back(it->second);
@@ -689,9 +691,9 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         }
         BaseRegion reg = regs[i];
         sym.addLabelToNode(0, a); reg.addLabelToNode(0, a);
-        sym.addLabelToNode(1, b); reg.addLabelToNode(1, c);
-        sym.addLabelToNode(2, c); reg.addLabelToNode(2, b);
-        sym.addLabelToNode(3, d); reg.addLabelToNode(3, d);
+        sym.addLabelToNode(1, b); reg.addLabelToNode(1, d);
+        sym.addLabelToNode(2, c); reg.addLabelToNode(2, c);
+        sym.addLabelToNode(3, d); reg.addLabelToNode(3, b);
         
         sym.glue(&reg);
         

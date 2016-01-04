@@ -1130,9 +1130,9 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     cout << "b-d edge" << endl;
     
     for (int i = 0; i < regions_4.size(); i++) {
-        for (int j = 0; j < regions_3.size(); j++) {
+        for (int j = 0; j < regions_3hat_with_edges.size(); j++) {
             BaseRegion reg4 = regions_4[i];
-            BaseRegion reg3 = regions_3[i];
+            BaseRegion reg3hat = regions_3hat_with_edges[j];
             
             Region R(5,a,d);
             R.addLabelToNode(0, a);
@@ -1149,10 +1149,10 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             reg4.addLabelToNode(4, d);
             toGlue.push_back(&reg4);
             
-            reg3.addLabelToNode(3, a);
-            reg3.addLabelToNode(2, b);
-            reg3.addLabelToNode(1, b);
-            toGlue.push_back(&reg3);
+            reg3hat.addLabelToNode(3, a);
+            reg3hat.addLabelToNode(2, b);
+            reg3hat.addLabelToNode(1, c);
+            toGlue.push_back(&reg3hat);
             
             R.glue(toGlue);
             
@@ -1168,8 +1168,8 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     cout << "c-e edge" << endl;
     for (int i = 0; i < regions_4hat_with_edges.size(); i++) {
         for (int j = 0; j < regions_3hat_with_edges.size(); j++) {
-            BaseRegion reg4 = regions_4[i];
-            BaseRegion reg3 = regions_3[i];
+            BaseRegion reg4 = regions_4hat_with_edges[i];
+            BaseRegion reg3 = regions_3hat_with_edges[j];
             
             Region R(5,a,d);
             R.addLabelToNode(0, a);
@@ -1188,7 +1188,7 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             
             reg3.addLabelToNode(3, a);
             reg3.addLabelToNode(2, b);
-            reg3.addLabelToNode(4, b);
+            reg3.addLabelToNode(4, c);
             toGlue.push_back(&reg3);
             
             R.glue(toGlue);
@@ -1196,6 +1196,13 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             if (!R.isAdjacent(c, e)) {
                 cout << "c-e not adj";
                 exit(1);
+            }
+            
+            if (!R.isValid()) {
+                cout << "reg4:";
+                reg4.printRegion();
+                cout << "reg3:";
+                reg3.printRegion();
             }
             
             store_sign(R, signature_minimal);
