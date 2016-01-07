@@ -260,9 +260,9 @@ int main(){
     load_region_vector(regions_4star_with_edges_vec, "4star_regions_with_edges.txt");
     
     // Generate 5-regions
-    map<vector<int>, BaseRegion> regions_5_with_edges_map;
-    generate_5regions_from_inner(regions_5_with_edges_map, inner_2regions_vec, inner_3regions_vec, inner_4regions_vec, inner_4starregions_vec, inner_5regions_vec, inner_6regions_vec, regions_3hat_with_edges_vec, regions_3hat_without_ac_edge_vec, regions_4hat_with_edges_vec, regions_4hat_without_ad_edge_vec, regions_3_with_edges_vec, regions_4_vec);
-    store_region_map(regions_5_with_edges_map, "5regions.txt");
+//    map<vector<int>, BaseRegion> regions_5_with_edges_map;
+//    generate_5regions_from_inner(regions_5_with_edges_map, inner_2regions_vec, inner_3regions_vec, inner_4regions_vec, inner_4starregions_vec, inner_5regions_vec, inner_6regions_vec, empty_inner6_vec, regions_3hat_with_edges_vec, regions_3hat_without_ac_edge_vec, regions_4hat_with_edges_vec, regions_4hat_without_ad_edge_vec, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, regions_3_with_edges_vec, regions_4_vec);
+//    store_region_map(regions_5_with_edges_map, "5regions.txt");
     vector<BaseRegion> regions_5_with_edges_vec;
     load_region_vector(regions_5_with_edges_vec, "5regions.txt");
     
@@ -273,37 +273,6 @@ int main(){
     vector<BaseRegion> regions_6_with_edges_vec;
     load_region_vector(regions_6_with_edges_vec, "6regions.txt");
     
-//    map<vector<int>, BaseRegion> signature_minimal_6_regions;
-//    generate_6regions_with_no_inner(signature_minimal_6_regions, regions_3hat_with_edges_vec, regions_4hat_with_edges_vec, regions_5hat_with_edges_vec, regions_6hat_with_edges_vec);
-    
-//    generate_6regions_from_nonempty_inner(signature_minimal_6_regions, inner_2regions_vec, inner_3regions_vec, inner_4regions_vec, inner_4starregions_vec, inner_5regions_vec, inner_6regions_vec, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, star, <#const vector<BaseRegion> &outer_non_dom_4starregions_with_edge#>)
-    cout << "main done" << endl;
-    return 0;
-    
-    
-    
-
-//    generate_empty_inner(regions_6, 6, 0, 3);
-//    cout << "DOOONONOONONNONO"<< endl;
-//    generate_empty_inner6(regions_6);
-    return 0;
-    
-//    benchmark();
-//    return 0;
-    
-    
-
-//    generate_4hat_regions(regions_4hat_with_edge, regions_3hat_with_edge, regions_3hat_without_edge, inner_2regions, inner_3regions, inner_4regions, true);
-    
-//    generate_3regions_from_inner(regions_3_with_edge, inner_2regions, inner_3regions, inner_4starregions, out, <#const vector<BaseRegion> &outer_general_3regions_without_edge#>, <#bool with_edge#>)
-
-    
-//    generate_6regions_from_nonempty_inner(regions_6, inner_2regions, inner_3regions, inner_4regions, inner_4starregions, inner_5regions, inner_6regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge);
-    
-//    map<vector<int>, BaseRegion> inner_regions_6;
-//    enumerate_inner_6regions(inner_regions_6);
-//    store_region_map(inner_regions_6, "sign_minimal_inner6.txt");
-
     cout << "main done" << endl;
     return 0;
 }
