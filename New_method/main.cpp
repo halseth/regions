@@ -11,402 +11,329 @@
 #include <sstream>
 #include <fstream>
 #include <stdlib.h>
-#include <omp.h>
 
 using namespace std;
 
 #include "BaseRegion.h"
 
-#include "3hat_b_regions.h"
-#include "3_regions.hpp"
-#include "3hat_regions.h"
-#include "4hat_b_regions.h"
-#include "4hat_regions.h"
-#include "4star_regions.hpp"
-#include "4_regions.hpp"
-#include "5hat_b_regions.h"
-#include "5hat_regions.h"
-#include "5_regions.hpp"
-#include "6hat_b_regions.h"
-#include "6hat_regions.h"
-#include "6_regions.hpp"
+#include "enumerate_inner.hpp"
+#include "enumerate_outer.hpp"
+#include "generate_from_inner.hpp"
 
 #include "store_region_map.h"
 #include "store_sign.h"
+#include "signature_benchmark.hpp"
+#include "generate_empty_inner.hpp"
+#include "generate_3regions_from_inner.hpp"
+#include "generate_hat_regions.hpp"
+#include "generate_4regions_from_inner.hpp"
+#include "generate_4starregions_from_inner.hpp"
+#include "generate_5regions_from_inner.hpp"
 
-#define FILENAME_3HAT_B "regions_3hat_b.txt"
-map<vector<int>, BaseRegion> regions_3hat_b;
-
-#define OLD_FILENAME_3HAT_B "old_regions_3hat_b.txt"
-map<vector<int>, BaseRegion> old_regions_3hat_b;
-
-#define FILENAME_3HAT "regions_3hat.txt"
-map<vector<int>, BaseRegion> regions_3hat;
-
-#define OLD_FILENAME_3HAT "old_regions_3hat.txt"
-map<vector<int>, BaseRegion> old_regions_3hat;
-
-#define FILENAME_3 "regions_3.txt"
-map<vector<int>, BaseRegion> regions_3;
-
-#define FILENAME_4HAT_B "regions_4hat_b.txt"
-map<vector<int>, BaseRegion> regions_4hat_b;
-#define OLD_FILENAME_4HAT_B "old_regions_4hat_b.txt"
-map<vector<int>, BaseRegion> old_regions_4hat_b;
-
-
-#define FILENAME_4HAT_AB "regions_4hat_ab.txt"
-map<vector<int>, BaseRegion> regions_4hat_ab;
-
-#define OLD_FILENAME_4HAT "old_regions_4hat.txt"
-map<vector<int>, BaseRegion> old_regions_4hat;
-
-#define FILENAME_4HAT "regions_4hat.txt"
-map<vector<int>, BaseRegion> regions_4hat;
-
-#define FILENAME_4star "regions_4star.txt"
-map<vector<int>, BaseRegion> regions_4star;
-#define FILENAME_4 "regions_4.txt"
-map<vector<int>, BaseRegion> regions_4;
-
-#define OLD_FILENAME_5HAT_B "old_regions_5hat_b.txt"
-map<vector<int>, BaseRegion> old_regions_5hat_b;
-
-#define FILENAME_5HAT_B "regions_5hat_b.txt"
-map<vector<int>, BaseRegion> regions_5hat_b;
-
-
-#define OLD_FILENAME_5HAT "old_regions_5hat.txt"
-map<vector<int>, BaseRegion> old_regions_5hat;
-#define FILENAME_5HAT "regions_5hat.txt"
-map<vector<int>, BaseRegion> regions_5hat;
-#define FILENAME_5 "regions_5.txt"
-map<vector<int>, BaseRegion> regions_5;
-
-#define OLD_FILENAME_6HAT_B "old_regions_6hat_b.txt"
-map<vector<int>, BaseRegion> old_regions_6hat_b;
-#define FILENAME_6HAT_B "regions_6hat_b.txt"
-map<vector<int>, BaseRegion> regions_6hat_b;
-
-
-#define OLD_FILENAME_6HAT "old_regions_6hat.txt"
-map<vector<int>, BaseRegion> old_regions_6hat;
-#define FILENAME_6HAT "regions_6hat.txt"
-map<vector<int>, BaseRegion> regions_6hat;
-
-#define FILENAME_6 "regions_6.txt"
-map<vector<int>, BaseRegion> regions_6;
+const int a = 0;
+const int b = 1;
+const int c = 2;
+const int d = 3;
+const int e = 4;
+const int f = 5;
 
 
 int main(){
-    int nthreads, tid;
+    
+    // Generate sign minimal inner regions
+    std::map<std::vector<int>, BaseRegion> inner_2regions_map;
+    generate_inner(inner_2regions_map, 2, a, b);
+    store_region_map(inner_2regions_map, "inner_2regions.txt");
+    
+    std::map<std::vector<int>, BaseRegion> inner_3regions_map;
+    generate_inner(inner_3regions_map, 3, a, c);
+    store_region_map(inner_3regions_map, "inner_3regions.txt");
+    
+    std::map<std::vector<int>, BaseRegion> inner_4regions_map;
+    generate_inner(inner_4regions_map, 4, a, c);
+    store_region_map(inner_4regions_map, "inner_4regions.txt");
 
-    /* Fork a team of threads giving them their own copies of variables */
-#pragma omp parallel private(nthreads, tid)
-    {
-        
-        /* Obtain thread number */
-        tid = omp_get_thread_num();
-        printf("Hello World from thread = %d\n", tid);
-        
-        /* Only master thread does this */
-        if (tid == 0)
-        {
-            nthreads = omp_get_num_threads();
-            printf("Number of threads = %d\n", nthreads);
-        }
-        
-    } /* All threads join master thread and disband */
+    std::map<std::vector<int>, BaseRegion> inner_4starregions_map;
+    generate_inner(inner_4starregions_map, 4, a, d);
+    store_region_map(inner_4starregions_map, "inner_4starregions.txt");
     
-    return 0;
+    std::map<std::vector<int>, BaseRegion> inner_5regions_map;
+    generate_inner(inner_5regions_map, 5, a, d);
+    store_region_map(inner_5regions_map, "inner_5regions.txt");
+
+    std::map<std::vector<int>, BaseRegion> inner_6regions_map;
+    generate_inner(inner_6regions_map, 6, a, d);
+    store_region_map(inner_6regions_map, "inner_6regions.txt");
+    
+    
+    // Load inner region vectors
+    std::vector<BaseRegion> inner_2regions_vec;
+    load_region_vector(inner_2regions_vec, "inner_2regions.txt");
+    
+    std::vector<BaseRegion> inner_3regions_vec;
+    load_region_vector(inner_3regions_vec, "inner_3regions.txt");
+    
+    std::vector<BaseRegion> inner_4regions_vec;
+    load_region_vector(inner_4regions_vec, "inner_4regions.txt");
+
+    std::vector<BaseRegion> inner_4starregions_vec;
+    load_region_vector(inner_4starregions_vec, "inner_4starregions.txt");
+    
+    std::vector<BaseRegion> inner_5regions_vec;
+    load_region_vector(inner_5regions_vec, "inner_5regions.txt");
+    
+    std::vector<BaseRegion> inner_6regions_vec;
+    load_region_vector(inner_6regions_vec, "inner_6regions.txt");
+    
+    
+    // Generate hat regions
+    map<vector<int>, BaseRegion> regions_3hat_with_edges_map;
+    generate_3hat_regions(regions_3hat_with_edges_map, true);
+    store_region_map(regions_3hat_with_edges_map, "3hat_with_edges.txt");
+    
+    vector<BaseRegion> regions_3hat_with_edges_vec;
+    load_region_vector(regions_3hat_with_edges_vec, "3hat_with_edges.txt");
+
+    std::map<std::vector<int>, BaseRegion> regions_3hat_without_ac_edge_map;
+    generate_3hat_regions(regions_3hat_without_ac_edge_map, false);
+    store_region_map(regions_3hat_without_ac_edge_map, "3hat_without_ac_edge.txt");
+    
+    vector<BaseRegion> regions_3hat_without_ac_edge_vec;
+    load_region_vector(regions_3hat_without_ac_edge_vec, "3hat_without_ac_edge.txt");
+
+    std::map<std::vector<int>, BaseRegion> regions_4hat_with_edges_map;
+    generate_4hat_regions(regions_4hat_with_edges_map,
+                          regions_3hat_with_edges_vec,
+                          regions_3hat_without_ac_edge_vec,
+                          inner_2regions_vec,
+                          inner_3regions_vec,
+                          inner_4regions_vec,
+                          true, true);
+    store_region_map(regions_4hat_with_edges_map, "4hat_with_edges.txt");
+    
+    vector<BaseRegion> regions_4hat_with_edges_vec;
+    load_region_vector(regions_4hat_with_edges_vec, "4hat_with_edges.txt");
+    
+    std::map<std::vector<int>, BaseRegion> regions_4hat_without_ad_edge_map;
+    generate_4hat_regions(regions_4hat_without_ad_edge_map,
+                          regions_3hat_with_edges_vec,
+                          regions_3hat_without_ac_edge_vec,
+                          inner_2regions_vec,
+                          inner_3regions_vec,
+                          inner_4regions_vec,
+                          true, false);
+    store_region_map(regions_4hat_without_ad_edge_map, "4hat_without_ad_edge.txt");
+    
+    vector<BaseRegion> regions_4hat_without_ad_edge_vec;
+    load_region_vector(regions_4hat_without_ad_edge_vec, "4hat_without_ad_edge.txt");
     
 
-    bool load_old_files = false;
-    bool load_from_file = true;
-    bool save_to_file = true;
+    std::map<std::vector<int>, BaseRegion> regions_4hat_without_bc_edge_map;
+    generate_4hat_regions(regions_4hat_without_bc_edge_map,
+                          regions_3hat_with_edges_vec,
+                          regions_3hat_without_ac_edge_vec,
+                          inner_2regions_vec,
+                          inner_3regions_vec,
+                          inner_4regions_vec,
+                          false, true);
+    store_region_map(regions_4hat_without_bc_edge_map, "4hat_without_bc_edge.txt");
     
-    if (load_old_files) load_region_map(old_regions_3hat_b, OLD_FILENAME_3HAT_B);
-    if (load_from_file) load_region_map(regions_3hat_b, FILENAME_3HAT_B);
-    if(regions_3hat_b.empty()){
-        generate_3hat_b_regions(regions_3hat_b);
-        if (save_to_file) store_region_map(regions_3hat_b, FILENAME_3HAT_B);
-    }
+    vector<BaseRegion> regions_4hat_without_bc_edge_vec;
+    load_region_vector(regions_4hat_without_bc_edge_vec, "4hat_without_bc_edge.txt");
     
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_3hat_b.begin() ; it != old_regions_3hat_b.end(); it++){
-        BaseRegion old = it->second;
-       
-        if (!contains_sign(regions_3hat_b, old)) {
-            cout << "old had more" << endl;
-            exit(1);
-        }
-    }
-    
-    if (load_old_files) load_region_map(old_regions_3hat, OLD_FILENAME_3HAT);
-    if (load_from_file) load_region_map(regions_3hat, FILENAME_3HAT);
-    if (regions_3hat.empty()) {
-        generate_3hat_regions(regions_3hat);
-        if (save_to_file) store_region_map(regions_3hat, FILENAME_3HAT);
-    }
-    
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_3hat.begin() ; it != old_regions_3hat.end(); it++){
-        BaseRegion old = it->second;
-        
-        if (!contains_sign(regions_3hat, old)) {
-            cout << "old had more" << endl;
-            exit(1);
-        }
-    }
+    std::map<std::vector<int>, BaseRegion> regions_4hat_without_ad_bc_edges_map;
+    generate_4hat_regions(regions_4hat_without_ad_bc_edges_map,
+                          regions_3hat_with_edges_vec,
+                          regions_3hat_without_ac_edge_vec,
+                          inner_2regions_vec,
+                          inner_3regions_vec,
+                          inner_4regions_vec,
+                          false, false);
+    store_region_map(regions_4hat_without_ad_bc_edges_map, "4hat_without_ad_bc_edges.txt");
+    vector<BaseRegion> regions_4hat_without_ad_bc_edges_vec;
+    load_region_vector(regions_4hat_without_ad_bc_edges_vec, "4hat_without_ad_bc_edges.txt");
 
-    if (load_old_files) load_region_map(old_regions_4hat_b, OLD_FILENAME_4HAT_B);
-    if (load_from_file) load_region_map(regions_4hat_b, FILENAME_4HAT_B);
-    if (regions_4hat_b.empty()) {
-        generate_4hat_b_regions(regions_4hat_b, regions_3hat_b);
-        if (save_to_file) store_region_map(regions_4hat_b, FILENAME_4HAT_B);
-    }
-    
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_4hat_b.begin() ; it != old_regions_4hat_b.end(); it++){
-        BaseRegion old = it->second;
-        
-        if (!contains_sign(regions_4hat_b, old)) {
-            cout << "old 4hat had more" << endl;
-            old.printRegion();
-            exit(1);
-        }
-    }
-    
-    if (load_old_files) load_region_map(old_regions_4hat, OLD_FILENAME_4HAT);
-    if (load_from_file) load_region_map(regions_4hat, FILENAME_4HAT);
-    if (regions_4hat.empty()) {
-        generate_4hat_regions(regions_4hat, regions_3hat, regions_4hat_b);
-        //generate_4hat_regions_new(regions_4hat, regions_4hat_a);
-        if (save_to_file) store_region_map(regions_4hat, FILENAME_4HAT);
-    }
-    
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_4hat.begin() ; it != old_regions_4hat.end(); it++){
-        BaseRegion old = it->second;
-        
-        if (!contains_sign(regions_4hat, old)) {
-            cout << "old 4hat had more" << endl;
-            old.printRegion();
-            exit(1);
-        }
-    }
+    map<vector<int>, BaseRegion> regions_5hat_with_edges_map;
+    generate_5hat_regions(regions_5hat_with_edges_map,
+                          regions_3hat_with_edges_vec,
+                          regions_3hat_without_ac_edge_vec,
+                          regions_4hat_with_edges_vec,
+                          regions_4hat_without_bc_edge_vec,
+                          regions_4hat_without_ad_edge_vec,
+                          regions_4hat_without_ad_bc_edges_vec,
+                          true);
+    store_region_map(regions_5hat_with_edges_map, "5hat_with_edges.txt");
+    vector<BaseRegion> regions_5hat_with_edges_vec;
+    load_region_vector(regions_5hat_with_edges_vec, "5hat_with_edges.txt");
 
-    if (load_old_files) load_region_map(old_regions_5hat_b, OLD_FILENAME_5HAT_B);
-    if (load_from_file) load_region_map(regions_5hat_b, FILENAME_5HAT_B);
-    if (regions_5hat_b.empty()) {
-        generate_5hat_b_regions(regions_5hat_b, regions_3hat_b, regions_4hat_b);
-        if (save_to_file) store_region_map(regions_5hat_b, FILENAME_5HAT_B);
-    }
-    
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_5hat_b.begin() ; it != old_regions_5hat_b.end(); it++){
-        BaseRegion old = it->second;
-        
-        if (!contains_sign(regions_5hat_b, old)) {
-            cout << "old 5hat_b had more" << endl;
-            old.printRegion();
-            exit(1);
-        }
-    }
+    map<vector<int>, BaseRegion> regions_5hat_without_de_edge_map;
+    generate_5hat_regions(regions_5hat_without_de_edge_map,
+                          regions_3hat_with_edges_vec,
+                          regions_3hat_without_ac_edge_vec,
+                          regions_4hat_with_edges_vec,
+                          regions_4hat_without_bc_edge_vec,
+                          regions_4hat_without_ad_edge_vec,
+                          regions_4hat_without_ad_bc_edges_vec,
+                          false);
+    store_region_map(regions_5hat_without_de_edge_map, "5hat_without_de_edge.txt");
+    vector<BaseRegion> regions_5hat_without_de_edge_vec;
+    load_region_vector(regions_5hat_without_de_edge_vec, "5hat_without_de_edge.txt");
 
-    if (load_old_files) load_region_map(old_regions_5hat, OLD_FILENAME_5HAT);
-    if (load_from_file) load_region_map(regions_5hat, FILENAME_5HAT);
-    if (regions_5hat.empty()) {
-        generate_5hat_regions(regions_5hat, regions_3hat, regions_4hat, regions_4hat_b, regions_5hat_b);
-        if (save_to_file) store_region_map(regions_5hat, FILENAME_5HAT);
-    }
+    map<vector<int>, BaseRegion> regions_6hat_with_edges_map;
+    generate_6hat_regions(regions_6hat_with_edges_map,
+                          regions_3hat_with_edges_vec,
+                          regions_4hat_with_edges_vec,
+                          regions_4hat_without_ad_edge_vec,
+                          regions_5hat_with_edges_vec,
+                          regions_5hat_without_de_edge_vec);
+    store_region_map(regions_6hat_with_edges_map, "6hat_with_edges.txt");
+    vector<BaseRegion> regions_6hat_with_edges_vec;
+    load_region_vector(regions_6hat_with_edges_vec, "6hat_with_edges.txt");
     
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_5hat.begin() ; it != old_regions_5hat.end(); it++){
-        BaseRegion old = it->second;
-        
-        if (!contains_sign(regions_5hat, old)) {
-            cout << "old 5hat had more" << endl;
-            old.printRegion();
-            exit(1);
-        }
-    }
-
-    if (load_old_files) load_region_map(old_regions_6hat_b, OLD_FILENAME_6HAT_B);
-    if (load_from_file) load_region_map(regions_6hat_b, FILENAME_6HAT_B);
-    if (regions_6hat_b.empty()) {
-        generate_6hat_b_regions(regions_6hat_b, regions_3hat_b, regions_4hat_b, regions_5hat_b);
-        if (save_to_file) store_region_map(regions_6hat_b, FILENAME_6HAT_B);
-    }
     
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_6hat_b.begin() ; it != old_regions_6hat_b.end(); it++){
-        BaseRegion old = it->second;
-        
-        if (!contains_sign(regions_6hat_b, old)) {
-            cout << "old 6hat_b had more" << endl;
-            old.printRegion();
-            exit(1);
-        }
-    }
-
-    if (load_old_files) load_region_map(old_regions_6hat, OLD_FILENAME_6HAT);
-    if (load_from_file) load_region_map(regions_6hat, FILENAME_6HAT);
-    if (regions_6hat.empty()) {
-        generate_6hat_regions(regions_6hat, regions_3hat, regions_4hat, regions_4hat_b, regions_5hat_b, regions_5hat, regions_6hat_b);
-        if (save_to_file) store_region_map(regions_6hat, FILENAME_6HAT);
-    }
+    // Generate non-dominator hat regions
+    vector<BaseRegion> outer_non_dom_3regions_with_edge;
+    vector<BaseRegion> outer_non_dom_3regions_without_edge;
+    vector<BaseRegion> outer_non_dom_4regions_with_edge;
+    vector<BaseRegion> outer_non_dom_4regions_without_edge;
     
-    for(std::map<vector<int>, BaseRegion>::iterator it = old_regions_6hat.begin() ; it != old_regions_6hat.end(); it++){
-        BaseRegion old = it->second;
-        
-        if (!contains_sign(regions_6hat, old)) {
-            cout << "old 6hat_b had more" << endl;
-            old.printRegion();
-            exit(1);
-        }
-    }
-
-    if (load_from_file) load_region_map(regions_3, FILENAME_3);
-    if (regions_3.empty()) {
-        generate_3_regions(regions_3, regions_3hat, regions_4hat, regions_5hat);
-        if (save_to_file) store_region_map(regions_3, FILENAME_3);
-    }
-
-    if (load_from_file) load_region_map(regions_4star, FILENAME_4star);
-    if (regions_4star.empty()) {
-        generate_4star_regions(regions_4star, regions_3hat, regions_3, regions_4hat, regions_6hat);
-        if (save_to_file) store_region_map(regions_4star, FILENAME_4star);
-    }
-
-    if (load_from_file) load_region_map(regions_4, FILENAME_4);
-    if (regions_4.empty()) {
-        generate_4_regions(regions_4, regions_3hat, regions_3, regions_4hat, regions_5hat);
-        if (save_to_file) store_region_map(regions_4, FILENAME_4);
-    }
-
-    if (load_from_file) load_region_map(regions_5, FILENAME_5);
-    if (regions_5.empty()) {
-        generate_5_regions(regions_5, regions_3hat, regions_3, regions_4hat, regions_4star, regions_4, regions_5hat, regions_6hat);
-        if (save_to_file) store_region_map(regions_5, FILENAME_5);
-    }
-
-    if (load_from_file) load_region_map(regions_6, FILENAME_6);
-    if (regions_6.empty()) {
-        generate_6_regions(regions_6, regions_3hat, regions_4hat, regions_4star, regions_5, regions_5hat, regions_6hat);
-        if (save_to_file) store_region_map(regions_6, FILENAME_6);
-    }
+    enumerate_non_dominator_outer_3regions(outer_non_dom_3regions_without_edge, true);
+    enumerate_non_dominator_outer_4regions(outer_non_dom_4regions_without_edge, true);
+    enumerate_non_dominator_outer_3regions(outer_non_dom_3regions_with_edge, false);
+    enumerate_non_dominator_outer_4regions(outer_non_dom_4regions_with_edge, false);
     
-    //cout << "#3a=" << signature_minimal_3aregions.size() << " #3b=" << signature_minimal_3bregions.size() << " #3=" << signature_minimal_3regions.size() << " #4a=" << signature_minimal_4aregions.size() << " #4b=" << signature_minimal_4bregions.size() << " #4=" << signature_minimal_4regions.size() << " #empty=" << empty_region.size()<< endl;
+    // Generate empty inner regions
+    map<vector<int>, BaseRegion> empty_inner2_map;
+    map<vector<int>, BaseRegion> empty_inner3_map;
+    map<vector<int>, BaseRegion> empty_inner4_map;
+    map<vector<int>, BaseRegion> empty_inner4star_map;
+    map<vector<int>, BaseRegion> empty_inner5_map;
+    map<vector<int>, BaseRegion> empty_inner6_map;
+    generate_empty_inner(empty_inner2_map, 2, a, b);
+    generate_empty_inner(empty_inner3_map, 3, a, c);
+    generate_empty_inner(empty_inner4_map, 4, a, c);
+    generate_empty_inner(empty_inner4star_map, 4, a, d);
+    generate_empty_inner(empty_inner5_map, 5, a, d);
+    generate_empty_inner(empty_inner6_map, 6, a, d);
     
-    /*
-    int id = 0;
-    for(std::map<vector<int>, BaseRegion>::iterator it = signature_minimal_3hat_a_regions.begin() ; it != signature_minimal_3hat_a_regions.end(); it++){
-        id++;
-        ofstream file;
-        stringstream ss;
-        ss << "4region_" << id << ".dot";
-        string filename = ss.str();
-        std::cout << "filename: " << filename << std::endl;
-        file.open(filename);
-        
-        if(!file.is_open()){
-            std::cout << "ERROR opening file "<< std::endl;
-        }
-        else {
-            //file << it->second.getDotFormat();
-        }
-        file.close();
-    }
+    vector<BaseRegion> empty_inner2_vec = toVector(empty_inner2_map);
+    vector<BaseRegion> empty_inner3_vec = toVector(empty_inner3_map);
+    vector<BaseRegion> empty_inner4_vec = toVector(empty_inner4_map);
+    vector<BaseRegion> empty_inner4star_vec = toVector(empty_inner4star_map);
+    vector<BaseRegion> empty_inner5_vec = toVector(empty_inner5_map);
+    vector<BaseRegion> empty_inner6_vec = toVector(empty_inner6_map);
     
-    cout << "Finding 6regions with empty mid" << endl;*/
-    /*
+    // Generate 3-regions
+    map<vector<int>, BaseRegion> regions_3_with_edges_map;
+    generate_3regions_from_inner(regions_3_with_edges_map,
+                                 inner_2regions_vec,
+                                 inner_3regions_vec,
+                                 inner_4starregions_vec,
+                                 regions_3hat_with_edges_vec,
+                                 regions_3hat_without_ac_edge_vec,
+                                 true);
+    store_region_map(regions_3_with_edges_map, "3regions.txt");
+    vector<BaseRegion> regions_3_with_edges_vec;
+    load_region_vector(regions_3_with_edges_vec, "3regions.txt");
     
-    for (int RegA = Empty; RegA <= Type4A; RegA++) {
-        int startB = Empty;
-        int maxB = RegA >= Type3A ? Type3B : Type4A;
-        for(int RegB = startB; RegB <= maxB; RegB++){
-            
-            for (int RegC = Empty; RegC <= Type4A; RegC++) {
-                int startD = Empty;
-                int maxD = RegC >= Type3A ? Type3B : Type4A;
-                for(int RegD = startD; RegD <= maxD; RegD++){
-                    
-                    int start_AB_together = 0;
-                    int max_AB_together = (RegA == Type3B && (RegB == Type3B || RegB == Type4A)) || (RegA == Type4A && (RegB == Type3B)) ? 1 : 0;
-                    for(int AB_together = start_AB_together; AB_together <= max_AB_together; AB_together++){
-                        
-                        int start_CD_together = 0;
-                        int max_CD_together = (RegC == Type3B && (RegD == Type3B || RegD == Type4A)) || (RegC == Type4A && (RegD == Type3B)) ? 1 : 0;
-                        
-                        for (int CD_together = start_CD_together; CD_together <= max_CD_together; CD_together++) {
-                            cout << "have region A=" << type_to_string(RegA) << ", B=" << type_to_string(RegB)<< ", C=" << type_to_string(RegC)<< ", D=" << type_to_string(RegD) << endl;
-                            
-                            map<vector<int>,SmallRegion >  RegAmap = set_regionmap((RegionType)RegA);
-                            map<vector<int>,SmallRegion >  RegBmap = set_regionmap((RegionType)RegB);
-                            map<vector<int>,SmallRegion >  RegCmap = set_regionmap((RegionType)RegC);
-                            map<vector<int>,SmallRegion >  RegDmap = set_regionmap((RegionType)RegD);
-                            
-                            for(map<vector<int>,SmallRegion >::iterator itA = RegAmap.begin(); itA != RegAmap.end(); itA++){
-                                for(map<vector<int>,SmallRegion >::iterator itB = RegBmap.begin(); itB != RegBmap.end(); itB++){
-                                    for(map<vector<int>,SmallRegion >::iterator itC = RegCmap.begin(); itC != RegCmap.end(); itC++){
-                                        for(map<vector<int>,SmallRegion >::iterator itD = RegDmap.begin(); itD != RegDmap.end(); itD++){
-                                            
-                                            // create boundaried 6-region and glue on the small regions
-                                            
-                                            BoundariedRegion bigRegion = BoundariedRegion(6, 3, counter++);
-                                            vector<BoundariedRegion> toGlue;
-                                            
-                                            for(int i = 0; i < 6; i++){
-                                                bigRegion.addLabel(i, i);
-                                            }
-                                            
-                                            int node6 = -1;
-                                            if(RegA == Type3B){
-                                                node6 = bigRegion.addNode();
-                                                bigRegion.addEdge(node6, 0);
-                                                bigRegion.addEdge(node6, 1);
-                                                bigRegion.addLabel(node6, 6);
-                                                
-                                                BoundariedRegion bA(3,0,0);
-                                                itA->second.copy(bA);
-                                                
-                                            }
-                                            if(RegA == Type4A){
-                                                node6 = bigRegion.addNode();
-                                                bigRegion.addEdge(node6, 0);
-                                                bigRegion.addEdge(node6, 2);
-                                                bigRegion.addLabel(node6, 6);
-                                            }
-                                            
-                                            int node7 = -1;
-                                            if(RegB == Type3B){
-                                                if (AB_together) {
-                                                    node7 = node6;
-                                                } else {
-                                                    node7 = bigRegion.addNode();
-                                                }
-                                                
-                                                bigRegion.addEdge(node7, 3);
-                                                bigRegion.addEdge(node7, 2);
-                                                bigRegion.addLabel(node7, 7);
-                                            }
-                                            if(RegB == Type4A){
-                                                if (AB_together) {
-                                                    node7 = node6;
-                                                } else {
-                                                    node7 = bigRegion.addNode();
-                                                }
-                                                bigRegion.addEdge(node7, 3);
-                                                bigRegion.addEdge(node7, 1);
-                                                bigRegion.addLabel(node7, 7);
-                                            }
-                                            
-                                            BoundariedRegion bA;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    */
+    map<vector<int>, BaseRegion> regions_3_without_ac_edge_map;
+    generate_3regions_from_inner(regions_3_without_ac_edge_map,
+                                 inner_2regions_vec,
+                                 inner_3regions_vec,
+                                 inner_4starregions_vec,
+                                 regions_3hat_with_edges_vec,
+                                 regions_3hat_without_ac_edge_vec,
+                                 false);
+    store_region_map(regions_3_without_ac_edge_map, "3regions_without_ac_edge.txt");
+    vector<BaseRegion> regions_3_without_ac_edge_vec;
+    load_region_vector(regions_3_without_ac_edge_vec, "3regions_without_ac_edge.txt");
+
+    // Generate 4-regions
+    map<vector<int>, BaseRegion> regions_4_map;
+    generate_4regions_from_inner(regions_4_map,
+                                 inner_2regions_vec,
+                                 inner_3regions_vec,
+                                 inner_4regions_vec, 
+                                 inner_4starregions_vec, 
+                                 inner_5regions_vec, 
+                                 inner_6regions_vec, 
+                                 regions_3hat_with_edges_vec, 
+                                 regions_3hat_without_ac_edge_vec, 
+                                 regions_4hat_with_edges_vec);
+    store_region_map(regions_4_map, "4regions.txt");
+    vector<BaseRegion> regions_4_vec;
+    load_region_vector(regions_4_vec, "4regions.txt");
+
+    // Generate 4*-regions
+    map<vector<int>, BaseRegion> regions_4star_with_edges_map;
+    generate_4starregions_from_inner(regions_4star_with_edges_map,
+                                     inner_2regions_vec, 
+                                     inner_3regions_vec, 
+                                     inner_4starregions_vec, 
+                                     regions_3hat_with_edges_vec, 
+                                     regions_3hat_without_ac_edge_vec, 
+                                     regions_4hat_with_edges_vec, 
+                                     regions_4hat_without_ad_edge_vec,
+                                     regions_3_with_edges_vec,
+                                     regions_3_without_ac_edge_vec,
+                                     false);
+    store_region_map(regions_4star_with_edges_map, "4star_regions_with_edges.txt");
+    vector<BaseRegion> regions_4star_with_edges_vec;
+    load_region_vector(regions_4star_with_edges_vec, "4star_regions_with_edges.txt");
+
+    // Generate 5-regions
+    map<vector<int>, BaseRegion> regions_5_with_edges_map;
+    generate_5regions_from_inner(regions_5_with_edges_map,
+                                 inner_2regions_vec, 
+                                 inner_3regions_vec, 
+                                 inner_4regions_vec, 
+                                 inner_4starregions_vec, 
+                                 inner_5regions_vec, 
+                                 inner_6regions_vec, 
+                                 empty_inner6_vec, 
+                                 regions_3hat_with_edges_vec, 
+                                 regions_3hat_without_ac_edge_vec, 
+                                 regions_4hat_with_edges_vec, 
+                                 regions_4hat_without_ad_edge_vec, 
+                                 outer_non_dom_3regions_with_edge,
+                                 outer_non_dom_3regions_without_edge,
+                                 outer_non_dom_4regions_with_edge,
+                                 outer_non_dom_4regions_without_edge, 
+                                 regions_3_with_edges_vec, 
+                                 regions_4_vec);
+    store_region_map(regions_5_with_edges_map, "5regions.txt");
+    vector<BaseRegion> regions_5_with_edges_vec;
+    load_region_vector(regions_5_with_edges_vec, "5regions.txt");
+
+    // Generate 6-regions
+    map<vector<int>, BaseRegion> regions_6_with_edges_map;
+    generate_6regions(regions_6_with_edges_map,
+                      inner_2regions_vec,
+                      inner_3regions_vec,
+                      inner_4regions_vec,
+                      inner_4starregions_vec,
+                      inner_5regions_vec,
+                      inner_6regions_vec,
+                      empty_inner2_vec,
+                      empty_inner3_vec,
+                      empty_inner4_vec,
+                      empty_inner4star_vec,
+                      empty_inner5_vec,
+                      empty_inner6_vec,
+                      regions_3hat_with_edges_vec,
+                      regions_3hat_without_ac_edge_vec,
+                      regions_4hat_with_edges_vec,
+                      regions_4hat_without_ad_edge_vec,
+                      regions_5hat_with_edges_vec,
+                      regions_6hat_with_edges_vec,
+                      outer_non_dom_3regions_with_edge,
+                      outer_non_dom_3regions_without_edge,
+                      outer_non_dom_4regions_with_edge,
+                      outer_non_dom_4regions_without_edge);
+    store_region_map(regions_6_with_edges_map, "6regions.txt");
+    vector<BaseRegion> regions_6_with_edges_vec;
+//    load_region_vector(regions_6_with_edges_vec, "6regions.txt");
+    
     cout << "main done" << endl;
     return 0;
 }

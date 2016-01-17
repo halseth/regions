@@ -16,8 +16,11 @@ Region::Region(int boundarySize, int endpoint1, int endpoint2) : BaseRegion(boun
 bool Region::isValid(){
     bool valid = BaseRegion::isValid();
     
-    // All internal vertices must be dominated by the two endpoints
-    for (int i = getBoundarySize(); i < getSize(); i++) {
+    // All vertices (internal and boundary) must be dominated by the two endpoints
+    for (int i = 0; i < getSize(); i++) {
+        if (i == endpoint1 || i == endpoint2) {
+            continue;
+        }
         valid &= isAdjacent(i, endpoint1) || isAdjacent(i, endpoint2);
     }
     return valid;

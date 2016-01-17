@@ -19,16 +19,19 @@
 class BaseRegion {
 private:
     // Data
-    std::vector<int> Boundary;
     int num_internal_nodes;
     std::vector<std::vector<bool> > adj;
     std::map<int, int> labelToNode;
     std::map<int, std::set<int> > nodeToLabels;
     
     // Private methods
+    bool dominates(std::vector<int> dominators, std::vector<int> S);
     int signature(std::vector<int> X, std::vector<int> S);
-    int signature2(std::vector<int> X, std::vector<int> S);
+    int generalSignature(std::vector<int> X, std::vector<int> S);
     void init(int boundarySize);
+    
+protected:
+    std::vector<int> Boundary;
     
 public:
     BaseRegion(int boundarySize);
@@ -40,12 +43,15 @@ public:
     bool operator==(const BaseRegion& b) const {return isEqual(b);};
     
     virtual bool isValid();
+    bool isConnected();
+    bool isPlanar();
     int getSize() const;
     int addNode();
     void addEdge(int from, int to);
+    void removeEdge(int from, int to);
     bool isAdjacent(int a, int b);
     void getSignature(std::vector<int> &signature);
-    void getSignature2(std::vector<int> &signature);
+    void getGeneralSignature(std::vector<int> &signature);
     int getBoundarySize() const;
     
     void printRegion();
@@ -61,7 +67,6 @@ public:
     std::map<int, std::set<int> > getNodeToLabels();
     
     virtual void test();
-    BaseRegion copy();
     
 };
 

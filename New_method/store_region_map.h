@@ -12,6 +12,9 @@
 #include "BaseRegion.h"
 
 void store_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string filename);
+void store_region_vector(std::vector<BaseRegion> vec, std::string filename);
 void load_region_map(std::map<std::vector<int>,BaseRegion> &map, std::string filename);
+void load_region_vector(std::vector<BaseRegion> &vec, std::string filename);
+std::vector<BaseRegion> toVector(std::map<std::vector<int>,BaseRegion> &map);
 
 #endif /* defined(__New_method__store_region_map__) */
