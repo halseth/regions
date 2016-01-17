@@ -12,13 +12,6 @@
 #include <stdio.h>
 #include "Region.h"
 
-void enumerate_inner_2regions(std::map<std::vector<int>, BaseRegion> &inner_2regions);
-void enumerate_inner_3regions(std::map<std::vector<int>, BaseRegion> &inner_3regions);
-void enumerate_inner_4regions(std::map<std::vector<int>, BaseRegion> &inner_4regions);
-void enumerate_inner_4starregions(std::map<std::vector<int>, BaseRegion> &inner_4regions);
-void enumerate_inner_5regions(std::map<std::vector<int>, BaseRegion> &inner_5regions);
-void enumerate_inner_6regions(std::map<std::vector<int>, BaseRegion> &sign_minimal);
-
-void generate_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int endpoint1, int endpoint2);
+void generate_inner(std::map<std::vector<int>, BaseRegion> &sign_minimal, int size, int endpoint1, int endpoint2);
 
 #endif /* enumerate_inner_hpp */

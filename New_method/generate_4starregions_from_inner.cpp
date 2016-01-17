@@ -14,8 +14,6 @@ const int a = 0;
 const int b = 1;
 const int c = 2;
 const int d = 3;
-const int e = 4;
-const int f = 5;
 
 void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_minimal,
                                   const vector<BaseRegion> &inner_2regions,
@@ -78,6 +76,11 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
                 exit(1);
             }
             
+            if (R2.isAdjacent(a, d) != with_ad_edge) {
+                cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+                exit(1);
+            }
+            
             if (!R2.isValid()) {
                 cout << "R:";
                 R.printRegion();
@@ -91,6 +94,33 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             
             store_sign(R2, signature_minimal);
         }
+    }
+    
+    cout << "inner 2-regions" << endl;
+    for (vector<BaseRegion>::const_iterator it_inner = inner_2regions.begin(); it_inner != inner_2regions.end(); it_inner++){
+        BaseRegion inner = *it_inner;
+        
+        // check if compatible with edge
+        if (inner.isAdjacent(a, b) != with_ad_edge) {
+            continue;
+        }
+        
+        Region R2(R);
+        
+        R2.addLabelToNode(0, a);
+        R2.addLabelToNode(1, d);
+        
+        inner.addLabelToNode(0, a);
+        inner.addLabelToNode(1, b);
+        
+        R2.glue(&inner);
+        
+        if (R2.isAdjacent(a, d) != with_ad_edge) {
+            cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+            exit(1);
+        }
+        
+        store_sign(R2, signature_minimal);
     }
     
     cout << "inner 3-region" << endl;
@@ -123,30 +153,13 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             
             R2.glue(&inner);
             
+            if (R2.isAdjacent(a, d) != with_ad_edge) {
+                cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+                exit(1);
+            }
+            
             store_sign(R2, signature_minimal);
         }
-    }
-    
-    cout << "inner 2-regions" << endl;
-    for (vector<BaseRegion>::const_iterator it_inner = inner_2regions.begin(); it_inner != inner_2regions.end(); it_inner++){
-        BaseRegion inner = *it_inner;
-        
-        // check if compatible with edge
-        if (inner.isAdjacent(a, b) != with_ad_edge) {
-            continue;
-        }
-        
-        Region R2(R);
-        
-        R2.addLabelToNode(0, a);
-        R2.addLabelToNode(1, d);
-        
-        inner.addLabelToNode(0, a);
-        inner.addLabelToNode(1, b);
-        
-        R2.glue(&inner);
-        
-        store_sign(R2, signature_minimal);
     }
     
     for (int upper_right_size = 3; upper_right_size <= 4; upper_right_size++) {
@@ -159,7 +172,6 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             map<vector<int>,BaseRegion> priv_signature_minimal;
             int priv_current = 0;
             int tid = THREAD_ID;
-            int nthreads = NUM_THREADS;
             
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4starregions.size(); i++) {
@@ -193,51 +205,54 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             
             for (vector<BaseRegion>::const_iterator it_upper_left = upper_left.begin(); it_upper_left != upper_left.end(); it_upper_left++) {
                 for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
+                    Region R3(R2);
                     
-                    int max_between_edge_up = upper_right_size == 3 ? 2 : 0;
-                    for (int between_edge_up = 0; between_edge_up <= max_between_edge_up; between_edge_up++) {
-                        Region R3(R2);
-                        
-                        if (between_edge_up == 1) {
-                            R3.addEdge(b, inner_c);
-                        }
-                        if(between_edge_up == 2) {
-                            R3.addEdge(c, inner_b);
-                        }
-                        
-                        R3.addLabelToNode(0, a);
-                        R3.addLabelToNode(1, b);
-                        R3.addLabelToNode(2, c);
-                        R3.addLabelToNode(3, d);
-                        R3.addLabelToNode(4, inner_b);
-                        R3.addLabelToNode(5, inner_c);
-                        
-                        vector<BaseRegion*> toGlue;
-                        
-                        BaseRegion upper_left = *it_upper_left;
-                        upper_left.addLabelToNode(0, a);
-                        upper_left.addLabelToNode(1, b);
-                        upper_left.addLabelToNode(4, c);
-                        toGlue.push_back(&upper_left);
-                        
-                        BaseRegion upper_right = *it_upper_right;
-                        if (upper_right_size == 3) {
-                            upper_right.addLabelToNode(3, a);
-                            upper_right.addLabelToNode(2, b);
-                            upper_right.addLabelToNode(5, c);
-                        } else {
-                            upper_right.addLabelToNode(3, a);
-                            upper_right.addLabelToNode(2, b);
-                            upper_right.addLabelToNode(1, c);
-                            upper_right.addLabelToNode(5, d);
-                        }
-                        toGlue.push_back(&upper_right);
-                        
-                        R3.glue(toGlue);
-                        
-                        store_sign(R3, priv_signature_minimal);
+                    R3.addLabelToNode(0, a);
+                    R3.addLabelToNode(1, b);
+                    R3.addLabelToNode(2, c);
+                    R3.addLabelToNode(3, d);
+                    R3.addLabelToNode(4, inner_b);
+                    R3.addLabelToNode(5, inner_c);
+                    
+                    vector<BaseRegion*> toGlue;
+                    
+                    BaseRegion upper_left = *it_upper_left;
+                    upper_left.addLabelToNode(0, a);
+                    upper_left.addLabelToNode(1, b);
+                    upper_left.addLabelToNode(4, c);
+                    toGlue.push_back(&upper_left);
+                    
+                    BaseRegion upper_right = *it_upper_right;
+                    if (upper_right_size == 3) {
+                        upper_right.addLabelToNode(3, a);
+                        upper_right.addLabelToNode(2, b);
+                        upper_right.addLabelToNode(5, c);
+                    } else {
+                        upper_right.addLabelToNode(3, a);
+                        upper_right.addLabelToNode(2, b);
+                        upper_right.addLabelToNode(1, c);
+                        upper_right.addLabelToNode(5, d);
+                    }
+                    toGlue.push_back(&upper_right);
+                    
+                    R3.glue(toGlue);
+                    
+                    if (R3.isAdjacent(a, d) != with_ad_edge) {
+                        cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+                        exit(1);
                     }
                     
+                    if (R3.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                        cout << "R3.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R3.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)) {
+                        cout << "R3.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)" << endl;
+                        exit(1);
+                    }
+                    
+                    store_sign(R3, priv_signature_minimal);
                 }
             }
             
@@ -261,6 +276,34 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             
         }// parallel over
     }
+    
+    // Symmetries
+    cout << "Finding symmetries"<< endl;
+    
+    // Flip around vertical
+    cout << "Around vertical" << endl;
+    vector<BaseRegion> regs;
+    for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
+        regs.push_back(it->second);
+    }
+    
+    for (int i = 0; i < regs.size(); i++) {
+        
+        BaseRegion sym(4);
+        for (int j = 0; j < sym.getSize(); j++) {
+            sym.removeEdge(j, (j+1)%sym.getSize());
+        }
+        BaseRegion reg = regs[i];
+        sym.addLabelToNode(0, a); reg.addLabelToNode(0, d);
+        sym.addLabelToNode(1, b); reg.addLabelToNode(1, c);
+        sym.addLabelToNode(2, c); reg.addLabelToNode(2, b);
+        sym.addLabelToNode(3, d); reg.addLabelToNode(3, a);
+        
+        sym.glue(&reg);
+        
+        store_sign(sym, signature_minimal);
+    }
+
     
     cout << "Done with 4*-regions" << endl;
     print_map(signature_minimal);

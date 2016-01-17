@@ -51,11 +51,11 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     for (vector<BaseRegion>::const_iterator it_left = regions_3hat_with_edges.begin(); it_left != regions_3hat_with_edges.end(); it_left++){
         for (vector<BaseRegion>::const_iterator it_right = regions_3hat_with_edges.begin(); it_right != regions_3hat_with_edges.end(); it_right++){
             
-            Region R2(4, a,c);
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, c);
-            R2.addLabelToNode(3, d);
+            Region R(4, a,c);
+            R.addLabelToNode(0, a);
+            R.addLabelToNode(1, b);
+            R.addLabelToNode(2, c);
+            R.addLabelToNode(3, d);
             
             vector<BaseRegion*> toGlue;
             
@@ -71,14 +71,14 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             right.addLabelToNode(3, c);
             toGlue.push_back(&right);
             
-            R2.glue(toGlue);
+            R.glue(toGlue);
             
-            if (!R2.isAdjacent(b, d)) {
+            if (!R.isAdjacent(b, d)) {
                 cout << "b-d not adj" ;
                 exit(1);
             }
             
-            store_sign(R2, signature_minimal);
+            store_sign(R, signature_minimal);
             
         }
     }
@@ -130,7 +130,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_6regions.size(); i++){
@@ -208,6 +207,36 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                             
                             R2.glue(toGlue);
                             
+                            if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                                cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(inner_b, inner_c) != inner.isAdjacent(b, c)) {
+                                cout << "R2.isAdjacent(inner_b, inner_c) != inner.isAdjacent(b, c)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(inner_c, c) != inner.isAdjacent(c, d)) {
+                                cout << "R2.isAdjacent(inner_c, c) != inner.isAdjacent(c, d)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(c, inner_e) != inner.isAdjacent(d, e)) {
+                                cout << "R2.isAdjacent(c, inner_e) != inner.isAdjacent(d, e)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)) {
+                                cout << "R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(inner_f, a) != inner.isAdjacent(f, a)) {
+                                cout << "R2.isAdjacent(inner_f, a) != inner.isAdjacent(f, a)" << endl;
+                                exit(1);
+                            }
+                            
                             if (!R2.isValid()) {
                                 cout << "inner:";
                                 inner.printRegion();
@@ -260,7 +289,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_5regions.size(); i++){
@@ -277,6 +305,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             int inner_c = R.addNode();
             int inner_e = R.addNode();
             
+            R.addEdge(inner_e, d);
             
             R.addLabelToNode(0, a);
             R.addLabelToNode(1, inner_b);
@@ -288,55 +317,62 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             
             vector<BaseRegion> upper_left = choose_outer_regions(inner.isAdjacent(a, b), regions_3hat_with_edges, regions_3hat_without_ac_edge);
             vector<BaseRegion> upper_right = choose_outer_regions(inner.isAdjacent(c, d), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            vector<BaseRegion> lower_right = choose_outer_regions(inner.isAdjacent(d, e), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            vector<BaseRegion> lower_left = choose_outer_regions(inner.isAdjacent(a, e), regions_3hat_with_edges, regions_3hat_without_ac_edge);
             
             for (vector<BaseRegion>::const_iterator it_upper_left = upper_left.begin(); it_upper_left != upper_left.end(); it_upper_left++) {
                 for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
-                    for (vector<BaseRegion>::const_iterator it_lower_left = lower_left.begin(); it_lower_left != lower_left.end(); it_lower_left++) {
-                        for (vector<BaseRegion>::const_iterator it_lower_right = lower_right.begin(); it_lower_right != lower_right.end(); it_lower_right++) {
-                            
-                            Region R2(R);
-                            
-                            R2.addLabelToNode(0, a);
-                            R2.addLabelToNode(1, b);
-                            R2.addLabelToNode(2, c);
-                            R2.addLabelToNode(3, d);
-                            R2.addLabelToNode(4, inner_b);
-                            R2.addLabelToNode(5, inner_c);
-                            R2.addLabelToNode(6, inner_e);
-                            
-                            vector<BaseRegion*> toGlue;
-                            
-                            BaseRegion upper_left = *it_upper_left;
-                            upper_left.addLabelToNode(0, a);
-                            upper_left.addLabelToNode(1, b);
-                            upper_left.addLabelToNode(4, c);
-                            toGlue.push_back(&upper_left);
-                            
-                            BaseRegion upper_right = *it_upper_right;
-                            upper_right.addLabelToNode(2, a);
-                            upper_right.addLabelToNode(1, b);
-                            upper_right.addLabelToNode(5, c);
-                            toGlue.push_back(&upper_right);
-                            
-                            BaseRegion lower_left = *it_lower_left;
-                            lower_left.addLabelToNode(0, a);
-                            lower_left.addLabelToNode(3, b);
-                            lower_left.addLabelToNode(6, c);
-                            toGlue.push_back(&lower_left);
-                            
-                            BaseRegion lower_right = *it_lower_right;
-                            lower_right.addLabelToNode(2, a);
-                            lower_right.addLabelToNode(3, b);
-                            lower_right.addLabelToNode(6, c);
-                            toGlue.push_back(&lower_right);
-                            
-                            R2.glue(toGlue);
-                            
-                            store_sign(R2, priv_signature_minimal);
-                        }
+                    
+                    Region R2(R);
+                    
+                    R2.addLabelToNode(0, a);
+                    R2.addLabelToNode(1, b);
+                    R2.addLabelToNode(2, c);
+                    R2.addLabelToNode(3, d);
+                    R2.addLabelToNode(4, inner_b);
+                    R2.addLabelToNode(5, inner_c);
+                    R2.addLabelToNode(6, inner_e);
+                    
+                    vector<BaseRegion*> toGlue;
+                    
+                    BaseRegion upper_left = *it_upper_left;
+                    upper_left.addLabelToNode(0, a);
+                    upper_left.addLabelToNode(1, b);
+                    upper_left.addLabelToNode(4, c);
+                    toGlue.push_back(&upper_left);
+                    
+                    BaseRegion upper_right = *it_upper_right;
+                    upper_right.addLabelToNode(2, a);
+                    upper_right.addLabelToNode(1, b);
+                    upper_right.addLabelToNode(5, c);
+                    toGlue.push_back(&upper_right);
+                    
+                    R2.glue(toGlue);
+                    
+                    if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                        cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                        exit(1);
                     }
+                    
+                    if (R2.isAdjacent(inner_b, inner_c) != inner.isAdjacent(b, c)) {
+                        cout << "R2.isAdjacent(inner_b, inner_c) != inner.isAdjacent(b, c)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(inner_c, c) != inner.isAdjacent(c, d)) {
+                        cout << "R2.isAdjacent(inner_c, c) != inner.isAdjacent(c, d)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(c, inner_e) != inner.isAdjacent(d, e)) {
+                        cout << "R2.isAdjacent(c, inner_e) != inner.isAdjacent(d, e)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(inner_e, a) != inner.isAdjacent(e, a)) {
+                        cout << "R2.isAdjacent(inner_e, a) != inner.isAdjacent(e, a)" << endl;
+                        exit(1);
+                    }
+                    
+                    store_sign(R2, priv_signature_minimal);
                 }
             }
             
@@ -369,7 +405,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4regions.size(); i++){
@@ -383,7 +418,8 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             
             int inner_b = R.addNode();
             int inner_d = R.addNode();
-            
+            R.addEdge(inner_b, b);
+            R.addEdge(inner_d, d);
             
             R.addLabelToNode(0, a);
             R.addLabelToNode(1, inner_b);
@@ -392,58 +428,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             
             R.glue(&inner);
             
-            vector<BaseRegion> upper_left = choose_outer_regions(inner.isAdjacent(a, b), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            vector<BaseRegion> upper_right = choose_outer_regions(inner.isAdjacent(b, c), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            vector<BaseRegion> lower_right = choose_outer_regions(inner.isAdjacent(c, d), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            vector<BaseRegion> lower_left = choose_outer_regions(inner.isAdjacent(a, d), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            
-            for (vector<BaseRegion>::const_iterator it_upper_left = upper_left.begin(); it_upper_left != upper_left.end(); it_upper_left++) {
-                for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
-                    for (vector<BaseRegion>::const_iterator it_lower_left = lower_left.begin(); it_lower_left != lower_left.end(); it_lower_left++) {
-                        for (vector<BaseRegion>::const_iterator it_lower_right = lower_right.begin(); it_lower_right != lower_right.end(); it_lower_right++) {
-                            
-                            Region R2(R);
-                            
-                            R2.addLabelToNode(0, a);
-                            R2.addLabelToNode(1, b);
-                            R2.addLabelToNode(2, c);
-                            R2.addLabelToNode(3, d);
-                            R2.addLabelToNode(4, inner_b);
-                            R2.addLabelToNode(5, inner_d);
-                            
-                            vector<BaseRegion*> toGlue;
-                            
-                            BaseRegion upper_left = *it_upper_left;
-                            upper_left.addLabelToNode(0, a);
-                            upper_left.addLabelToNode(1, b);
-                            upper_left.addLabelToNode(4, c);
-                            toGlue.push_back(&upper_left);
-                            
-                            BaseRegion upper_right = *it_upper_right;
-                            upper_right.addLabelToNode(2, a);
-                            upper_right.addLabelToNode(1, b);
-                            upper_right.addLabelToNode(4, c);
-                            toGlue.push_back(&upper_right);
-                            
-                            BaseRegion lower_left = *it_lower_left;
-                            lower_left.addLabelToNode(0, a);
-                            lower_left.addLabelToNode(3, b);
-                            lower_left.addLabelToNode(5, c);
-                            toGlue.push_back(&lower_left);
-                            
-                            BaseRegion lower_right = *it_lower_right;
-                            lower_right.addLabelToNode(2, a);
-                            lower_right.addLabelToNode(3, b);
-                            lower_right.addLabelToNode(5, c);
-                            toGlue.push_back(&lower_right);
-                            
-                            R2.glue(toGlue);
-                            
-                            store_sign(R2, priv_signature_minimal);
-                        }
-                    }
-                }
-            }
+            store_sign(R, priv_signature_minimal);
             
             priv_current++;
             if(priv_current%100 == 0) {
@@ -474,7 +459,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4starregions.size(); i++){
@@ -528,6 +512,26 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                     
                     R2.glue(toGlue);
                     
+                    if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                        cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(inner_b, inner_c) != inner.isAdjacent(b, c)) {
+                        cout << "R2.isAdjacent(inner_b, inner_c) != inner.isAdjacent(b, c)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(inner_c, c) != inner.isAdjacent(c, d)) {
+                        cout << "R2.isAdjacent(inner_c, c) != inner.isAdjacent(c, d)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(a, c) != inner.isAdjacent(a, d)) {
+                        cout << "R2.isAdjacent(a, c) != inner.isAdjacent(a, d)" << endl;
+                        exit(1);
+                    }
+                    
                     store_sign(R2, priv_signature_minimal);
                 }
             }
@@ -560,7 +564,6 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_3regions.size(); i++){
@@ -572,6 +575,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             Region R(4,a,c);
             
             int inner_b = R.addNode();
+            R.addEdge(inner_b, b);
             
             
             R.addLabelToNode(0, a);
@@ -580,39 +584,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             
             R.glue(&inner);
             
-            vector<BaseRegion> upper_left = choose_outer_regions(inner.isAdjacent(a, b), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            vector<BaseRegion> upper_right = choose_outer_regions(inner.isAdjacent(b, c), regions_3hat_with_edges, regions_3hat_without_ac_edge);
-            
-            for (vector<BaseRegion>::const_iterator it_upper_left = upper_left.begin(); it_upper_left != upper_left.end(); it_upper_left++) {
-                for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
-                    
-                    Region R2(R);
-                    
-                    R2.addLabelToNode(0, a);
-                    R2.addLabelToNode(1, b);
-                    R2.addLabelToNode(2, c);
-                    R2.addLabelToNode(3, d);
-                    R2.addLabelToNode(4, inner_b);
-                    
-                    vector<BaseRegion*> toGlue;
-                    
-                    BaseRegion upper_left = *it_upper_left;
-                    upper_left.addLabelToNode(0, a);
-                    upper_left.addLabelToNode(1, b);
-                    upper_left.addLabelToNode(4, c);
-                    toGlue.push_back(&upper_left);
-                    
-                    BaseRegion upper_right = *it_upper_right;
-                    upper_right.addLabelToNode(2, a);
-                    upper_right.addLabelToNode(1, b);
-                    upper_right.addLabelToNode(4, c);
-                    toGlue.push_back(&upper_right);
-                    
-                    R2.glue(toGlue);
-                    
-                    store_sign(R2, priv_signature_minimal);
-                }
-            }
+            store_sign(R, priv_signature_minimal);
             
             priv_current++;
             if(priv_current%100 == 0) {

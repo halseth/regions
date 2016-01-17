@@ -51,131 +51,63 @@ void generate_from_inner2(map<vector<int>,BaseRegion> &signature_minimal,
                           ) {
     
     cout << "Starting from inner 2-regions" << endl;
-    
-    int current = 0;
-    unsigned long mmax = inner_2regions.size();
-    
-#pragma omp parallel
-    {
-        map<vector<int>,BaseRegion> priv_signature_minimal;
-        int priv_current = 0;
-        int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
+    for (int i = 0; i < inner_2regions.size(); i++) {
         
-#pragma omp for schedule(dynamic) nowait
-        for (int i = 0; i < inner_2regions.size(); i++) {
-            
-            BaseRegion inner = inner_2regions[i];
-            inner.addLabelToNode(0, a);
-            inner.addLabelToNode(1, b);
-            
-            Region R(6,a,d);
-            
-            R.addLabelToNode(0, a);
-            R.addLabelToNode(1, d);
-            
-            R.glue(&inner);
-            
-            store_sign(R, priv_signature_minimal);
-            
-            priv_current++;
-            if(priv_current%100 == 0) {
-#pragma omp critical
-                {
-                    current+=100;
-                    std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
-                }
-            }
-        }
+        BaseRegion inner = inner_2regions[i];
+        inner.addLabelToNode(0, a);
+        inner.addLabelToNode(1, b);
         
-#pragma omp critical
-        {
-            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
-            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
-                BaseRegion R = it->second;
-                store_sign(R, signature_minimal);
-            }
-        }
+        Region R(6,a,d);
         
-    } // parallel over
+        R.addLabelToNode(0, a);
+        R.addLabelToNode(1, d);
+        
+        R.glue(&inner);
+        
+        store_sign(R, signature_minimal);
+    }
     cout << "Done with inner 2-regions." << endl;
-    
 }
 
 void generate_from_inner3(map<vector<int>,BaseRegion> &signature_minimal,
-                              const vector<BaseRegion> &inner_3regions,
-                              const vector<BaseRegion> &outer_3regions_with_edge,
-                              const vector<BaseRegion> &outer_4regions_with_edge,
-                              const vector<BaseRegion> &outer_3regions_without_edge,
-                              const vector<BaseRegion> &outer_4regions_without_edge
+                          const vector<BaseRegion> &inner_3regions,
+                          const vector<BaseRegion> &outer_3regions_with_edge,
+                          const vector<BaseRegion> &outer_3regions_without_edge,
+                          const vector<BaseRegion> &outer_4regions_with_edge,
+                          const vector<BaseRegion> &outer_4regions_without_edge
                               ) {
     
     cout << "Starting from inner 3-regions" << endl;
-    
-    int current = 0;
-    unsigned long mmax = inner_3regions.size();
-    
-#pragma omp parallel
-    {
-        map<vector<int>,BaseRegion> priv_signature_minimal;
-        int priv_current = 0;
-        int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
+    for (int i = 0; i < inner_3regions.size(); i++) {
         
-#pragma omp for schedule(dynamic) nowait
-        for (int i = 0; i < inner_3regions.size(); i++) {
+        BaseRegion inner = inner_3regions[i];
+        inner.addLabelToNode(0, a);
+        inner.addLabelToNode(1, b);
+        inner.addLabelToNode(2, c);
+        
+        Region R(6,a,d);
+        
+        int inner_b = R.addNode();
+        
+        R.addLabelToNode(0, a);
+        R.addLabelToNode(1, inner_b);
+        R.addLabelToNode(2, d);
+        
+        R.glue(&inner);
+        
+        for (int up_edges = 1; up_edges <= 0b11; up_edges++) {
+            Region R2(R);
             
-            BaseRegion inner = inner_3regions[i];
-            inner.addLabelToNode(0, a);
-            inner.addLabelToNode(1, b);
-            inner.addLabelToNode(2, c);
-            
-            Region R(6,a,d);
-            
-            int inner_b = R.addNode();
-            
-            
-            R.addLabelToNode(0, a);
-            R.addLabelToNode(1, inner_b);
-            R.addLabelToNode(2, d);
-            
-            R.glue(&inner);
-            
-            for (int up_edges = 1; up_edges <= 0b11; up_edges++) {
-                Region R2(R);
-                
-                if ((up_edges & 0b10) != 0) {
-                    R2.addEdge(inner_b, b);
-                }
-                if ((up_edges & 0b01) != 0) {
-                    R2.addEdge(inner_b, c);
-                }
-                
-                store_sign(R2, priv_signature_minimal);
-                
+            if ((up_edges & 0b10) != 0) {
+                R2.addEdge(inner_b, b);
+            }
+            if ((up_edges & 0b01) != 0) {
+                R2.addEdge(inner_b, c);
             }
             
-            
-            priv_current++;
-            if(priv_current%100 == 0) {
-#pragma omp critical
-                {
-                    current+=100;
-                    std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
-                }
-            }
+            store_sign(R2, signature_minimal);
         }
-        
-#pragma omp critical
-        {
-            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
-            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
-                BaseRegion R = it->second;
-                store_sign(R, signature_minimal);
-            }
-        }
-        
-    } // parallel over
+    }
     cout << "Done with inner 3-regions." << endl;
     
 }
@@ -183,8 +115,8 @@ void generate_from_inner3(map<vector<int>,BaseRegion> &signature_minimal,
 void generate_from_inner4(map<vector<int>,BaseRegion> &signature_minimal,
                           const vector<BaseRegion> &inner_4regions,
                           const vector<BaseRegion> &outer_3regions_with_edge,
-                          const vector<BaseRegion> &outer_4regions_with_edge,
                           const vector<BaseRegion> &outer_3regions_without_edge,
+                          const vector<BaseRegion> &outer_4regions_with_edge,
                           const vector<BaseRegion> &outer_4regions_without_edge
                           ) {
     
@@ -198,7 +130,6 @@ void generate_from_inner4(map<vector<int>,BaseRegion> &signature_minimal,
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4regions.size(); i++) {
@@ -271,14 +202,13 @@ void generate_from_inner4(map<vector<int>,BaseRegion> &signature_minimal,
 void generate_from_inner4star(map<vector<int>,BaseRegion> &signature_minimal,
                           const vector<BaseRegion> &inner_4starregions,
                           const vector<BaseRegion> &outer_3regions_with_edge,
-                          const vector<BaseRegion> &outer_4regions_with_edge,
                           const vector<BaseRegion> &outer_3regions_without_edge,
-                              const vector<BaseRegion> &outer_4regions_without_edge,
-                          int upper_left_size,
+                          const vector<BaseRegion> &outer_4regions_with_edge,
+                          const vector<BaseRegion> &outer_4regions_without_edge,
                           int upper_right_size
                           ) {
     
-    cout << "Starting from inner 4star-regions. Outer: " << upper_left_size << "-"<< upper_right_size << endl;
+    cout << "Starting from inner 4star-regions. Outer: " << 3 << "-"<< upper_right_size << endl;
     
     int current = 0;
     unsigned long mmax = inner_4starregions.size();
@@ -288,7 +218,6 @@ void generate_from_inner4star(map<vector<int>,BaseRegion> &signature_minimal,
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_4starregions.size(); i++) {
@@ -312,64 +241,82 @@ void generate_from_inner4star(map<vector<int>,BaseRegion> &signature_minimal,
             
             R.glue(&inner);
             
-            vector<BaseRegion> upper_left = choose_outer_regions(upper_left_size, inner.isAdjacent(a, b), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
+            vector<BaseRegion> upper_left = choose_outer_regions(inner.isAdjacent(a, b), outer_3regions_with_edge, outer_3regions_without_edge);
             vector<BaseRegion> upper_right = choose_outer_regions(upper_right_size, inner.isAdjacent(c, d), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
             
             for (vector<BaseRegion>::const_iterator it_upper_left = upper_left.begin(); it_upper_left != upper_left.end(); it_upper_left++) {
                 for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
+                    Region R2(R);
                     
-                    int max_between_edge_up = upper_left_size == 3 && upper_right_size == 3 ? 2 : 0;
-                    for (int between_edge_up = 0; between_edge_up <= max_between_edge_up; between_edge_up++) {
-                        Region R2(R);
-                        
-                        if (between_edge_up == 1) {
-                            R2.addEdge(b, inner_c);
-                        }
-                        if(between_edge_up == 2) {
-                            R2.addEdge(c, inner_b);
-                        }
-                        
-                        R2.addLabelToNode(0, a);
-                        R2.addLabelToNode(1, b);
-                        R2.addLabelToNode(2, c);
-                        R2.addLabelToNode(3, d);
-                        R2.addLabelToNode(4, e);
-                        R2.addLabelToNode(5, f);
-                        R2.addLabelToNode(6, inner_b);
-                        R2.addLabelToNode(7, inner_c);
-                        
-                        vector<BaseRegion*> toGlue;
-                        
-                        BaseRegion upper_left = *it_upper_left;
-                        if (upper_left_size == 3) {
-                            upper_left.addLabelToNode(0, a);
-                            upper_left.addLabelToNode(1, b);
-                            upper_left.addLabelToNode(6, c);
-                        } else {
-                            cout << "errro. upper left should be 3" << endl;
-                            exit(1);
-                        }
-                        toGlue.push_back(&upper_left);
-                        
-                        BaseRegion upper_right = *it_upper_right;
-                        if (upper_right_size == 3) {
-                            upper_right.addLabelToNode(3, a);
-                            upper_right.addLabelToNode(2, b);
-                            upper_right.addLabelToNode(7, c);
-                        } else {
-                            upper_right.addLabelToNode(3, a);
-                            upper_right.addLabelToNode(2, b);
-                            upper_right.addLabelToNode(1, c);
-                            upper_right.addLabelToNode(7, d);
-                        }
-                        
-                        toGlue.push_back(&upper_right);
-                        
-                        R2.glue(toGlue);
-                        
-                        store_sign(R2, priv_signature_minimal);
+                    R2.addLabelToNode(0, a);
+                    R2.addLabelToNode(1, b);
+                    R2.addLabelToNode(2, c);
+                    R2.addLabelToNode(3, d);
+                    R2.addLabelToNode(4, e);
+                    R2.addLabelToNode(5, f);
+                    R2.addLabelToNode(6, inner_b);
+                    R2.addLabelToNode(7, inner_c);
+                    
+                    vector<BaseRegion*> toGlue;
+                    
+                    BaseRegion upper_left = *it_upper_left;
+                    upper_left.addLabelToNode(0, a);
+                    upper_left.addLabelToNode(1, b);
+                    upper_left.addLabelToNode(6, c);
+                    toGlue.push_back(&upper_left);
+                    
+                    BaseRegion upper_right = *it_upper_right;
+                    if (upper_right_size == 3) {
+                        upper_right.addLabelToNode(3, a);
+                        upper_right.addLabelToNode(2, b);
+                        upper_right.addLabelToNode(7, c);
+                    } else {
+                        upper_right.addLabelToNode(3, a);
+                        upper_right.addLabelToNode(2, b);
+                        upper_right.addLabelToNode(1, c);
+                        upper_right.addLabelToNode(7, d);
                     }
                     
+                    toGlue.push_back(&upper_right);
+                    
+                    R2.glue(toGlue);
+                    
+                    if (!R2.isAdjacent(inner_b, b)) {
+                        cout << "b-inner_b not adj" << endl;
+                        exit(1);
+                    }
+                    
+                    if (upper_right_size == 4 && !R2.isAdjacent(inner_c, b)) {
+                        cout << "b-inner_c not adj" << endl;
+                        exit(1);
+                    }
+                    
+                    if (upper_right_size == 3 && !R2.isAdjacent(inner_c, c)) {
+                        cout << "c-inner_c not adj" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                        cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)) {
+                        cout << "R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)) {
+                        cout << "R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)" << endl;
+                        exit(1);
+                    }
+                    
+                    if (R2.isAdjacent(a, d) != inner.isAdjacent(a, d)) {
+                        cout << "R2.isAdjacent(a, d) != inner.isAdjacent(a, d)" << endl;
+                        exit(1);
+                    }
+                    
+                    store_sign(R2, priv_signature_minimal);
                 }
             }
             
@@ -394,21 +341,20 @@ void generate_from_inner4star(map<vector<int>,BaseRegion> &signature_minimal,
         }
         
     } // parallel over
-    cout << "Done with inner 4star-regions. Outer: " << upper_left_size << "-"<< upper_right_size << endl;
+    cout << "Done with inner 4star-regions. Outer: " << 3 << "-"<< upper_right_size << endl;
     
 }
 
 void generate_from_inner5(map<vector<int>,BaseRegion> &signature_minimal,
-                             const vector<BaseRegion> &inner_5regions,
-                             const vector<BaseRegion> &outer_3regions_with_edge,
-                             const vector<BaseRegion> &outer_4regions_with_edge,
-                             const vector<BaseRegion> &outer_3regions_without_edge,
+                          const vector<BaseRegion> &inner_5regions,
+                          const vector<BaseRegion> &outer_3regions_with_edge,
+                          const vector<BaseRegion> &outer_3regions_without_edge,
+                          const vector<BaseRegion> &outer_4regions_with_edge,
                           const vector<BaseRegion> &outer_4regions_without_edge,
-                          int upper_left_size,
                           int upper_right_size
                              ) {
     
-    cout << "Starting from inner 5-regions. Outer: " << upper_left_size << "-"<< upper_right_size << endl;
+    cout << "Starting from inner 5-regions. Outer: " << 3 << "-"<< upper_right_size << endl;
     
     int current = 0;
     unsigned long mmax = inner_5regions.size();
@@ -418,7 +364,6 @@ void generate_from_inner5(map<vector<int>,BaseRegion> &signature_minimal,
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_5regions.size(); i++) {
@@ -445,7 +390,7 @@ void generate_from_inner5(map<vector<int>,BaseRegion> &signature_minimal,
             
             R.glue(&inner);
             
-            vector<BaseRegion> upper_left = choose_outer_regions(upper_left_size, inner.isAdjacent(a, b), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
+            vector<BaseRegion> upper_left = choose_outer_regions(inner.isAdjacent(a, b), outer_3regions_with_edge, outer_3regions_without_edge);
             vector<BaseRegion> upper_right = choose_outer_regions(upper_right_size, inner.isAdjacent(c, d), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
             
             for (vector<BaseRegion>::const_iterator it_upper_left = upper_left.begin(); it_upper_left != upper_left.end(); it_upper_left++) {
@@ -453,65 +398,91 @@ void generate_from_inner5(map<vector<int>,BaseRegion> &signature_minimal,
                     
                     for (int down_edges = 1; down_edges <= 0b11; down_edges++) {
                         
-                        int max_between_edge_up = upper_left_size == 3 && upper_right_size == 3 ? 2 : 0;
-                        for (int between_edge_up = 0; between_edge_up <= max_between_edge_up; between_edge_up++) {
-                            Region R2(R);
-                            
-                            if (between_edge_up == 1) {
-                                R2.addEdge(b, inner_c);
-                            }
-                            if(between_edge_up == 2) {
-                                R2.addEdge(c, inner_b);
-                            }
-                            
-                            if ((down_edges & 0b10) != 0) {
-                                R2.addEdge(inner_e, e);
-                            }
-                            if ((down_edges & 0b01) != 0) {
-                                R2.addEdge(inner_e, f);
-                            }
-                            
-                            R2.addLabelToNode(0, a);
-                            R2.addLabelToNode(1, b);
-                            R2.addLabelToNode(2, c);
-                            R2.addLabelToNode(3, d);
-                            R2.addLabelToNode(4, e);
-                            R2.addLabelToNode(5, f);
-                            R2.addLabelToNode(6, inner_b);
-                            R2.addLabelToNode(7, inner_c);
-                            R2.addLabelToNode(8, inner_e);
-                            
-                            vector<BaseRegion*> toGlue;
-                            
-                            BaseRegion upper_left = *it_upper_left;
-                            if (upper_left_size == 3) {
-                                upper_left.addLabelToNode(0, a);
-                                upper_left.addLabelToNode(1, b);
-                                upper_left.addLabelToNode(6, c);
-                            } else {
-                                cout << "errro. upper left should be 3" << endl;
-                                exit(1);
-                            }
-                            toGlue.push_back(&upper_left);
-                            
-                            BaseRegion upper_right = *it_upper_right;
-                            if (upper_right_size == 3) {
-                                upper_right.addLabelToNode(3, a);
-                                upper_right.addLabelToNode(2, b);
-                                upper_right.addLabelToNode(7, c);
-                            } else {
-                                upper_right.addLabelToNode(3, a);
-                                upper_right.addLabelToNode(2, b);
-                                upper_right.addLabelToNode(1, c);
-                                upper_right.addLabelToNode(7, d);
-                            }
-                            
-                            toGlue.push_back(&upper_right);
-                            
-                            R2.glue(toGlue);
-                            
-                            store_sign(R2, priv_signature_minimal);
+                        Region R2(R);
+                        
+                        if ((down_edges & 0b10) != 0) {
+                            R2.addEdge(inner_e, e);
                         }
+                        if ((down_edges & 0b01) != 0) {
+                            R2.addEdge(inner_e, f);
+                        }
+                        
+                        R2.addLabelToNode(0, a);
+                        R2.addLabelToNode(1, b);
+                        R2.addLabelToNode(2, c);
+                        R2.addLabelToNode(3, d);
+                        R2.addLabelToNode(4, e);
+                        R2.addLabelToNode(5, f);
+                        R2.addLabelToNode(6, inner_b);
+                        R2.addLabelToNode(7, inner_c);
+                        R2.addLabelToNode(8, inner_e);
+                        
+                        vector<BaseRegion*> toGlue;
+                        
+                        BaseRegion upper_left = *it_upper_left;
+                        upper_left.addLabelToNode(0, a);
+                        upper_left.addLabelToNode(1, b);
+                        upper_left.addLabelToNode(6, c);
+                        toGlue.push_back(&upper_left);
+                        
+                        BaseRegion upper_right = *it_upper_right;
+                        if (upper_right_size == 3) {
+                            upper_right.addLabelToNode(3, a);
+                            upper_right.addLabelToNode(2, b);
+                            upper_right.addLabelToNode(7, c);
+                        } else {
+                            upper_right.addLabelToNode(3, a);
+                            upper_right.addLabelToNode(2, b);
+                            upper_right.addLabelToNode(1, c);
+                            upper_right.addLabelToNode(7, d);
+                        }
+                        
+                        toGlue.push_back(&upper_right);
+                        
+                        R2.glue(toGlue);
+                        
+                        if (!R2.isAdjacent(inner_b, b)) {
+                            cout << "b-inner_b not adj" << endl;
+                            exit(1);
+                        }
+                        
+                        if (upper_right_size == 4 && !R2.isAdjacent(inner_c, b)) {
+                            cout << "b-inner_c not adj" << endl;
+                            exit(1);
+                        }
+                        
+                        if (upper_right_size == 3 && !R2.isAdjacent(inner_c, c)) {
+                            cout << "c-inner_c not adj" << endl;
+                            exit(1);
+                        }
+                        
+                        if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                            cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                            exit(1);
+                        }
+                        
+                        if (R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)) {
+                            cout << "R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)" << endl;
+                            exit(1);
+                        }
+                        
+                        if (R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)) {
+                            cout << "R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)" << endl;
+                            exit(1);
+                        }
+                        
+                        if (R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)) {
+                            cout << "R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)" << endl;
+                            exit(1);
+                        }
+                        
+                        if (R2.isAdjacent(a, inner_e) != inner.isAdjacent(a, e)) {
+                            cout << "R2.isAdjacent(a, inner_e) != inner.isAdjacent(a, e)" << endl;
+                            exit(1);
+                        }
+                        
+                        store_sign(R2, priv_signature_minimal);
+                        
                     }
                 }
             }
@@ -544,16 +515,15 @@ void generate_from_inner5(map<vector<int>,BaseRegion> &signature_minimal,
 void generate_from_inner6(map<vector<int>,BaseRegion> &signature_minimal,
                           const vector<BaseRegion> &inner_6regions,
                           const vector<BaseRegion> &outer_3regions_with_edge,
-                          const vector<BaseRegion> &outer_4regions_with_edge,
                           const vector<BaseRegion> &outer_3regions_without_edge,
+                          const vector<BaseRegion> &outer_4regions_with_edge,
                           const vector<BaseRegion> &outer_4regions_without_edge,
-                          int upper_left_size,
                           int upper_right_size,
                           int lower_left_size,
                           int lower_right_size
                                ) {
     
-    cout << "Starting generate_from_inner6. Outer: " << upper_left_size << "-"<< upper_right_size<<"-"<< lower_left_size<< "-"<< lower_right_size << endl;
+    cout << "Starting generate_from_inner6. Outer: " << 3 << "-"<< upper_right_size<<"-"<< lower_left_size<< "-"<< lower_right_size << endl;
     
     int current = 0;
     unsigned long mmax = inner_6regions.size();
@@ -565,7 +535,6 @@ void generate_from_inner6(map<vector<int>,BaseRegion> &signature_minimal,
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < inner_6regions.size(); i++) {
@@ -596,95 +565,144 @@ void generate_from_inner6(map<vector<int>,BaseRegion> &signature_minimal,
             
             R.glue(&inner);
             
-            vector<BaseRegion> upper_left = choose_outer_regions(upper_left_size, inner.isAdjacent(a, b), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
+            vector<BaseRegion> upper_left = choose_outer_regions(inner.isAdjacent(a, b), outer_3regions_with_edge, outer_3regions_without_edge);
             vector<BaseRegion> upper_right = choose_outer_regions(upper_right_size, inner.isAdjacent(c, d), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
             
             vector<BaseRegion> lower_right = choose_outer_regions(lower_right_size, inner.isAdjacent(d, e), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
             vector<BaseRegion> lower_left = choose_outer_regions(lower_left_size, inner.isAdjacent(a, f), outer_3regions_with_edge, outer_3regions_without_edge, outer_4regions_with_edge, outer_4regions_without_edge);
             
-            unsigned long itss = upper_left.size() * upper_right.size() * lower_right.size() * lower_left.size();
-            
-            cout << "Thread " << tid << ": Going to do " << itss << " iterations" << endl;
-            
-            unsigned long done_its = 0;
-            
             for (vector<BaseRegion>::const_iterator it_upper_left = upper_left.begin(); it_upper_left != upper_left.end(); it_upper_left++) {
                 for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
                     for (vector<BaseRegion>::const_iterator it_lower_left = lower_left.begin(); it_lower_left != lower_left.end(); it_lower_left++) {
                         for (vector<BaseRegion>::const_iterator it_lower_right = lower_right.begin(); it_lower_right != lower_right.end(); it_lower_right++) {
-                                    Region R2(R);
+                            Region R2(R);
                             
-                                    
-                                    R2.addLabelToNode(0, a);
-                                    R2.addLabelToNode(1, b);
-                                    R2.addLabelToNode(2, c);
-                                    R2.addLabelToNode(3, d);
-                                    R2.addLabelToNode(4, e);
-                                    R2.addLabelToNode(5, f);
-                                    R2.addLabelToNode(6, inner_b);
-                                    R2.addLabelToNode(7, inner_c);
-                                    R2.addLabelToNode(8, inner_e);
-                                    R2.addLabelToNode(9, inner_f);
-                                    
-                                    vector<BaseRegion*> toGlue;
-                                    
-                                    BaseRegion upper_left = *it_upper_left;
-                                    if (upper_left_size == 3) {
-                                        upper_left.addLabelToNode(0, a);
-                                        upper_left.addLabelToNode(1, b);
-                                        upper_left.addLabelToNode(6, c);
-                                    } else {
-                                        cout << "assume always 3" << endl;
-                                        exit(0);
-                                    }
-                                    toGlue.push_back(&upper_left);
-                                    
-                                    BaseRegion upper_right = *it_upper_right;
-                                    if (upper_right_size == 3) {
-                                        upper_right.addLabelToNode(3, a);
-                                        upper_right.addLabelToNode(2, b);
-                                        upper_right.addLabelToNode(7, c);
-                                    } else {
-                                        upper_right.addLabelToNode(3, a);
-                                        upper_right.addLabelToNode(2, b);
-                                        upper_right.addLabelToNode(1, c);
-                                        upper_right.addLabelToNode(7, d);
-                                    }
-                                    toGlue.push_back(&upper_right);
-                                    
-                                    BaseRegion lower_left = *it_lower_left;
-                                    if (lower_left_size == 3) {
-                                        lower_left.addLabelToNode(0, a);
-                                        lower_left.addLabelToNode(5, b);
-                                        lower_left.addLabelToNode(9, c);
-                                    } else {
-                                        lower_left.addLabelToNode(0, a);
-                                        lower_left.addLabelToNode(5, b);
-                                        lower_left.addLabelToNode(4, c);
-                                        lower_left.addLabelToNode(9, d);
-                                    }
-                                    toGlue.push_back(&lower_left);
-                                    
-                                    BaseRegion lower_right = *it_lower_right;
-                                    if (lower_right_size == 3) {
-                                        lower_right.addLabelToNode(3, a);
-                                        lower_right.addLabelToNode(4, b);
-                                        lower_right.addLabelToNode(8, c);
-                                    } else {
-                                        lower_right.addLabelToNode(3, a);
-                                        lower_right.addLabelToNode(4, b);
-                                        lower_right.addLabelToNode(5, c);
-                                        lower_right.addLabelToNode(8, d);
-                                    }
-                                    toGlue.push_back(&lower_right);
-                                    
-                                    R2.glue(toGlue);
-                                    
-                                    store_sign(R2, priv_signature_minimal);
-                            done_its++;
-                            if (done_its % 10000 == 0) {
-                                cout << "____________Thread " << tid << " done " << done_its << " of " << itss << " iterations" << endl;
+                            R2.addLabelToNode(0, a);
+                            R2.addLabelToNode(1, b);
+                            R2.addLabelToNode(2, c);
+                            R2.addLabelToNode(3, d);
+                            R2.addLabelToNode(4, e);
+                            R2.addLabelToNode(5, f);
+                            R2.addLabelToNode(6, inner_b);
+                            R2.addLabelToNode(7, inner_c);
+                            R2.addLabelToNode(8, inner_e);
+                            R2.addLabelToNode(9, inner_f);
+                            
+                            vector<BaseRegion*> toGlue;
+                            
+                            BaseRegion upper_left = *it_upper_left;
+                            upper_left.addLabelToNode(0, a);
+                            upper_left.addLabelToNode(1, b);
+                            upper_left.addLabelToNode(6, c);
+                            toGlue.push_back(&upper_left);
+                            
+                            BaseRegion upper_right = *it_upper_right;
+                            if (upper_right_size == 3) {
+                                upper_right.addLabelToNode(3, a);
+                                upper_right.addLabelToNode(2, b);
+                                upper_right.addLabelToNode(7, c);
+                            } else {
+                                upper_right.addLabelToNode(3, a);
+                                upper_right.addLabelToNode(2, b);
+                                upper_right.addLabelToNode(1, c);
+                                upper_right.addLabelToNode(7, d);
                             }
+                            toGlue.push_back(&upper_right);
+                            
+                            BaseRegion lower_left = *it_lower_left;
+                            if (lower_left_size == 3) {
+                                lower_left.addLabelToNode(0, a);
+                                lower_left.addLabelToNode(5, b);
+                                lower_left.addLabelToNode(9, c);
+                            } else {
+                                lower_left.addLabelToNode(0, a);
+                                lower_left.addLabelToNode(5, b);
+                                lower_left.addLabelToNode(4, c);
+                                lower_left.addLabelToNode(9, d);
+                            }
+                            toGlue.push_back(&lower_left);
+                            
+                            BaseRegion lower_right = *it_lower_right;
+                            if (lower_right_size == 3) {
+                                lower_right.addLabelToNode(3, a);
+                                lower_right.addLabelToNode(4, b);
+                                lower_right.addLabelToNode(8, c);
+                            } else {
+                                lower_right.addLabelToNode(3, a);
+                                lower_right.addLabelToNode(4, b);
+                                lower_right.addLabelToNode(5, c);
+                                lower_right.addLabelToNode(8, d);
+                            }
+                            toGlue.push_back(&lower_right);
+                            
+                            R2.glue(toGlue);
+                            
+                            if (!R2.isAdjacent(inner_b, b)) {
+                                cout << "b-inner_b not adj" << endl;
+                                exit(1);
+                            }
+                            
+                            if (upper_right_size == 4 && !R2.isAdjacent(inner_c, b)) {
+                                cout << "b-inner_c not adj" << endl;
+                                exit(1);
+                            }
+                            
+                            if (upper_right_size == 3 && !R2.isAdjacent(inner_c, c)) {
+                                cout << "c-inner_c not adj" << endl;
+                                exit(1);
+                            }
+                            
+                            if (lower_left_size == 3 && !R2.isAdjacent(inner_f, f)) {
+                                cout << "f-inner_f not adj" << endl;
+                                exit(1);
+                            }
+                            
+                            if (lower_left_size == 4 && !R2.isAdjacent(inner_f, e)) {
+                                cout << "e-inner_f not adj" << endl;
+                                exit(1);
+                            }
+                            
+                            if (lower_right_size == 3 && !R2.isAdjacent(inner_e, e)) {
+                                cout << "e-inner_e not adj" << endl;
+                                exit(1);
+                            }
+                            
+                            if (lower_right_size == 4 && !R2.isAdjacent(inner_e, f)) {
+                                cout << "f-inner_e not adj" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                                cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)) {
+                                cout << "R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)) {
+                                cout << "R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)) {
+                                cout << "R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)) {
+                                cout << "R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)" << endl;
+                                exit(1);
+                            }
+                            
+                            if (R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)) {
+                                cout << "R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)" << endl;
+                                exit(1);
+                            }
+                            
+                            store_sign(R2, priv_signature_minimal);
                         }
                     }
                 }
@@ -710,7 +728,7 @@ void generate_from_inner6(map<vector<int>,BaseRegion> &signature_minimal,
         }
         
     } // parallel over
-    cout << "Done with inner non-empty 6-regions. Outer: 3-4-4-3" << endl;
+    cout << "Done with generate_from_inner6. Outer: " << 3 << "-"<< upper_right_size<<"-"<< lower_left_size<< "-"<< lower_right_size << endl;
     
 }
 
@@ -723,9 +741,9 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          const vector<BaseRegion> &inner_5regions,
                          const vector<BaseRegion> &inner_6regions,
                          const vector<BaseRegion> &outer_non_dom_3regions_with_edge,
-                         const vector<BaseRegion> &outer_non_dom_4regions_with_edge,
                          const vector<BaseRegion> &outer_non_dom_3regions_without_edge,
-                                  const vector<BaseRegion> &outer_non_dom_4regions_without_edge
+                         const vector<BaseRegion> &outer_non_dom_4regions_with_edge,
+                         const vector<BaseRegion> &outer_non_dom_4regions_without_edge
                          ) {
     
     if(inner_4starregions.empty() || inner_4regions.empty() || inner_5regions.empty() || inner_6regions.empty() || inner_2regions.empty() || inner_3regions.empty()
@@ -736,32 +754,91 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
     
     int num = 0;
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner6(signature_minimal, inner_6regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 4, 4, 3);
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         4, 4, 3);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner6(signature_minimal, inner_6regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 4, 3, 4);
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         4, 3, 4);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner6(signature_minimal, inner_6regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 4, 3, 3);
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         4, 3, 3);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner6(signature_minimal, inner_6regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 3, 3, 3);
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         3, 3, 3);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner5(signature_minimal, inner_5regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 4);
+    generate_from_inner5(signature_minimal,
+                         inner_5regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         4);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner5(signature_minimal, inner_5regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 3);
+    generate_from_inner5(signature_minimal,
+                         inner_5regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         3);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner4(signature_minimal, inner_4regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge);
+    generate_from_inner4(signature_minimal,
+                         inner_4regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner4star(signature_minimal, inner_4starregions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 4);
+    generate_from_inner4star(signature_minimal,
+                             inner_4starregions, 
+                             outer_non_dom_3regions_with_edge,
+                             outer_non_dom_3regions_without_edge,
+                             outer_non_dom_4regions_with_edge,
+                             outer_non_dom_4regions_without_edge, 
+                             4);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner4star(signature_minimal, inner_4starregions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge, 3, 3);
+    generate_from_inner4star(signature_minimal,
+                             inner_4starregions, 
+                             outer_non_dom_3regions_with_edge,
+                             outer_non_dom_3regions_without_edge,
+                             outer_non_dom_4regions_with_edge,
+                             outer_non_dom_4regions_without_edge, 
+                             3);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner3(signature_minimal, inner_3regions, outer_non_dom_3regions_with_edge, outer_non_dom_4regions_with_edge, outer_non_dom_3regions_without_edge, outer_non_dom_4regions_without_edge);
+    generate_from_inner3(signature_minimal,
+                         inner_3regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner2(signature_minimal, inner_2regions);
+    generate_from_inner2(signature_minimal,
+                         inner_2regions);
     cout << "Checkpoint " << num++ << endl;
     
 }
@@ -774,46 +851,105 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                                   const vector<BaseRegion> &empty_inner_5regions,
                                   const vector<BaseRegion> &empty_inner_6regions,
                                   const vector<BaseRegion> &outer_general_3regions_with_edge,
-                                  const vector<BaseRegion> &outer_general_4regions_with_edge,
                                   const vector<BaseRegion> &outer_general_3regions_without_edge,
-                                        const vector<BaseRegion> &outer_general_4regions_without_edge,
-                                        const vector<BaseRegion> &outer_non_dom_3regions_with_edge,
-                                        const vector<BaseRegion> &outer_non_dom_4regions_with_edge,
-                                        const vector<BaseRegion> &outer_non_dom_3regions_without_edge,
-                                        const vector<BaseRegion> &outer_non_dom_4regions_without_edge
+                                  const vector<BaseRegion> &outer_general_4regions_with_edge,
+                                  const vector<BaseRegion> &outer_general_4regions_without_edge
                                   ) {
     cout << "Starting generate_6regions_from_empty_inner" << endl;
     
     if(empty_inner_4starregions.empty() || empty_inner_4regions.empty() || empty_inner_5regions.empty() || empty_inner_6regions.empty() || empty_inner_2regions.empty() || empty_inner_3regions.empty()
-       || outer_general_3regions_with_edge.empty() || outer_general_4regions_with_edge.empty() | outer_general_3regions_without_edge.empty() || outer_general_4regions_without_edge.empty() ){
+       || outer_general_3regions_with_edge.empty() || outer_general_4regions_with_edge.empty() | outer_general_3regions_without_edge.empty() || outer_general_4regions_without_edge.empty()
+       ){
         cerr << "needed regions empty" << endl;
         exit(1);
     }
     
     int num = 0;
-    generate_from_inner6(signature_minimal, empty_inner_6regions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge, 3, 4, 4, 3);
+    generate_from_inner6(signature_minimal, 
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         4, 4, 3);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner6(signature_minimal, empty_inner_6regions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge, 3, 4, 3, 4);
+    generate_from_inner6(signature_minimal,
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         4, 3, 4);
+    cout << "Checkpoint " << num++ << endl;
+    generate_from_inner6(signature_minimal,
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         4, 3, 3);
+    cout << "Checkpoint " << num++ << endl;
+    generate_from_inner6(signature_minimal,
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         3, 3, 3);
     cout << "Checkpoint " << num++ << endl;
     
-    // TODO: Make empty outers
-    generate_from_inner5(signature_minimal, empty_inner_5regions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge, 3, 4);
+    generate_from_inner5(signature_minimal,
+                         empty_inner_5regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         4);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner5(signature_minimal, empty_inner_5regions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge, 3, 3);
+    generate_from_inner5(signature_minimal,
+                         empty_inner_5regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         3);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner4(signature_minimal, empty_inner_4regions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge);
+    generate_from_inner4(signature_minimal,
+                         empty_inner_4regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner4star(signature_minimal, empty_inner_4starregions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge, 3, 4);
+    generate_from_inner4star(signature_minimal,
+                             empty_inner_4starregions, 
+                             outer_general_3regions_with_edge,
+                             outer_general_3regions_without_edge,
+                             outer_general_4regions_with_edge,
+                             outer_general_4regions_without_edge, 
+                             4);
     cout << "Checkpoint " << num++ << endl;
-    generate_from_inner4star(signature_minimal, empty_inner_4starregions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge, 3, 3);
+    generate_from_inner4star(signature_minimal,
+                             empty_inner_4starregions, 
+                             outer_general_3regions_with_edge,
+                             outer_general_3regions_without_edge,
+                             outer_general_4regions_with_edge,
+                             outer_general_4regions_without_edge, 
+                             3);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner3(signature_minimal, empty_inner_3regions, outer_general_3regions_with_edge, outer_general_4regions_with_edge, outer_general_3regions_without_edge, outer_general_4regions_without_edge);
+    generate_from_inner3(signature_minimal,
+                         empty_inner_3regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge);
     cout << "Checkpoint " << num++ << endl;
     
-    generate_from_inner2(signature_minimal, empty_inner_2regions);
+    generate_from_inner2(signature_minimal,
+                         empty_inner_2regions);
     cout << "Checkpoint " << num++ << endl;
     
 }
@@ -843,7 +979,6 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < regions_5hat_with_edges.size(); i++) {
@@ -873,6 +1008,11 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                 toGlue.push_back(&right3);
                 
                 R2.glue(toGlue);
+                
+                if (!R2.isAdjacent(c, e)) {
+                    cout << "c-e not adj" << endl;
+                    exit(1);
+                }
                 
                 store_sign(R2, priv_signature_minimal);
             }
@@ -938,6 +1078,11 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                 toGlue.push_back(&right4);
                 
                 R2.glue(toGlue);
+                
+                if (!R2.isAdjacent(b, e)) {
+                    cout << "b-e not adj" << endl;
+                    exit(1);
+                }
                 
                 store_sign(R2, priv_signature_minimal);
             }
@@ -1006,8 +1151,20 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                 
                 R2.glue(toGlue);
                 
+                if (!R2.isAdjacent(node, b)) {
+                    cout << "b-node not adj" << endl;
+                    exit(1);
+                }
                 
-                store_sign_if_valid(R2, priv_signature_minimal);
+                if (!R2.isAdjacent(node, e)) {
+                    cout << "e-node not adj" << endl;
+                    exit(1);
+                }
+                
+                if (R2.isValid()) {
+                    store_sign(R2, priv_signature_minimal);
+                }
+                
             }
             priv_current++;
             if(priv_current%100 == 0) {
@@ -1068,13 +1225,25 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                 BaseRegion right4 = regions_4hat_with_edges[j];
                 right4.addLabelToNode(3, a);
                 right4.addLabelToNode(4, b);
-                right4.addLabelToNode(5, c);
+                right4.addLabelToNode(6, c);
                 right4.addLabelToNode(2, d);
                 toGlue.push_back(&right4);
                 
                 R2.glue(toGlue);
                 
-                store_sign_if_valid(R2, priv_signature_minimal);
+                if (!R2.isAdjacent(node, c)) {
+                    cout << "c-node not adj" << endl;
+                    exit(1);
+                }
+                
+                if (!R2.isAdjacent(node, e)) {
+                    cout << "e-node not adj" << endl;
+                    exit(1);
+                }
+                
+                if (R2.isValid()) {
+                    store_sign(R2, priv_signature_minimal);
+                }
             }
             
             priv_current++;
@@ -1115,14 +1284,14 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
                        const vector<BaseRegion> &empty_inner_5regions,
                        const vector<BaseRegion> &empty_inner_6regions,
                        const vector<BaseRegion> &regions_3hat_with_edges,
+                       const vector<BaseRegion> &regions_3hat_without_ac_edge,
                        const vector<BaseRegion> &regions_4hat_with_edges,
+                       const vector<BaseRegion> &regions_4hat_without_ad_edge,
                        const vector<BaseRegion> &regions_5hat_with_edges,
                        const vector<BaseRegion> &regions_6hat_with_edges,
-                       const vector<BaseRegion> &regions_3hat_without_ac_edge,
-                       const vector<BaseRegion> &regions_4hat_without_ad_edge,
                        const vector<BaseRegion> &non_dom_regions_3hat_with_edges,
-                       const vector<BaseRegion> &non_dom_regions_4hat_with_edges,
                        const vector<BaseRegion> &non_dom_regions_3hat_without_ac_edge,
+                       const vector<BaseRegion> &non_dom_regions_4hat_with_edges,
                        const vector<BaseRegion> &non_dom_regions_4hat_without_ad_edge
                        ) {
     
@@ -1135,15 +1304,41 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
     
     if(inner_2regions.empty() || inner_3regions.empty() || inner_4regions.empty() || inner_4starregions.empty() || inner_5regions.empty() || inner_6regions.empty()
        || empty_inner_2regions.empty() || empty_inner_3regions.empty() || empty_inner_4regions.empty() || empty_inner_4starregions.empty() || empty_inner_5regions.empty() || empty_inner_6regions.empty()
-       || regions_3hat_with_edges.empty() || regions_4hat_with_edges.empty() || regions_3hat_without_ac_edge.empty() || regions_4hat_without_ad_edge.empty()
+       || regions_3hat_with_edges.empty() || regions_4hat_with_edges.empty() || regions_3hat_without_ac_edge.empty() || regions_4hat_without_ad_edge.empty() || regions_5hat_with_edges.empty() || regions_6hat_with_edges.empty()
        || non_dom_regions_3hat_with_edges.empty() || non_dom_regions_4hat_with_edges.empty() || non_dom_regions_3hat_without_ac_edge.empty() || non_dom_regions_4hat_without_ad_edge.empty()){
         cerr << "needed regions empty" << endl;
         exit(1);
     }
     
-    generate_6regions_with_no_inner(signature_minimal, regions_3hat_with_edges, regions_4hat_with_edges, regions_5hat_with_edges, regions_6hat_with_edges);
-    generate_6regions_from_empty_inner(signature_minimal, empty_inner_2regions, empty_inner_3regions, empty_inner_4regions, empty_inner_4starregions, empty_inner_5regions, empty_inner_6regions, regions_3hat_with_edges, regions_4hat_with_edges, regions_3hat_without_ac_edge, regions_4hat_without_ad_edge, non_dom_regions_3hat_with_edges, non_dom_regions_4hat_with_edges, non_dom_regions_3hat_without_ac_edge, non_dom_regions_4hat_without_ad_edge);
-    generate_6regions_from_nonempty_inner(signature_minimal, inner_2regions, inner_3regions, inner_4regions, inner_4starregions, inner_5regions, inner_6regions, non_dom_regions_3hat_with_edges, non_dom_regions_4hat_with_edges, non_dom_regions_3hat_without_ac_edge, non_dom_regions_4hat_without_ad_edge);
+    generate_6regions_with_no_inner(signature_minimal,
+                                    regions_3hat_with_edges, 
+                                    regions_4hat_with_edges, 
+                                    regions_5hat_with_edges, 
+                                    regions_6hat_with_edges);
+    
+    generate_6regions_from_empty_inner(signature_minimal,
+                                       empty_inner_2regions, 
+                                       empty_inner_3regions, 
+                                       empty_inner_4regions, 
+                                       empty_inner_4starregions, 
+                                       empty_inner_5regions, 
+                                       empty_inner_6regions, 
+                                       regions_3hat_with_edges,
+                                       regions_3hat_without_ac_edge,
+                                       regions_4hat_with_edges,
+                                       regions_4hat_without_ad_edge);
+    
+    generate_6regions_from_nonempty_inner(signature_minimal,
+                                          inner_2regions, 
+                                          inner_3regions, 
+                                          inner_4regions, 
+                                          inner_4starregions, 
+                                          inner_5regions, 
+                                          inner_6regions, 
+                                          non_dom_regions_3hat_with_edges,
+                                          non_dom_regions_3hat_without_ac_edge,
+                                          non_dom_regions_4hat_with_edges,
+                                          non_dom_regions_4hat_without_ad_edge);
     
     // Symmetries
     cout << "Finding symmetries"<< endl;

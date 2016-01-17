@@ -23,6 +23,11 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     
     cout << "Starting generate_3hat_regions with ac_edge: " << with_ac_edge << endl;
     
+    if(!signature_minimal.empty()){
+        cerr << "signminimal not empty";
+        exit(1);
+    }
+    
     // 5 is the max number of internal nodes
     HatRegion R(3,a);
     if (!with_ac_edge) {
@@ -39,17 +44,27 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
             if(node == -1) node = nn;
         }
         
-        for (int internal_edges = 0; internal_edges <= ((1 << num_internal_nodes) - 1); internal_edges++) {
+        int max_internal_edges = 0;
+        // calculate set of edges among internal nodes
+        for (int i = 0; i < num_internal_nodes; i++) {
+            for (int j = i+1; j < num_internal_nodes; j++) {
+                max_internal_edges = (max_internal_edges << 1) + 1;
+            }
+        }
+        
+        for (int internal_edges = 0; internal_edges <= max_internal_edges; internal_edges++) {
             HatRegion R2(R1);
             
-            if (num_internal_nodes > 1) {
-                for (int i = 0; i < num_internal_nodes; i++) {
-                    if ( (internal_edges & (1 << i)) != 0 ) {
-                        R2.addEdge(node+i, node + ( (i+1) % num_internal_nodes) );
+            // Add edges between internal nodes
+            int edge = 1;
+            for (int i = 0; i < num_internal_nodes; i++) {
+                for (int j = i+1; j < num_internal_nodes; j++) {
+                    if ( (internal_edges & edge) != 0 ) {
+                        R.addEdge(node+i, node+j);
                     }
+                    edge = edge << 1;
                 }
             }
-            
             
             // Edges from boundary nodes to internal nodes
             int max_to_internal_edges = (1 << num_internal_nodes) -1;
@@ -97,6 +112,16 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                            ){
     cout << "Starting generate_4hat_regions with_bc_edge: " << with_bc_edge << ", with_ad_edge: " << with_ad_edge << endl;
     
+    if(!signature_minimal.empty()){
+        cerr << "signminimal not empty";
+        exit(1);
+    }
+    
+    if(regions_3hat_with_edge.empty() || regions_3hat_without_edge.empty() || inner_2regions.empty() || inner_3regions.empty() ||  inner_4regions.empty() ){
+        cerr << "needed regions empty" << endl;
+        exit(1);
+    }
+    
     HatRegion R(4,a);
     
     if (!with_ad_edge) {
@@ -111,7 +136,7 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     
     for (vector<BaseRegion>::const_iterator it_lower = lower.begin(); it_lower != lower.end(); it_lower++) {
         HatRegion R2(R);
-        R2.addEdge(b, d);
+        
         R2.addLabelToNode(0, a);
         R2.addLabelToNode(1, b);
         R2.addLabelToNode(2, d);
@@ -123,6 +148,16 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         R2.glue(&lower_left);
         
+        if (!R2.isAdjacent(b, d)) {
+            cout << "ERROR: bd not adj";
+            exit(1);
+        }
+        
+        if (R2.isAdjacent(a, d) != R.isAdjacent(a, d)) {
+            cout << "ERROR: R2.isAdjacent(a, d) != R.isAdjacent(a, d)";
+            exit(1);
+        }
+        
         store_sign(R2, signature_minimal);
         
     }
@@ -133,36 +168,52 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     
     for (vector<BaseRegion>::const_iterator it_lower = lower.begin(); it_lower != lower.end(); it_lower++) {
         for (vector<BaseRegion>::const_iterator it_upper = upper.begin(); it_upper != upper.end(); it_upper++) {
-            HatRegion R2(R);
-            int node = R2.addNode();
-            
-            R2.addLabelToNode(0, a);
-            R2.addLabelToNode(1, b);
-            R2.addLabelToNode(2, node);
-            R2.addLabelToNode(3, d);
-            
-            vector<BaseRegion*> toGlue;
-            
-            BaseRegion upper_left = *it_upper;
-            upper_left.addLabelToNode(0, a);
-            upper_left.addLabelToNode(1, b);
-            upper_left.addLabelToNode(2, c);
-            toGlue.push_back(&upper_left);
-            
-            BaseRegion lower_left = *it_lower;
-            lower_left.addLabelToNode(0, a);
-            lower_left.addLabelToNode(2, b);
-            lower_left.addLabelToNode(3, c);
-            toGlue.push_back(&lower_left);
-            
-            if (!lower_left.isAdjacent(b, c)) {
-                cout << "b c not adjacent"<< endl;
-                exit(1);
+            for (int node_c_edge = 0; node_c_edge <= 1; node_c_edge++) {
+                HatRegion R2(R);
+                int node = R2.addNode();
+                
+                if (node_c_edge) {
+                    R2.addEdge(node, c);
+                }
+                
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, node);
+                R2.addLabelToNode(3, d);
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion upper_left = *it_upper;
+                upper_left.addLabelToNode(0, a);
+                upper_left.addLabelToNode(1, b);
+                upper_left.addLabelToNode(2, c);
+                toGlue.push_back(&upper_left);
+                
+                BaseRegion lower_left = *it_lower;
+                lower_left.addLabelToNode(0, a);
+                lower_left.addLabelToNode(2, b);
+                lower_left.addLabelToNode(3, c);
+                toGlue.push_back(&lower_left);
+                
+                if (!lower_left.isAdjacent(b, c)) {
+                    cout << "b c not adjacent"<< endl;
+                    exit(1);
+                }
+                
+                R2.glue(toGlue);
+                
+                if (!R2.isAdjacent(a, node)) {
+                    cout << "ERROR: a-node not adj";
+                    exit(1);
+                }
+                
+                if (R2.isAdjacent(a, d) != R.isAdjacent(a, d)) {
+                    cout << "ERROR: R2.isAdjacent(a, d) != R.isAdjacent(a, d)";
+                    exit(1);
+                }
+                
+                store_sign(R2, signature_minimal);
             }
-            
-            R2.glue(toGlue);
-            
-            store_sign(R2, signature_minimal);
         }
     }
     
@@ -227,6 +278,11 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                     exit(1);
                 }
                 
+                if (!R3.isAdjacent(inner_b, b)) {
+                    cout << "inner_b b not adj" << endl;
+                    exit(1);
+                }
+                
                 if (R3.isAdjacent(a, d) != R.isAdjacent(a, d)) {
                     cout << "ERROR: a and d adjacent" << endl;
                     exit(1);
@@ -276,6 +332,11 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
             upper_left.addLabelToNode(2, c);
             
             R3.glue(&upper_left);
+            
+            if (!R3.isAdjacent(inner_b, b)) {
+                cout << "inner_b b not adj" << endl;
+                exit(1);
+            }
             
             store_sign(R3, signature_minimal);
         }
@@ -328,6 +389,11 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                 exit(1);
             }
             
+            if (!R3.isAdjacent(inner_d, d)) {
+                cout << "inner_d d not adj" << endl;
+                exit(1);
+            }
+            
             store_sign(R3, signature_minimal);
         }
         
@@ -347,7 +413,12 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         R2.glue(&inner);
         
-        store_sign_if_valid(R2, signature_minimal);
+        // Check if hat region
+        if (!R2.isValid()) {
+            continue;
+        }
+        
+        store_sign(R2, signature_minimal);
     }
 
     
@@ -362,6 +433,17 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                            const vector<BaseRegion> &regions_4hat_without_bc_ad_edges,
                            bool with_de_edge
                            ){
+    cout << "Starting generate_5hat_regions with_de_edge: " << with_de_edge << endl;
+    
+    if(!signature_minimal.empty()){
+        cerr << "signminimal not empty";
+        exit(1);
+    }
+    
+    if(regions_3hat_with_edge.empty() || regions_3hat_without_ac_edge.empty() || regions_4hat_with_edges.empty() || regions_4hat_without_bc_edge.empty() ||  regions_4hat_without_ad_edge.empty() || regions_4hat_without_bc_ad_edges.empty() ){
+        cerr << "needed regions empty" << endl;
+        exit(1);
+    }
     
     HatRegion R(5,a);
     if (!with_de_edge) {
@@ -392,7 +474,7 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
             R2.glue(&upper4);
             
             // Lower part is 3 region
-            vector<BaseRegion> lower = choose_outer_regions(R2.isAdjacent(a, e), regions_3hat_with_edge, regions_3hat_without_ac_edge);
+            vector<BaseRegion> lower = regions_3hat_with_edge;
             for (vector<BaseRegion>::const_iterator it_lower = lower.begin(); it_lower != lower.end(); it_lower++) {
                 HatRegion R3(R2);
                 R3.addLabelToNode(0, a);
@@ -405,17 +487,8 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                 lower3.addLabelToNode(2, c);
                 
                 R3.glue(&lower3);
-                
-                for (int ce_edge = 0; ce_edge <= 1; ce_edge++) {
                     
-                    HatRegion R4(R3);
-                    
-                    if (ce_edge) {
-                        R4.addEdge(c, e);
-                    }
-                    
-                    store_sign(R4, signature_minimal);
-                }
+                store_sign(R3, signature_minimal);
             }
             
             // Lower part is 4 region
@@ -438,14 +511,11 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                 store_sign(R3, signature_minimal);
             }
         }
-        
-        
     }
     
     cout << "a-c noose" << endl;
     for (int edge = 0; edge <= 1; edge++) {
         vector<BaseRegion> upper = choose_outer_regions(edge, regions_3hat_with_edge, regions_3hat_without_ac_edge);
-        
         
         vector<BaseRegion> lower_without_edge = choose_outer_regions(R.isAdjacent(e, d), regions_4hat_without_ad_edge, regions_4hat_without_bc_ad_edges);
         vector<BaseRegion> lower_with_edge = choose_outer_regions(R.isAdjacent(e, d), regions_4hat_with_edges, regions_4hat_without_bc_edge);
@@ -459,8 +529,7 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                 R2.addLabelToNode(1, b);
                 R2.addLabelToNode(2, c);
                 R2.addLabelToNode(3, d);
-                R2.addLabelToNode(e, e);
-                
+                R2.addLabelToNode(4, e);
                 
                 vector<BaseRegion*> toGlue;
                 
@@ -481,12 +550,12 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                 
                 // sanity checks
                 if (R2.isAdjacent(a, c) != edge) {
-                    cout << "no1" << endl;
+                    cout << "R2.isAdjacent(a, c) != edge" << endl;
                     exit(1);
                 }
                 
                 if (R2.isAdjacent(d, e) != R.isAdjacent(d, e)) {
-                    cout << "no2" << endl;
+                    cout << "R2.isAdjacent(d, e) != R.isAdjacent(d, e)" << endl;
                     exit(1);
                 }
                 
@@ -511,6 +580,11 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         R2.glue(&left);
         
+        if (!R2.isAdjacent(b, e)) {
+            cout << "b-e not adj" << endl;
+            exit(1);
+        }
+        
         store_sign(R2, signature_minimal);
         
     }
@@ -532,12 +606,42 @@ void generate_5hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         R2.glue(&left4);
         
+        if (!R2.isAdjacent(b, d)) {
+            cout << "b-d not adj" << endl;
+            exit(1);
+        }
+        
+        if (R2.isAdjacent(e, d) != R.isAdjacent(e, d)) {
+            cout << "R2.isAdjacent(e, d) != R.isAdjacent(e, d)" << endl;
+            exit(1);
+        }
+        
         store_sign(R2, signature_minimal);
     }
     
-    
-    
-    
+    cout << "ce edge" << endl;
+    for (vector<BaseRegion>::const_iterator it_left = regions_4hat_with_edges.begin(); it_left != regions_4hat_with_edges.end(); it_left++) {
+        HatRegion R2(R);
+        R2.addLabelToNode(0, a);
+        R2.addLabelToNode(1, b);
+        R2.addLabelToNode(2, c);
+        R2.addLabelToNode(3, e);
+        
+        BaseRegion left4 = *it_left;
+        left4.addLabelToNode(0, a);
+        left4.addLabelToNode(1, b);
+        left4.addLabelToNode(2, c);
+        left4.addLabelToNode(3, d);
+        
+        R2.glue(&left4);
+        
+        if (!R2.isAdjacent(c, e)) {
+            cout << "c-e not adj" << endl;
+            exit(1);
+        }
+        
+        store_sign(R2, signature_minimal);
+    }
 }
 
 void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
@@ -549,6 +653,17 @@ void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                            ){
 
     cout << "Starting generate_6hat_regions"<< endl;
+    
+    if(!signature_minimal.empty()){
+        cerr << "signminimal not empty";
+        exit(1);
+    }
+    
+    if(regions_3hat_with_edges.empty() || regions_4hat_with_edges.empty() || regions_4hat_without_ad_edge.empty() || regions_5hat_with_edges.empty() ||  regions_5hat_without_de_edge.empty() ){
+        cerr << "needed regions empty" << endl;
+        exit(1);
+    }
+    
     HatRegion R(6,a);
     
     
@@ -570,6 +685,37 @@ void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         R2.glue(&left5);
         
+        if (!R2.isAdjacent(c, e)) {
+            cout << "c-e not adj" << endl;
+            exit(1);
+        }
+        
+        store_sign(R2, signature_minimal);
+    }
+    
+    cout << "b-d edge" << endl;
+    for (vector<BaseRegion>::const_iterator it_left = regions_5hat_with_edges.begin(); it_left != regions_5hat_with_edges.end(); it_left++) {
+        HatRegion R2(R);
+        R2.addLabelToNode(0, a);
+        R2.addLabelToNode(1, b);
+        R2.addLabelToNode(2, d);
+        R2.addLabelToNode(3, e);
+        R2.addLabelToNode(4, f);
+        
+        BaseRegion left5 = *it_left;
+        left5.addLabelToNode(0, a);
+        left5.addLabelToNode(1, b);
+        left5.addLabelToNode(2, c);
+        left5.addLabelToNode(3, d);
+        left5.addLabelToNode(4, e);
+        
+        R2.glue(&left5);
+        
+        if (!R2.isAdjacent(b, d)) {
+            cout << "b-d not adj" << endl;
+            exit(1);
+        }
+        
         store_sign(R2, signature_minimal);
     }
     
@@ -589,6 +735,11 @@ void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         R2.glue(&left4);
         
+        if (!R2.isAdjacent(b, e)) {
+            cout << "b-e not adj" << endl;
+            exit(1);
+        }
+        
         store_sign(R2, signature_minimal);
     }
     
@@ -606,128 +757,180 @@ void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         R2.glue(&left3);
         
+        if (!R2.isAdjacent(b, f)) {
+            cout << "b-f not adj" << endl;
+            exit(1);
+        }
+        
         store_sign(R2, signature_minimal);
     }
     
     cout << "a-d noose" << endl;
     
+    for (int ad_edge = 0; ad_edge <= 1; ad_edge++) {
+        cout << "ad edge = " << ad_edge << endl;
+        
+        vector<BaseRegion> upper = choose_outer_regions(ad_edge, regions_4hat_with_edges, regions_4hat_without_ad_edge);
+        vector<BaseRegion> lower = choose_outer_regions(ad_edge, regions_4hat_with_edges, regions_4hat_without_ad_edge);
+        
 #pragma omp parallel
-    {
-        map<vector<int>,BaseRegion> priv_signature_minimal;
-        int priv_current = 0;
-        int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
-        
-#pragma omp for schedule(dynamic) nowait
-        for (int i = 0; i < regions_4hat_without_ad_edge.size(); i++){
-            for (int j = 0; j < regions_5hat_without_de_edge.size(); j++) {
-                HatRegion R2(R);
-                R2.addLabelToNode(0, a);
-                R2.addLabelToNode(1, b);
-                R2.addLabelToNode(2, c);
-                R2.addLabelToNode(3, d);
-                R2.addLabelToNode(4, e);
-                R2.addLabelToNode(5, f);
-                
-                vector<BaseRegion*> toGlue;
-                
-                BaseRegion upper = regions_4hat_without_ad_edge[i];
-                upper.addLabelToNode(0, a);
-                upper.addLabelToNode(1, b);
-                upper.addLabelToNode(2, c);
-                upper.addLabelToNode(3, d);
-                toGlue.push_back(&upper);
-                
-                BaseRegion lower = regions_5hat_without_de_edge[j];
-                lower.addLabelToNode(0, a);
-                lower.addLabelToNode(5, b);
-                lower.addLabelToNode(4, c);
-                lower.addLabelToNode(3, d);
-                toGlue.push_back(&lower);
-                
-                R2.glue(toGlue);
-                
-                store_sign(R2, priv_signature_minimal);
-            }
-        }
-        
-#pragma omp critical
         {
-            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
-            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
-                BaseRegion R = it->second;
-                store_sign(R, signature_minimal);
+            map<vector<int>,BaseRegion> priv_signature_minimal;
+            int tid = THREAD_ID;
+            
+#pragma omp for schedule(dynamic) nowait
+            for (int i = 0; i < upper.size(); i++){
+                for (int j = 0; j < lower.size(); j++) {
+                    HatRegion R2(R);
+                    R2.addLabelToNode(0, a);
+                    R2.addLabelToNode(1, b);
+                    R2.addLabelToNode(2, c);
+                    R2.addLabelToNode(3, d);
+                    R2.addLabelToNode(4, e);
+                    R2.addLabelToNode(5, f);
+                    
+                    vector<BaseRegion*> toGlue;
+                    
+                    BaseRegion upper4 = upper[i];
+                    upper4.addLabelToNode(0, a);
+                    upper4.addLabelToNode(1, b);
+                    upper4.addLabelToNode(2, c);
+                    upper4.addLabelToNode(3, d);
+                    toGlue.push_back(&upper4);
+                    
+                    BaseRegion lower4 = lower[j];
+                    lower4.addLabelToNode(0, a);
+                    lower4.addLabelToNode(5, b);
+                    lower4.addLabelToNode(4, c);
+                    lower4.addLabelToNode(3, d);
+                    toGlue.push_back(&lower4);
+                    
+                    R2.glue(toGlue);
+                    
+                    if (R2.isAdjacent(a, d) != ad_edge) {
+                        cout << "R2.isAdjacent(a, d) != ad_edge" << endl;
+                        exit(1);
+                    }
+                    
+                    store_sign(R2, priv_signature_minimal);
+                }
             }
-        }
-    } // parallel over
+            
+#pragma omp critical
+            {
+                cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+                for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                    BaseRegion R = it->second;
+                    store_sign(R, signature_minimal);
+                }
+            }
+        } // parallel over
+    }
+
     
     cout << "a-d node" << endl;
+    for (int node_d_edge = 0; node_d_edge <= 1; node_d_edge++) {
+        cout << "node_d_edge = " << node_d_edge << endl;
+        
+        vector<BaseRegion> upper = choose_outer_regions(node_d_edge, regions_5hat_with_edges, regions_5hat_without_de_edge);
+        vector<BaseRegion> lower = choose_outer_regions(node_d_edge, regions_5hat_with_edges, regions_5hat_without_de_edge);
+        
 #pragma omp parallel
-    {
-        map<vector<int>,BaseRegion> priv_signature_minimal;
-        int priv_current = 0;
-        int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
-        
-#pragma omp for schedule(dynamic) nowait
-        for (int i = 0; i < regions_5hat_without_de_edge.size(); i++){
-            for (int j = 0; j < regions_5hat_without_de_edge.size(); j++) {
-                HatRegion R2(R);
-                int node = R2.addNode();
-                R2.addLabelToNode(0, a);
-                R2.addLabelToNode(1, b);
-                R2.addLabelToNode(2, c);
-                R2.addLabelToNode(3, d);
-                R2.addLabelToNode(4, e);
-                R2.addLabelToNode(5, f);
-                R2.addLabelToNode(6, node);
-                
-                
-                vector<BaseRegion*> toGlue;
-                
-                BaseRegion upper = regions_5hat_without_de_edge[i];
-                upper.addLabelToNode(0, a);
-                upper.addLabelToNode(1, b);
-                upper.addLabelToNode(2, c);
-                upper.addLabelToNode(3, d);
-                upper.addLabelToNode(6, e);
-                toGlue.push_back(&upper);
-                
-                BaseRegion lower = regions_5hat_without_de_edge[j];
-                lower.addLabelToNode(0, a);
-                lower.addLabelToNode(5, b);
-                lower.addLabelToNode(4, c);
-                lower.addLabelToNode(3, d);
-                lower.addLabelToNode(6, e);
-                toGlue.push_back(&lower);
-                
-                R2.glue(toGlue);
-                
-                //sanity checks
-                if (!R2.isAdjacent(a, node)) {
-                    cout << "a-node not adj" << endl;
-                    exit(1);
-                }
-                if (R2.isAdjacent(node, d)) {
-                    cout << "node-d adj" << endl;
-                    upper.printRegion();
-                    lower.printRegion();
-                    R2.printRegion();
-                    exit(1);
-                }
-                
-                store_sign(R2, priv_signature_minimal);
-            }
-        }
-        
-#pragma omp critical
         {
-            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
-            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
-                BaseRegion R = it->second;
-                store_sign(R, signature_minimal);
+            map<vector<int>,BaseRegion> priv_signature_minimal;
+            int tid = THREAD_ID;
+            
+#pragma omp for schedule(dynamic) nowait
+            for (int i = 0; i < upper.size(); i++){
+                for (int j = 0; j < lower.size(); j++) {
+                    HatRegion R2(R);
+                    int node = R2.addNode();
+                    R2.addLabelToNode(0, a);
+                    R2.addLabelToNode(1, b);
+                    R2.addLabelToNode(2, c);
+                    R2.addLabelToNode(3, d);
+                    R2.addLabelToNode(4, e);
+                    R2.addLabelToNode(5, f);
+                    R2.addLabelToNode(6, node);
+                    
+                    vector<BaseRegion*> toGlue;
+                    
+                    BaseRegion upper5 = upper[i];
+                    upper5.addLabelToNode(0, a);
+                    upper5.addLabelToNode(1, b);
+                    upper5.addLabelToNode(2, c);
+                    upper5.addLabelToNode(3, d);
+                    upper5.addLabelToNode(6, e);
+                    toGlue.push_back(&upper5);
+                    
+                    BaseRegion lower5 = lower[j];
+                    lower5.addLabelToNode(0, a);
+                    lower5.addLabelToNode(5, b);
+                    lower5.addLabelToNode(4, c);
+                    lower5.addLabelToNode(3, d);
+                    lower5.addLabelToNode(6, e);
+                    toGlue.push_back(&lower5);
+                    
+                    R2.glue(toGlue);
+                    
+                    //sanity checks
+                    if (!R2.isAdjacent(a, node)) {
+                        cout << "a-node not adj" << endl;
+                        exit(1);
+                    }
+                    if (R2.isAdjacent(node, d) != node_d_edge) {
+                        cout << "R2.isAdjacent(node, d) != node_d_edge" << endl;
+                        upper5.printRegion();
+                        lower5.printRegion();
+                        R2.printRegion();
+                        exit(1);
+                    }
+                    
+                    store_sign(R2, priv_signature_minimal);
+                }
             }
+            
+#pragma omp critical
+            {
+                cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+                for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                    BaseRegion R = it->second;
+                    store_sign(R, signature_minimal);
+                }
+            }
+        }// parallel over
+        
+    }
+    
+    // Symmetries
+    cout << "Finding symmetries"<< endl;
+    
+    // Flip around horisontal
+    cout << "Around horistontal" << endl;
+    
+    vector<BaseRegion> regs;
+    for(map<vector<int>,BaseRegion >::const_iterator it = signature_minimal.begin(); it != signature_minimal.end(); it++){
+        regs.push_back(it->second);
+    }
+    
+    for (int i = 0; i < regs.size(); i++) {
+        
+        BaseRegion sym(6);
+        for (int j = 0; j < sym.getSize(); j++) {
+            sym.removeEdge(j, (j+1)%sym.getSize());
         }
-    }// parallel over
+        BaseRegion reg = regs[i];
+        sym.addLabelToNode(0, a); reg.addLabelToNode(0, a);
+        sym.addLabelToNode(1, b); reg.addLabelToNode(1, f);
+        sym.addLabelToNode(2, c); reg.addLabelToNode(2, e);
+        sym.addLabelToNode(3, d); reg.addLabelToNode(3, d);
+        sym.addLabelToNode(4, e); reg.addLabelToNode(4, c);
+        sym.addLabelToNode(5, f); reg.addLabelToNode(5, b);
+        
+        sym.glue(&reg);
+        
+        store_sign(sym, signature_minimal);
+    }
+
     cout << "Done generate_6hat_regions"<< endl;
 }

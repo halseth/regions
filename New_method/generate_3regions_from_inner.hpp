@@ -24,8 +24,8 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                   const vector<BaseRegion> &inner_2regions,
                                   const vector<BaseRegion> &inner_3regions,
                                   const vector<BaseRegion> &inner_4starregions,
-                                  const vector<BaseRegion> &outer_general_3regions_with_edge,
-                                  const vector<BaseRegion> &outer_general_3regions_without_edge,
+                                  const vector<BaseRegion> &regions_3hat_with_edges,
+                                  const vector<BaseRegion> &regions_3hat_without_ac_edge,
                                   bool with_edge);
 
 #endif /* generate_3regions_from_inner_hpp */
