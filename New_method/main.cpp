@@ -18,7 +18,6 @@ using namespace std;
 
 #include "enumerate_inner.hpp"
 #include "enumerate_outer.hpp"
-#include "generate_from_inner.hpp"
 
 #include "store_region_map.h"
 #include "store_sign.h"
@@ -29,13 +28,12 @@ using namespace std;
 #include "generate_4regions_from_inner.hpp"
 #include "generate_4starregions_from_inner.hpp"
 #include "generate_5regions_from_inner.hpp"
+#include "generate_6regions_from_inner.hpp"
 
 const int a = 0;
 const int b = 1;
 const int c = 2;
 const int d = 3;
-const int e = 4;
-const int f = 5;
 
 
 int main(){
@@ -294,7 +292,8 @@ int main(){
                                  regions_3hat_with_edges_vec, 
                                  regions_3hat_without_ac_edge_vec, 
                                  regions_4hat_with_edges_vec, 
-                                 regions_4hat_without_ad_edge_vec, 
+                                 regions_4hat_without_ad_edge_vec,
+                                 regions_5hat_with_edges_vec,
                                  outer_non_dom_3regions_with_edge,
                                  outer_non_dom_3regions_without_edge,
                                  outer_non_dom_4regions_with_edge,
@@ -329,7 +328,8 @@ int main(){
                       outer_non_dom_3regions_with_edge,
                       outer_non_dom_3regions_without_edge,
                       outer_non_dom_4regions_with_edge,
-                      outer_non_dom_4regions_without_edge);
+                      outer_non_dom_4regions_without_edge,
+                      regions_5_with_edges_vec);
     store_region_map(regions_6_with_edges_map, "6regions.txt");
     vector<BaseRegion> regions_6_with_edges_vec;
 //    load_region_vector(regions_6_with_edges_vec, "6regions.txt");

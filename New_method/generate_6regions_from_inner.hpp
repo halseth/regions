@@ -1,13 +1,13 @@
 //
-//  generate_from_inner.hpp
+//  generate_6regions_from_inner.hpp
 //  New_method
 //
 //  Created by Johan Torås Halseth on 05/12/15.
 //  Copyright © 2015 Johan Torås Halseth. All rights reserved.
 //
 
-#ifndef generate_from_inner_hpp
-#define generate_from_inner_hpp
+#ifndef generate_6regions_from_inner_hpp
+#define generate_6regions_from_inner_hpp
 
 #include <vector>
 #include <map>
@@ -19,17 +19,6 @@ using namespace std;
 #include "BaseRegion.h"
 #include "Region.h"
 #include "store_sign.h"
-
-vector<BaseRegion> choose_outer_regions(bool edge,
-                                        const vector<BaseRegion> &regions_with_edge,
-                                        const vector<BaseRegion> &regions_without_edge
-                                        );
-vector<BaseRegion> choose_outer_regions(int size, bool edge,
-                                        const vector<BaseRegion> &outer_3regions_with_edge,
-                                        const vector<BaseRegion> &outer_3regions_without_edge,
-                                        const vector<BaseRegion> &outer_4regions_with_edge,
-                                        const vector<BaseRegion> &outer_4regions_without_edge
-                                        );
 
 void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
                        const vector<BaseRegion> &inner_2regions,
@@ -53,7 +42,7 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
                        const vector<BaseRegion> &non_dom_regions_3hat_with_edges,
                        const vector<BaseRegion> &non_dom_regions_3hat_without_ac_edge,
                        const vector<BaseRegion> &non_dom_regions_4hat_with_edges,
-                       const vector<BaseRegion> &non_dom_regions_4hat_without_ad_edge
-                       );
+                       const vector<BaseRegion> &non_dom_regions_4hat_without_ad_edge,
+                       const vector<BaseRegion> &regions_5);
 
 #endif /* generate_from_inner_hpp */

@@ -42,9 +42,7 @@ void generate_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int en
     {
         map<vector<int>, BaseRegion> priv_sign_minimal;
         int priv_current = 0;
-        int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
-        
+        int tid = THREAD_ID;        
         
 #pragma omp for schedule(dynamic) nowait
         for (int boundary_neighbors = 0; boundary_neighbors <= edges; boundary_neighbors++) {

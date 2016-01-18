@@ -8,7 +8,8 @@
 
 
 #include "parallization.h"
-#include "generate_from_inner.hpp"
+#include "generate_6regions_from_inner.hpp"
+#include "choose_regions.hpp"
 #include <stdlib.h>
 
 
@@ -18,33 +19,6 @@ const int c = 2;
 const int d = 3;
 const int e = 4;
 const int f = 5;
-
-
-vector<BaseRegion> choose_outer_regions(int size, bool edge,
-                                        const vector<BaseRegion> &outer_3regions_with_edge,
-                                        const vector<BaseRegion> &outer_3regions_without_edge,
-                                        const vector<BaseRegion> &outer_4regions_with_edge,
-                                        const vector<BaseRegion> &outer_4regions_without_edge
-                                        ){
-    if (size == 3) {
-        if (edge) return outer_3regions_with_edge;
-        else return outer_3regions_without_edge;
-    } else if (size == 4) {
-        if (edge) return outer_4regions_with_edge;
-        else return outer_4regions_without_edge;
-    } else {
-        cout << "Ivalid size: " << size << endl;
-        exit(1);
-    }
-}
-
-vector<BaseRegion> choose_outer_regions(bool edge,
-                                        const vector<BaseRegion> &regions_with_edge,
-                                        const vector<BaseRegion> &regions_without_edge
-                                        ){
-    if (edge) return regions_with_edge;
-    else return regions_without_edge;
-}
 
 void generate_from_inner2(map<vector<int>,BaseRegion> &signature_minimal,
                           const vector<BaseRegion> &inner_2regions
@@ -958,7 +932,8 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                                      const vector<BaseRegion> &regions_3hat_with_edges,
                                      const vector<BaseRegion> &regions_4hat_with_edges,
                                      const vector<BaseRegion> &regions_5hat_with_edges,
-                                     const vector<BaseRegion> &regions_6hat_with_edges
+                                     const vector<BaseRegion> &regions_6hat_with_edges,
+                                     const vector<BaseRegion> &regions_5
                                      ) {
     cout << "Starting generate_6regions_with_no_inner" << endl;
     
@@ -1048,7 +1023,6 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < regions_4hat_with_edges.size(); i++) {
@@ -1107,6 +1081,74 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
         
     } // parallel over
     
+    cout << "b-d edge" << endl;
+    current = 0;
+    mmax = regions_5.size();
+    
+#pragma omp parallel
+    {
+        map<vector<int>,BaseRegion> priv_signature_minimal;
+        int priv_current = 0;
+        int tid = THREAD_ID;
+        
+#pragma omp for schedule(dynamic) nowait
+        for (int i = 0; i < regions_5.size(); i++) {
+            for (int j = 0; j < regions_3hat_with_edges.size(); j++) {
+                Region R2(R);
+                R2.addLabelToNode(0, a);
+                R2.addLabelToNode(1, b);
+                R2.addLabelToNode(2, c);
+                R2.addLabelToNode(3, d);
+                R2.addLabelToNode(4, e);
+                R2.addLabelToNode(5, f);
+                
+                vector<BaseRegion*> toGlue;
+                
+                BaseRegion reg5 = regions_5[i];
+                reg5.addLabelToNode(0, a);
+                reg5.addLabelToNode(5, b);
+                reg5.addLabelToNode(4, c);
+                reg5.addLabelToNode(3, d);
+                reg5.addLabelToNode(1, e);
+                toGlue.push_back(&reg5);
+                
+                BaseRegion right3 = regions_3hat_with_edges[j];
+                right3.addLabelToNode(3, a);
+                right3.addLabelToNode(2, b);
+                right3.addLabelToNode(1, c);
+                toGlue.push_back(&right3);
+                
+                R2.glue(toGlue);
+                
+                if (!R2.isAdjacent(b, d)) {
+                    cout << "b-d not adj" << endl;
+                    exit(1);
+                }
+                
+                store_sign(R2, priv_signature_minimal);
+            }
+            priv_current++;
+            if(priv_current%100 == 0) {
+#pragma omp critical
+                {
+                    current+=100;
+                    std::cout << "Thread " << tid << ": Done with iteration " << current << " of " << mmax << std::endl;
+                }
+            }
+        }
+        
+#pragma omp critical
+        {
+            cout << "Thread " << tid << " done and now adding to signature_minimal " << endl;
+            for (map<vector<int>,BaseRegion>::const_iterator it = priv_signature_minimal.begin(); it != priv_signature_minimal.end(); ++it) {
+                BaseRegion R = it->second;
+                store_sign(R, signature_minimal);
+            }
+        }
+        
+    } // parallel over
+
+    
     cout << "b-e node" << endl;
     current = 0;
     mmax = regions_5hat_with_edges.size();
@@ -1116,7 +1158,6 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < regions_5hat_with_edges.size(); i++) {
@@ -1161,10 +1202,12 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                     exit(1);
                 }
                 
-                if (R2.isValid()) {
-                    store_sign(R2, priv_signature_minimal);
+                // Check node adj to at least one endpoint
+                if (!R2.isAdjacent(a, node) && !R2.isAdjacent(d, node)) {
+                    continue;
                 }
                 
+                store_sign(R2, priv_signature_minimal);
             }
             priv_current++;
             if(priv_current%100 == 0) {
@@ -1196,7 +1239,6 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
         map<vector<int>,BaseRegion> priv_signature_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
 #pragma omp for schedule(dynamic) nowait
         for (int i = 0; i < regions_6hat_with_edges.size(); i++) {
@@ -1292,7 +1334,8 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
                        const vector<BaseRegion> &non_dom_regions_3hat_with_edges,
                        const vector<BaseRegion> &non_dom_regions_3hat_without_ac_edge,
                        const vector<BaseRegion> &non_dom_regions_4hat_with_edges,
-                       const vector<BaseRegion> &non_dom_regions_4hat_without_ad_edge
+                       const vector<BaseRegion> &non_dom_regions_4hat_without_ad_edge,
+                       const vector<BaseRegion> &regions_5
                        ) {
     
     cout << "starting generate_6regions" << endl;
@@ -1305,7 +1348,8 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
     if(inner_2regions.empty() || inner_3regions.empty() || inner_4regions.empty() || inner_4starregions.empty() || inner_5regions.empty() || inner_6regions.empty()
        || empty_inner_2regions.empty() || empty_inner_3regions.empty() || empty_inner_4regions.empty() || empty_inner_4starregions.empty() || empty_inner_5regions.empty() || empty_inner_6regions.empty()
        || regions_3hat_with_edges.empty() || regions_4hat_with_edges.empty() || regions_3hat_without_ac_edge.empty() || regions_4hat_without_ad_edge.empty() || regions_5hat_with_edges.empty() || regions_6hat_with_edges.empty()
-       || non_dom_regions_3hat_with_edges.empty() || non_dom_regions_4hat_with_edges.empty() || non_dom_regions_3hat_without_ac_edge.empty() || non_dom_regions_4hat_without_ad_edge.empty()){
+       || non_dom_regions_3hat_with_edges.empty() || non_dom_regions_4hat_with_edges.empty() || non_dom_regions_3hat_without_ac_edge.empty() || non_dom_regions_4hat_without_ad_edge.empty()
+       || regions_5.empty() ){
         cerr << "needed regions empty" << endl;
         exit(1);
     }
@@ -1314,7 +1358,8 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
                                     regions_3hat_with_edges, 
                                     regions_4hat_with_edges, 
                                     regions_5hat_with_edges, 
-                                    regions_6hat_with_edges);
+                                    regions_6hat_with_edges,
+                                    regions_5);
     
     generate_6regions_from_empty_inner(signature_minimal,
                                        empty_inner_2regions, 
