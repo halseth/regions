@@ -10,7 +10,7 @@
 #include "parallization.h"
 
 
-#include "generate_from_inner.hpp"
+#include "choose_regions.hpp"
 #include <stdlib.h>
 
 const int a = 0;
@@ -114,9 +114,12 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             
             R2.glue(toGlue);
             
-            if (R2.isValid()) {
-                 store_sign(R2, signature_minimal);
+            // Check if node is adjacent to an endpoint
+            if (!R2.isAdjacent(a, node) && !R2.isAdjacent(c, node)) {
+                continue;
             }
+            
+            store_sign(R2, signature_minimal);
         }
     }
     

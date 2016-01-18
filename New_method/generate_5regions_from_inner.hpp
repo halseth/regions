@@ -27,6 +27,7 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                   const vector<BaseRegion> &regions_3hat_without_ac_edge,
                                   const vector<BaseRegion> &regions_4hat_with_edges,
                                   const vector<BaseRegion> &regions_4hat_without_ad_edge,
+                                  const vector<BaseRegion> &regions_5hat_with_edges,
                                   const vector<BaseRegion> &non_dom_regions_3hat_with_edges,
                                   const vector<BaseRegion> &non_dom_regions_3hat_without_ac_edge,
                                   const vector<BaseRegion> &non_dom_regions_4hat_with_edges,

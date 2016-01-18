@@ -8,7 +8,7 @@
 
 #include "generate_3regions_from_inner.hpp"
 #include "parallization.h"
-#include "generate_from_inner.hpp"
+#include "choose_regions.hpp"
 const int a = 0;
 const int b = 1;
 const int c = 2;

@@ -38,8 +38,6 @@ void generate_empty_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, 
         map<vector<int>, BaseRegion> priv_sign_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
-        
         
 #pragma omp for schedule(dynamic) nowait
         for (int boundary_neighbors = 0; boundary_neighbors <= edges; boundary_neighbors++) {
@@ -112,7 +110,6 @@ void generate_empty_inner6(map<vector<int>, BaseRegion> &sign_minimal) {
         map<vector<int>, BaseRegion> priv_sign_minimal;
         int priv_current = 0;
         int tid = THREAD_ID;
-        int nthreads = NUM_THREADS;
         
         
 #pragma omp for schedule(dynamic) nowait

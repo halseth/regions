@@ -7,7 +7,7 @@
 //
 
 #include "generate_hat_regions.hpp"
-#include "generate_from_inner.hpp"
+#include "choose_regions.hpp"
 #include "parallization.h"
 
 const int a = 0;

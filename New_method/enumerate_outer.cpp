@@ -9,7 +9,7 @@
 #include <sstream>
 
 #include "enumerate_outer.hpp"
-#include "generate_from_inner.hpp"
+#include "choose_regions.hpp"
 #include "HatRegion.h"
 #include "BaseRegion.h"
 #include "store_sign.h"

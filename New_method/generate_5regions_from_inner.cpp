@@ -7,7 +7,7 @@
 //
 
 #include "generate_5regions_from_inner.hpp"
-#include "generate_from_inner.hpp"
+#include "choose_regions.hpp"
 #include "parallization.h"
 
 const int a = 0;
@@ -866,6 +866,7 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                   const vector<BaseRegion> &regions_3hat_without_ac_edge,
                                   const vector<BaseRegion> &regions_4hat_with_edges,
                                   const vector<BaseRegion> &regions_4hat_without_ad_edge,
+                                  const vector<BaseRegion> &regions_5hat_with_edges,
                                   const vector<BaseRegion> &non_dom_regions_3hat_with_edges,
                                   const vector<BaseRegion> &non_dom_regions_3hat_without_ac_edge,
                                   const vector<BaseRegion> &non_dom_regions_4hat_with_edges,
@@ -882,7 +883,7 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         exit(1);
     }
     
-    if(inner_2regions.empty() || inner_3regions.empty() || inner_4regions.empty() || inner_4starregions.empty() || inner_5regions.empty() || inner_6regions.empty() || empty_inner_6regions.empty() || regions_3hat_with_edges.empty() ||  regions_3hat_without_ac_edge.empty() || regions_4hat_with_edges.empty() || regions_4hat_without_ad_edge.empty() || non_dom_regions_3hat_with_edges.empty() || non_dom_regions_4hat_with_edges.empty() || non_dom_regions_3hat_without_ac_edge.empty() || non_dom_regions_4hat_without_ad_edge.empty() || regions_3.empty() || regions_4.empty() ){
+    if(inner_2regions.empty() || inner_3regions.empty() || inner_4regions.empty() || inner_4starregions.empty() || inner_5regions.empty() || inner_6regions.empty() || empty_inner_6regions.empty() || regions_3hat_with_edges.empty() ||  regions_3hat_without_ac_edge.empty() || regions_4hat_with_edges.empty() || regions_4hat_without_ad_edge.empty() || regions_5hat_with_edges.empty() || non_dom_regions_3hat_with_edges.empty() || non_dom_regions_4hat_with_edges.empty() || non_dom_regions_3hat_without_ac_edge.empty() || non_dom_regions_4hat_without_ad_edge.empty() || regions_3.empty() || regions_4.empty() ){
         cerr << "needed regions empty" << endl;
         exit(1);
     }
@@ -963,6 +964,67 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                 reg4.printRegion();
                 cout << "reg3:";
                 reg3.printRegion();
+            }
+            
+            store_sign(R, signature_minimal);
+        }
+    }
+    
+    cout << "c-e node" << endl;
+    for (int i = 0; i < regions_5hat_with_edges.size(); i++) {
+        for (int j = 0; j < regions_4hat_with_edges.size(); j++) {
+            BaseRegion reg5hat = regions_5hat_with_edges[i];
+            BaseRegion reg4hat = regions_4hat_with_edges[j];
+            
+            Region R(5,a,d);
+            int node = R.addNode();
+            
+            R.addLabelToNode(0, a);
+            R.addLabelToNode(1, b);
+            R.addLabelToNode(2, c);
+            R.addLabelToNode(3, d);
+            R.addLabelToNode(4, e);
+            R.addLabelToNode(5, node);
+            
+            vector<BaseRegion*> toGlue;
+            
+            reg5hat.addLabelToNode(0, a);
+            reg5hat.addLabelToNode(1, b);
+            reg5hat.addLabelToNode(2, c);
+            reg5hat.addLabelToNode(5, d);
+            reg5hat.addLabelToNode(4, e);
+            toGlue.push_back(&reg5hat);
+            
+            reg4hat.addLabelToNode(3, a);
+            reg4hat.addLabelToNode(2, b);
+            reg4hat.addLabelToNode(5, c);
+            reg4hat.addLabelToNode(4, d);
+            toGlue.push_back(&reg4hat);
+            
+            R.glue(toGlue);
+            
+            if (!R.isAdjacent(c, node)) {
+                cout << "c-node not adj";
+                exit(1);
+            }
+            
+            if (!R.isAdjacent(e, node)) {
+                cout << "e-node not adj";
+                exit(1);
+            }
+            
+            // If node is not dominated by one of endpoints, ignore it
+            if (!R.isAdjacent(a, node) && !R.isAdjacent(d, node)) {
+                continue;
+            }
+            
+            if (!R.isValid()) {
+                cout << "reg5hat:";
+                reg5hat.printRegion();
+                cout << "reg4hat:";
+                reg4hat.printRegion();
+                cout << "R:";
+                R.printRegion();
             }
             
             store_sign(R, signature_minimal);
