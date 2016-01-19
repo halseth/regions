@@ -750,8 +750,6 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
         exit(1);
     }
     
-    int num = 0;
-    cout << "Checkpoint " << num++ << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
@@ -760,7 +758,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_without_edge, 
                          4, 4, 3,
                          0, 0);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-1" << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
@@ -769,7 +767,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_without_edge, 
                          4, 3, 4,
                          0, 0);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-2" << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
@@ -778,7 +776,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_without_edge, 
                          4, 3, 3,
                          0, 2);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-3" << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
@@ -787,7 +785,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_without_edge, 
                          3, 3, 3,
                          1, 2);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-4" << endl;
     
     generate_from_inner5(signature_minimal,
                          inner_5regions, 
@@ -796,7 +794,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
                          4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-5" << endl;
     generate_from_inner5(signature_minimal,
                          inner_5regions, 
                          outer_non_dom_3regions_with_edge,
@@ -804,7 +802,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
                          3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-6" << endl;
     
     generate_from_inner4(signature_minimal,
                          inner_4regions, 
@@ -812,7 +810,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-7" << endl;
     
     generate_from_inner4star(signature_minimal,
                              inner_4starregions, 
@@ -821,7 +819,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                              outer_non_dom_4regions_with_edge,
                              outer_non_dom_4regions_without_edge, 
                              4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-8" << endl;
     generate_from_inner4star(signature_minimal,
                              inner_4starregions, 
                              outer_non_dom_3regions_with_edge,
@@ -829,7 +827,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                              outer_non_dom_4regions_with_edge,
                              outer_non_dom_4regions_without_edge, 
                              3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-9" << endl;
     
     generate_from_inner3(signature_minimal,
                          inner_3regions, 
@@ -837,11 +835,11 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-10" << endl;
     
     generate_from_inner2(signature_minimal,
                          inner_2regions);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-11" << endl;
     
 }
 
@@ -866,7 +864,6 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
         exit(1);
     }
     
-    int num = 0;
     generate_from_inner6(signature_minimal, 
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
@@ -875,7 +872,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_without_edge, 
                          4, 4, 3,
                          0, 0);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-1" << endl;
     generate_from_inner6(signature_minimal,
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
@@ -884,7 +881,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_without_edge, 
                          4, 3, 4,
                          0, 0);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-2" << endl;
     generate_from_inner6(signature_minimal,
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
@@ -893,7 +890,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_without_edge, 
                          4, 3, 3,
                          0, 2);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-3" << endl;
     generate_from_inner6(signature_minimal,
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
@@ -902,7 +899,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_without_edge, 
                          3, 3, 3,
                          1, 2);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-4" << endl;
     
     generate_from_inner5(signature_minimal,
                          empty_inner_5regions, 
@@ -911,7 +908,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
                          4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-5" << endl;
     generate_from_inner5(signature_minimal,
                          empty_inner_5regions, 
                          outer_general_3regions_with_edge,
@@ -919,7 +916,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
                          3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-6" << endl;
     
     generate_from_inner4(signature_minimal,
                          empty_inner_4regions, 
@@ -927,7 +924,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-7" << endl;
     
     generate_from_inner4star(signature_minimal,
                              empty_inner_4starregions, 
@@ -936,7 +933,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                              outer_general_4regions_with_edge,
                              outer_general_4regions_without_edge, 
                              4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-8" << endl;
     generate_from_inner4star(signature_minimal,
                              empty_inner_4starregions, 
                              outer_general_3regions_with_edge,
@@ -944,7 +941,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                              outer_general_4regions_with_edge,
                              outer_general_4regions_without_edge, 
                              3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-9" << endl;
     
     generate_from_inner3(signature_minimal,
                          empty_inner_3regions, 
@@ -952,11 +949,11 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-10" << endl;
     
     generate_from_inner2(signature_minimal,
                          empty_inner_2regions);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-11" << endl;
     
 }
 
