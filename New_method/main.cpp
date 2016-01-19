@@ -29,6 +29,7 @@ using namespace std;
 #include "generate_4starregions_from_inner.hpp"
 #include "generate_5regions_from_inner.hpp"
 #include "generate_6regions_from_inner.hpp"
+#include "generate_basic_regions.hpp"
 
 const int a = 0;
 const int b = 1;
@@ -37,6 +38,16 @@ const int d = 3;
 
 
 int main(){
+    
+    std::map<std::vector<int>, BaseRegion> basic_regions;
+    generate_basic_regions(basic_regions);
+    std::map<std::vector<int>, BaseRegion> built;
+    build_from_basic_regions(built, basic_regions);
+    store_region_map(built, "regions_from_basic.txt");
+    
+    
+    
+    return 0;
     
     // Generate sign minimal inner regions
     std::map<std::vector<int>, BaseRegion> inner_2regions_map;
