@@ -636,7 +636,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(4);
+        Region sym(4,a,c);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }
@@ -660,7 +660,7 @@ void generate_4regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(4);
+        Region sym(4,a,c);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }

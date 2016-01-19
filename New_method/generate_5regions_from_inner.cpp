@@ -678,7 +678,8 @@ void generate_5regions_from_inner6(map<vector<int>,BaseRegion> &signature_minima
                                    const vector<BaseRegion> &outer_3regions_without_edge,
                                    const vector<BaseRegion> &outer_4regions_with_edge,
                                    const vector<BaseRegion> &outer_4regions_without_edge,
-                                   int upper_right_size
+                                   int upper_right_size,
+                                   int max_between_edge
                                    ) {
     
     cout << "Starting 5regions from inner 6-regions. Outer: " << 3 << "-"<< upper_right_size << endl;
@@ -731,99 +732,107 @@ void generate_5regions_from_inner6(map<vector<int>,BaseRegion> &signature_minima
                 for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
                     for (vector<BaseRegion>::const_iterator it_lower_left = lower_left.begin(); it_lower_left != lower_left.end(); it_lower_left++) {
                         for (vector<BaseRegion>::const_iterator it_lower_right = lower_right.begin(); it_lower_right != lower_right.end(); it_lower_right++) {
-                            Region R2(R);
                             
-                            R2.addLabelToNode(0, a);
-                            R2.addLabelToNode(1, b);
-                            R2.addLabelToNode(2, c);
-                            R2.addLabelToNode(3, d);
-                            R2.addLabelToNode(4, e);
-                            R2.addLabelToNode(5, inner_b);
-                            R2.addLabelToNode(6, inner_c);
-                            R2.addLabelToNode(7, inner_e);
-                            R2.addLabelToNode(8, inner_f);
-                            
-                            vector<BaseRegion*> toGlue;
-                            
-                            BaseRegion upper_left = *it_upper_left;
-                            upper_left.addLabelToNode(0, a);
-                            upper_left.addLabelToNode(1, b);
-                            upper_left.addLabelToNode(5, c);
-                            toGlue.push_back(&upper_left);
-                            
-                            BaseRegion upper_right = *it_upper_right;
-                            if (upper_right_size == 3) {
-                                upper_right.addLabelToNode(3, a);
-                                upper_right.addLabelToNode(2, b);
-                                upper_right.addLabelToNode(6, c);
-                            } else {
-                                upper_right.addLabelToNode(3, a);
-                                upper_right.addLabelToNode(2, b);
-                                upper_right.addLabelToNode(1, c);
-                                upper_right.addLabelToNode(6, d);
+                            for (int between_edge = 0; between_edge <= max_between_edge; between_edge++) {
+                                Region R2(R);
+                                
+                                if (between_edge) {
+                                    R2.addEdge(b, inner_c);
+                                }
+                                
+                                R2.addLabelToNode(0, a);
+                                R2.addLabelToNode(1, b);
+                                R2.addLabelToNode(2, c);
+                                R2.addLabelToNode(3, d);
+                                R2.addLabelToNode(4, e);
+                                R2.addLabelToNode(5, inner_b);
+                                R2.addLabelToNode(6, inner_c);
+                                R2.addLabelToNode(7, inner_e);
+                                R2.addLabelToNode(8, inner_f);
+                                
+                                vector<BaseRegion*> toGlue;
+                                
+                                BaseRegion upper_left = *it_upper_left;
+                                upper_left.addLabelToNode(0, a);
+                                upper_left.addLabelToNode(1, b);
+                                upper_left.addLabelToNode(5, c);
+                                toGlue.push_back(&upper_left);
+                                
+                                BaseRegion upper_right = *it_upper_right;
+                                if (upper_right_size == 3) {
+                                    upper_right.addLabelToNode(3, a);
+                                    upper_right.addLabelToNode(2, b);
+                                    upper_right.addLabelToNode(6, c);
+                                } else {
+                                    upper_right.addLabelToNode(3, a);
+                                    upper_right.addLabelToNode(2, b);
+                                    upper_right.addLabelToNode(1, c);
+                                    upper_right.addLabelToNode(6, d);
+                                }
+                                toGlue.push_back(&upper_right);
+                                
+                                BaseRegion lower_left = *it_lower_left;
+                                lower_left.addLabelToNode(0, a);
+                                lower_left.addLabelToNode(4, b);
+                                lower_left.addLabelToNode(8, c);
+                                toGlue.push_back(&lower_left);
+                                
+                                BaseRegion lower_right = *it_lower_right;
+                                lower_right.addLabelToNode(3, a);
+                                lower_right.addLabelToNode(4, b);
+                                lower_right.addLabelToNode(7, c);
+                                toGlue.push_back(&lower_right);
+                                
+                                R2.glue(toGlue);
+                                
+                                if (!R2.isAdjacent(inner_b, b)) {
+                                    cout << "b-inner_b not adj" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (upper_right_size == 4 && !R2.isAdjacent(inner_c, b)) {
+                                    cout << "c-inner_b not adj" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (upper_right_size == 3 && !R2.isAdjacent(inner_c, c)) {
+                                    cout << "c-inner_b not adj" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (!R2.isAdjacent(inner_e, e)) {
+                                    cout << "e-inner_e not adj" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (!R2.isAdjacent(inner_e, e)) {
+                                    cout << "e-inner_e not adj" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                                    cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (R2.isAdjacent(d, inner_c) != inner.isAdjacent(d, c)) {
+                                    cout << "R2.isAdjacent(d, inner_c) != inner.isAdjacent(d, c)" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)) {
+                                    cout << "R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)" << endl;
+                                    exit(1);
+                                }
+                                
+                                if (R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)) {
+                                    cout << "R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)" << endl;
+                                    exit(1);
+                                }
+                                
+                                store_sign(R2, priv_signature_minimal);
                             }
-                            toGlue.push_back(&upper_right);
                             
-                            BaseRegion lower_left = *it_lower_left;
-                            lower_left.addLabelToNode(0, a);
-                            lower_left.addLabelToNode(4, b);
-                            lower_left.addLabelToNode(8, c);
-                            toGlue.push_back(&lower_left);
-                            
-                            BaseRegion lower_right = *it_lower_right;
-                            lower_right.addLabelToNode(3, a);
-                            lower_right.addLabelToNode(4, b);
-                            lower_right.addLabelToNode(7, c);
-                            toGlue.push_back(&lower_right);
-                            
-                            R2.glue(toGlue);
-                            
-                            if (!R2.isAdjacent(inner_b, b)) {
-                                cout << "b-inner_b not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (upper_right_size == 4 && !R2.isAdjacent(inner_c, b)) {
-                                cout << "c-inner_b not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (upper_right_size == 3 && !R2.isAdjacent(inner_c, c)) {
-                                cout << "c-inner_b not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (!R2.isAdjacent(inner_e, e)) {
-                                cout << "e-inner_e not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (!R2.isAdjacent(inner_e, e)) {
-                                cout << "e-inner_e not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
-                                cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(d, inner_c) != inner.isAdjacent(d, c)) {
-                                cout << "R2.isAdjacent(d, inner_c) != inner.isAdjacent(d, c)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)) {
-                                cout << "R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)) {
-                                cout << "R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)" << endl;
-                                exit(1);
-                            }
-                            
-                            store_sign(R2, priv_signature_minimal);
                         }
                     }
                 }
@@ -1104,14 +1113,14 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                   regions_3hat_without_ac_edge,
                                   regions_4hat_with_edges,
                                   regions_4hat_without_ad_edge, 
-                                  3);
+                                  3, 1);
     generate_5regions_from_inner6(signature_minimal,
                                   empty_inner_6regions, 
                                   regions_3hat_with_edges,
                                   regions_3hat_without_ac_edge,
                                   regions_4hat_with_edges,
                                   regions_4hat_without_ad_edge, 
-                                  4);
+                                  4, 0);
     
     // Non-empty inner
     cout << "Starting generate_5regions_from_inner6 with non-empty inner" << endl;
@@ -1121,14 +1130,14 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                   non_dom_regions_3hat_without_ac_edge,
                                   non_dom_regions_4hat_with_edges,
                                   non_dom_regions_4hat_without_ad_edge,
-                                  3);
+                                  3, 1);
     generate_5regions_from_inner6(signature_minimal, 
                                   inner_6regions, 
                                   non_dom_regions_3hat_with_edges,
                                   non_dom_regions_3hat_without_ac_edge,
                                   non_dom_regions_4hat_with_edges,
                                   non_dom_regions_4hat_without_ad_edge, 
-                                  4);
+                                  4, 0);
     
     // Symmetries
     cout << "Finding symmetries"<< endl;
@@ -1139,7 +1148,7 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(5);
+        Region sym(5,a,d);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }

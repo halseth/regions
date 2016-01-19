@@ -23,9 +23,7 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
                                   const vector<BaseRegion> &regions_3hat_without_ac_edge,
                                   const vector<BaseRegion> &regions_4hat_with_edges,
                                   const vector<BaseRegion> &regions_4hat_without_ad_edge,
-                                  const vector<BaseRegion> &regions_3_with_edges,
-                                  const vector<BaseRegion> &regions_3_without_ac_edge,
-                                  bool with_ad_edge
+                                  const vector<BaseRegion> &regions_3_with_edges
                                   ){
     cout << "Starting 4*-regions from inner" << endl;
     
@@ -34,20 +32,16 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
         exit(1);
     }
     
-    if(inner_2regions.empty() || inner_3regions.empty() || inner_4starregions.empty() || regions_3hat_with_edges.empty() ||  regions_3hat_without_ac_edge.empty() || regions_4hat_with_edges.empty() || regions_3_with_edges.empty() || regions_3_without_ac_edge.empty() || regions_4hat_without_ad_edge.empty() ){
+    if(inner_2regions.empty() || inner_3regions.empty() || inner_4starregions.empty() || regions_3hat_with_edges.empty() ||  regions_3hat_without_ac_edge.empty() || regions_4hat_with_edges.empty() || regions_3_with_edges.empty() || regions_4hat_without_ad_edge.empty() ){
         cerr << "needed regions empty" << endl;
         exit(1);
     }
     
     Region R(4,a,d);
-    if (!with_ad_edge) {
-        R.removeEdge(a, d);
-    }
     
     cout << "a-c edge" << endl;
-    vector<BaseRegion> rights = choose_outer_regions(with_ad_edge, regions_3_with_edges, regions_3_without_ac_edge);
     for (vector<BaseRegion>::const_iterator it_left = regions_3hat_with_edges.begin(); it_left != regions_3hat_with_edges.end(); it_left++){
-        for (vector<BaseRegion>::const_iterator it_right = rights.begin(); it_right != rights.end(); it_right++){
+        for (vector<BaseRegion>::const_iterator it_right = regions_3_with_edges.begin(); it_right != regions_3_with_edges.end(); it_right++){
             
             Region R2(R);
             R2.addLabelToNode(0, a);
@@ -76,10 +70,10 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
                 exit(1);
             }
             
-            if (R2.isAdjacent(a, d) != with_ad_edge) {
-                cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
-                exit(1);
-            }
+//            if (R2.isAdjacent(a, d) != with_ad_edge) {
+//                cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+//                exit(1);
+//            }
             
             if (!R2.isValid()) {
                 cout << "R:";
@@ -101,9 +95,9 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
         BaseRegion inner = *it_inner;
         
         // check if compatible with edge
-        if (inner.isAdjacent(a, b) != with_ad_edge) {
-            continue;
-        }
+//        if (inner.isAdjacent(a, b) != with_ad_edge) {
+//            continue;
+//        }
         
         Region R2(R);
         
@@ -115,10 +109,10 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
         
         R2.glue(&inner);
         
-        if (R2.isAdjacent(a, d) != with_ad_edge) {
-            cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
-            exit(1);
-        }
+//        if (R2.isAdjacent(a, d) != with_ad_edge) {
+//            cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+//            exit(1);
+//        }
         
         store_sign(R2, signature_minimal);
     }
@@ -128,9 +122,9 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
         BaseRegion inner = *it_inner;
         
         // check if compatible with edge
-        if (inner.isAdjacent(a, c) != with_ad_edge) {
-            continue;
-        }
+//        if (inner.isAdjacent(a, c) != with_ad_edge) {
+//            continue;
+//        }
         
         for (int up_edges = 1; up_edges <= 0b11; up_edges++) {
             Region R2(R);
@@ -153,10 +147,10 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             
             R2.glue(&inner);
             
-            if (R2.isAdjacent(a, d) != with_ad_edge) {
-                cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
-                exit(1);
-            }
+//            if (R2.isAdjacent(a, d) != with_ad_edge) {
+//                cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+//                exit(1);
+//            }
             
             store_sign(R2, signature_minimal);
         }
@@ -178,9 +172,9 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
             
             BaseRegion inner = inner_4starregions[i];
             // check if compatible with edge
-            if (inner.isAdjacent(a, d) != with_ad_edge) {
-                continue;
-            }
+//            if (inner.isAdjacent(a, d) != with_ad_edge) {
+//                continue;
+//            }
             
             inner.addLabelToNode(0, a);
             inner.addLabelToNode(1, b);
@@ -237,10 +231,10 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
                     
                     R3.glue(toGlue);
                     
-                    if (R3.isAdjacent(a, d) != with_ad_edge) {
-                        cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
-                        exit(1);
-                    }
+//                    if (R3.isAdjacent(a, d) != with_ad_edge) {
+//                        cout << "R2.isAdjacent(a, d) != with_ad_edge" << endl;
+//                        exit(1);
+//                    }
                     
                     if (R3.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
                         cout << "R3.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
@@ -289,7 +283,7 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(4);
+        Region sym(4,a,d);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }

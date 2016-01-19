@@ -26,9 +26,7 @@ void generate_4starregions_from_inner(map<vector<int>,BaseRegion> &signature_min
                                       const vector<BaseRegion> &regions_3hat_without_ac_edge,
                                       const vector<BaseRegion> &regions_4hat_with_edges,
                                       const vector<BaseRegion> &regions_4hat_without_ad_edge,
-                                      const vector<BaseRegion> &regions_3_with_edges,
-                                      const vector<BaseRegion> &regions_3_without_ac_edge,
-                                      bool with_ad_edge
+                                      const vector<BaseRegion> &regions_3_with_edges
                                       );
 
 #endif /* generate_4starregions_from_inner_hpp */

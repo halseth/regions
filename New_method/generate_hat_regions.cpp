@@ -34,7 +34,7 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         R.removeEdge(a, c);
     }
     
-    for (int num_internal_nodes = 0; num_internal_nodes<=5; num_internal_nodes++) {
+    for (int num_internal_nodes = 0; num_internal_nodes<=4; num_internal_nodes++) {
         cout << "num: " << num_internal_nodes << endl;
         HatRegion R1(R);
         
@@ -60,7 +60,7 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
             for (int i = 0; i < num_internal_nodes; i++) {
                 for (int j = i+1; j < num_internal_nodes; j++) {
                     if ( (internal_edges & edge) != 0 ) {
-                        R.addEdge(node+i, node+j);
+                        R2.addEdge(node+i, node+j);
                     }
                     edge = edge << 1;
                 }
@@ -104,9 +104,9 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
 void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                            const vector<BaseRegion> &regions_3hat_with_edge,
                            const vector<BaseRegion> &regions_3hat_without_edge,
-                           const vector<BaseRegion> &inner_2regions,
-                           const vector<BaseRegion> &inner_3regions,
-                           const vector<BaseRegion> &inner_4regions,
+                           const vector<BaseRegion> &inner_2hat_regions,
+                           const vector<BaseRegion> &inner_3hat_regions,
+                           const vector<BaseRegion> &inner_4hat_regions,
                            bool with_bc_edge,
                            bool with_ad_edge
                            ){
@@ -117,7 +117,7 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         exit(1);
     }
     
-    if(regions_3hat_with_edge.empty() || regions_3hat_without_edge.empty() || inner_2regions.empty() || inner_3regions.empty() ||  inner_4regions.empty() ){
+    if(regions_3hat_with_edge.empty() || regions_3hat_without_edge.empty() || inner_2hat_regions.empty() || inner_3hat_regions.empty() ||  inner_4hat_regions.empty() ){
         cerr << "needed regions empty" << endl;
         exit(1);
     }
@@ -218,11 +218,12 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     }
     
     cout << "inner 4region" << endl;
-    for (vector<BaseRegion>::const_iterator it_inner = inner_4regions.begin(); it_inner != inner_4regions.end(); it_inner++) {
+    for (vector<BaseRegion>::const_iterator it_inner = inner_4hat_regions.begin(); it_inner != inner_4hat_regions.end(); it_inner++) {
         
         BaseRegion inner = *it_inner;
         if (!inner.isAdjacent(a, b) || !inner.isAdjacent(a, d)) {
-            continue;
+            cout << "!inner.isAdjacent(a, b) || !inner.isAdjacent(a, d)" << endl;
+            exit(1);
         }
         
         HatRegion R2(R);
@@ -241,7 +242,8 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         R2.glue(&inner);
         
         if (!R2.isValid()) {
-            continue;
+            cout << "!R2.isValid()" << endl;
+            exit(1);
         }
         
         upper = regions_3hat_with_edge;
@@ -294,13 +296,14 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     }
     
     cout << "inner3 with node up" << endl;
-    for (vector<BaseRegion>::const_iterator it_inner = inner_3regions.begin(); it_inner != inner_3regions.end(); it_inner++) {
+    for (vector<BaseRegion>::const_iterator it_inner = inner_3hat_regions.begin(); it_inner != inner_3hat_regions.end(); it_inner++) {
         
         BaseRegion inner = *it_inner;
         
         // Must be adjacent for it to be hat region
         if (!inner.isAdjacent(a, b)) {
-            continue;
+            cout << "!inner.isAdjacent(a, b)" << endl;
+            exit(1);
         }
         
         HatRegion R2(R);
@@ -316,7 +319,8 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         R2.glue(&inner);
         
         if (!R2.isValid()) {
-            continue;
+            cout << "!R2.isValid()" << endl;
+            exit(1);
         }
         
         for (vector<BaseRegion>::const_iterator it_upper = regions_3hat_with_edge.begin(); it_upper != regions_3hat_with_edge.end(); it_upper++) {
@@ -344,13 +348,14 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     }
     
     cout << "inner3 with node down" << endl;
-    for (vector<BaseRegion>::const_iterator it_inner = inner_3regions.begin(); it_inner != inner_3regions.end(); it_inner++) {
+    for (vector<BaseRegion>::const_iterator it_inner = inner_3hat_regions.begin(); it_inner != inner_3hat_regions.end(); it_inner++) {
         
         BaseRegion inner = *it_inner;
         
         // Must be adjacent for it to be hat region
         if (!inner.isAdjacent(a, b)) {
-            continue;
+            cout << "!inner.isAdjacent(a, b)" << endl;
+            exit(1);
         }
         
         HatRegion R2(R);
@@ -366,7 +371,8 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         R2.glue(&inner);
         
         if (!R2.isValid()) {
-            continue;
+            cout << "!R2.isValid()" << endl;
+            exit(1);
         }
         
         lower = choose_outer_regions(R.isAdjacent(a, d), regions_3hat_with_edge, regions_3hat_without_edge);
@@ -400,7 +406,7 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     }
     
     cout << "inner2 regions" << endl;
-    for (vector<BaseRegion>::const_iterator it_inner = inner_2regions.begin(); it_inner != inner_2regions.end(); it_inner++) {
+    for (vector<BaseRegion>::const_iterator it_inner = inner_2hat_regions.begin(); it_inner != inner_2hat_regions.end(); it_inner++) {
         
         BaseRegion inner = *it_inner;
         
@@ -415,7 +421,8 @@ void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         
         // Check if hat region
         if (!R2.isValid()) {
-            continue;
+            cout << "!R2.isValid()" << endl;
+            exit(1);
         }
         
         store_sign(R2, signature_minimal);
@@ -915,7 +922,7 @@ void generate_6hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(6);
+        HatRegion sym(6,a);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }

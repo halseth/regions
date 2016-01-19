@@ -117,15 +117,15 @@ bool BaseRegion::isValid(){
     
     bool valid = true;
     
-    // It must be connected
-    if (!isConnected()) {
-        //std::cout << "Not connected" << std::endl;
-        valid = false;
-#ifndef TEST
-        //printRegion();
-        //exit(0);
-#endif
-    }
+//    // It must be connected
+//    if (!isConnected()) {
+//        //std::cout << "Not connected" << std::endl;
+//        valid = false;
+//#ifndef TEST
+//        //printRegion();
+//        //exit(0);
+//#endif
+//    }
     
     if(!isPlanar()){
         //std::cout << "Not planar" << std::endl;

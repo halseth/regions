@@ -98,14 +98,28 @@ int main(){
     
     vector<BaseRegion> regions_3hat_without_ac_edge_vec;
     load_region_vector(regions_3hat_without_ac_edge_vec, "3hat_without_ac_edge.txt");
+    
+    
+    
+    vector<BaseRegion> inner_2hat_regions;
+    enumerate_inner_hat_regions(inner_2hat_regions, 2, a, b);
+    store_region_vector(inner_2hat_regions, "inner_2hat_regions.txt");
+    
+    vector<BaseRegion> inner_3hat_regions;
+    enumerate_inner_hat_regions(inner_3hat_regions, 3, a, c);
+    store_region_vector(inner_3hat_regions, "inner_3hat_regions.txt");
+    
+    vector<BaseRegion> inner_4hat_regions;
+    enumerate_inner_hat_regions(inner_4hat_regions, 4, a, c);
+    store_region_vector(inner_4hat_regions, "inner_4hat_regions.txt");
 
     std::map<std::vector<int>, BaseRegion> regions_4hat_with_edges_map;
     generate_4hat_regions(regions_4hat_with_edges_map,
                           regions_3hat_with_edges_vec,
                           regions_3hat_without_ac_edge_vec,
-                          inner_2regions_vec,
-                          inner_3regions_vec,
-                          inner_4regions_vec,
+                          inner_2hat_regions,
+                          inner_3hat_regions,
+                          inner_4hat_regions,
                           true, true);
     store_region_map(regions_4hat_with_edges_map, "4hat_with_edges.txt");
     
@@ -116,9 +130,9 @@ int main(){
     generate_4hat_regions(regions_4hat_without_ad_edge_map,
                           regions_3hat_with_edges_vec,
                           regions_3hat_without_ac_edge_vec,
-                          inner_2regions_vec,
-                          inner_3regions_vec,
-                          inner_4regions_vec,
+                          inner_2hat_regions,
+                          inner_3hat_regions,
+                          inner_4hat_regions,
                           true, false);
     store_region_map(regions_4hat_without_ad_edge_map, "4hat_without_ad_edge.txt");
     
@@ -130,9 +144,9 @@ int main(){
     generate_4hat_regions(regions_4hat_without_bc_edge_map,
                           regions_3hat_with_edges_vec,
                           regions_3hat_without_ac_edge_vec,
-                          inner_2regions_vec,
-                          inner_3regions_vec,
-                          inner_4regions_vec,
+                          inner_2hat_regions,
+                          inner_3hat_regions,
+                          inner_4hat_regions,
                           false, true);
     store_region_map(regions_4hat_without_bc_edge_map, "4hat_without_bc_edge.txt");
     
@@ -143,9 +157,9 @@ int main(){
     generate_4hat_regions(regions_4hat_without_ad_bc_edges_map,
                           regions_3hat_with_edges_vec,
                           regions_3hat_without_ac_edge_vec,
-                          inner_2regions_vec,
-                          inner_3regions_vec,
-                          inner_4regions_vec,
+                          inner_2hat_regions,
+                          inner_3hat_regions,
+                          inner_4hat_regions,
                           false, false);
     store_region_map(regions_4hat_without_ad_bc_edges_map, "4hat_without_ad_bc_edges.txt");
     vector<BaseRegion> regions_4hat_without_ad_bc_edges_vec;
@@ -222,29 +236,16 @@ int main(){
     vector<BaseRegion> empty_inner6_vec = toVector(empty_inner6_map);
     
     // Generate 3-regions
-    map<vector<int>, BaseRegion> regions_3_with_edges_map;
-    generate_3regions_from_inner(regions_3_with_edges_map,
+    map<vector<int>, BaseRegion> regions_3_map;
+    generate_3regions_from_inner(regions_3_map,
                                  inner_2regions_vec,
                                  inner_3regions_vec,
                                  inner_4starregions_vec,
                                  regions_3hat_with_edges_vec,
-                                 regions_3hat_without_ac_edge_vec,
-                                 true);
-    store_region_map(regions_3_with_edges_map, "3regions.txt");
-    vector<BaseRegion> regions_3_with_edges_vec;
-    load_region_vector(regions_3_with_edges_vec, "3regions.txt");
-    
-    map<vector<int>, BaseRegion> regions_3_without_ac_edge_map;
-    generate_3regions_from_inner(regions_3_without_ac_edge_map,
-                                 inner_2regions_vec,
-                                 inner_3regions_vec,
-                                 inner_4starregions_vec,
-                                 regions_3hat_with_edges_vec,
-                                 regions_3hat_without_ac_edge_vec,
-                                 false);
-    store_region_map(regions_3_without_ac_edge_map, "3regions_without_ac_edge.txt");
-    vector<BaseRegion> regions_3_without_ac_edge_vec;
-    load_region_vector(regions_3_without_ac_edge_vec, "3regions_without_ac_edge.txt");
+                                 regions_3hat_without_ac_edge_vec);
+    store_region_map(regions_3_map, "3regions.txt");
+    vector<BaseRegion> regions_3_vec;
+    load_region_vector(regions_3_vec, "3regions.txt");
 
     // Generate 4-regions
     map<vector<int>, BaseRegion> regions_4_map;
@@ -263,8 +264,8 @@ int main(){
     load_region_vector(regions_4_vec, "4regions.txt");
 
     // Generate 4*-regions
-    map<vector<int>, BaseRegion> regions_4star_with_edges_map;
-    generate_4starregions_from_inner(regions_4star_with_edges_map,
+    map<vector<int>, BaseRegion> regions_4star_map;
+    generate_4starregions_from_inner(regions_4star_map,
                                      inner_2regions_vec, 
                                      inner_3regions_vec, 
                                      inner_4starregions_vec, 
@@ -272,16 +273,14 @@ int main(){
                                      regions_3hat_without_ac_edge_vec, 
                                      regions_4hat_with_edges_vec, 
                                      regions_4hat_without_ad_edge_vec,
-                                     regions_3_with_edges_vec,
-                                     regions_3_without_ac_edge_vec,
-                                     false);
-    store_region_map(regions_4star_with_edges_map, "4star_regions_with_edges.txt");
-    vector<BaseRegion> regions_4star_with_edges_vec;
-    load_region_vector(regions_4star_with_edges_vec, "4star_regions_with_edges.txt");
+                                     regions_3_vec);
+    store_region_map(regions_4star_map, "4star_regions.txt");
+    vector<BaseRegion> regions_4star_vec;
+    load_region_vector(regions_4star_vec, "4star_regions.txt");
 
     // Generate 5-regions
-    map<vector<int>, BaseRegion> regions_5_with_edges_map;
-    generate_5regions_from_inner(regions_5_with_edges_map,
+    map<vector<int>, BaseRegion> regions_5_map;
+    generate_5regions_from_inner(regions_5_map,
                                  inner_2regions_vec, 
                                  inner_3regions_vec, 
                                  inner_4regions_vec, 
@@ -298,15 +297,15 @@ int main(){
                                  outer_non_dom_3regions_without_edge,
                                  outer_non_dom_4regions_with_edge,
                                  outer_non_dom_4regions_without_edge, 
-                                 regions_3_with_edges_vec, 
+                                 regions_3_vec,
                                  regions_4_vec);
-    store_region_map(regions_5_with_edges_map, "5regions.txt");
-    vector<BaseRegion> regions_5_with_edges_vec;
-    load_region_vector(regions_5_with_edges_vec, "5regions.txt");
+    store_region_map(regions_5_map, "5regions.txt");
+    vector<BaseRegion> regions_5_vec;
+    load_region_vector(regions_5_vec, "5regions.txt");
 
     // Generate 6-regions
-    map<vector<int>, BaseRegion> regions_6_with_edges_map;
-    generate_6regions(regions_6_with_edges_map,
+    map<vector<int>, BaseRegion> regions_6_map;
+    generate_6regions(regions_6_map,
                       inner_2regions_vec,
                       inner_3regions_vec,
                       inner_4regions_vec,
@@ -329,9 +328,9 @@ int main(){
                       outer_non_dom_3regions_without_edge,
                       outer_non_dom_4regions_with_edge,
                       outer_non_dom_4regions_without_edge,
-                      regions_5_with_edges_vec);
-    store_region_map(regions_6_with_edges_map, "6regions.txt");
-    vector<BaseRegion> regions_6_with_edges_vec;
+                      regions_5_vec);
+    store_region_map(regions_6_map, "6regions.txt");
+    vector<BaseRegion> regions_6_vec;
 //    load_region_vector(regions_6_with_edges_vec, "6regions.txt");
     
     cout << "main done" << endl;

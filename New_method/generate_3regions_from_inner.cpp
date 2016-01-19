@@ -19,8 +19,7 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                         const vector<BaseRegion> &inner_3regions,
                                         const vector<BaseRegion> &inner_4starregions,
                                         const vector<BaseRegion> &regions_3hat_with_edges,
-                                        const vector<BaseRegion> &regions_3hat_without_ac_edge,
-                                  bool with_edge
+                                        const vector<BaseRegion> &regions_3hat_without_ac_edge
                                         ){
     cout << "Start generate 3-regions from inner" <<endl;
     if(!signature_minimal.empty()){
@@ -34,9 +33,6 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     }
     
     Region R(3, a,c);
-    if (!with_edge) {
-        R.removeEdge(a, c);
-    }
     
     cout << "Starting with inner 4*-regions" << endl;
     int current = 0;
@@ -53,9 +49,9 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             BaseRegion inner = inner_4starregions[i];
             
             //Ignore if not consistent with edge
-            if (inner.isAdjacent(a, d) != with_edge) {
-                continue;
-            }
+//            if (inner.isAdjacent(a, d) != with_edge) {
+//                continue;
+//            }
             
             Region R2(R);
             
@@ -103,10 +99,10 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                     
                     R3.glue(toGlue);
                     
-                    if (R3.isAdjacent(a, c) != with_edge) {
-                        cout << "R3.isAdjacent(a, c) != with_edge" << endl;
-                        exit(1);
-                    }
+//                    if (R3.isAdjacent(a, c) != with_edge) {
+//                        cout << "R3.isAdjacent(a, c) != with_edge" << endl;
+//                        exit(1);
+//                    }
                     
                     if (!R3.isAdjacent(inner_b, b)) {
                         cout << "b-inner_b not adj" << endl;
@@ -180,9 +176,9 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             BaseRegion inner = inner_3regions[i];
             
             //Ignore if not consistent with edge
-            if (inner.isAdjacent(a, c) != with_edge) {
-                continue;
-            }
+//            if (inner.isAdjacent(a, c) != with_edge) {
+//                continue;
+//            }
             
             Region R2(R);
             
@@ -200,10 +196,10 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
             
             R2.glue(&inner);
             
-            if (R2.isAdjacent(a, c) != with_edge) {
-                cout << "R2.isAdjacent(a, c) != with_edge" << endl;
-                exit(1);
-            }
+//            if (R2.isAdjacent(a, c) != with_edge) {
+//                cout << "R2.isAdjacent(a, c) != with_edge" << endl;
+//                exit(1);
+//            }
             
             store_sign(R2, priv_signature_minimal);
             
@@ -232,9 +228,9 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         BaseRegion inner = *it_inner2;
         
         //Ignore if not consistent with edge
-        if (inner.isAdjacent(a, b) != with_edge) {
-            continue;
-        }
+//        if (inner.isAdjacent(a, b) != with_edge) {
+//            continue;
+//        }
         
         Region R2(R);
         
@@ -246,10 +242,10 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
         
         R2.glue(&inner);
         
-        if (R2.isAdjacent(a, c) != with_edge) {
-            cout << "R2.isAdjacent(a, c) != with_edge" << endl;
-            exit(1);
-        }
+//        if (R2.isAdjacent(a, c) != with_edge) {
+//            cout << "R2.isAdjacent(a, c) != with_edge" << endl;
+//            exit(1);
+//        }
         
         store_sign(R2, signature_minimal);
     }
@@ -263,7 +259,7 @@ void generate_3regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(3);
+        Region sym(3,a,c);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }
