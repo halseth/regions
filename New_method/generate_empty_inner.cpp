@@ -54,8 +54,8 @@ void generate_empty_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, 
                 }
             }
             
-            // Check if planar (no internal nodes)
-            if (R.isPlanar()) {
+            // Check if planar and dominates boundary nodes
+            if (R.isValid()) {
                 store_sign(R, priv_sign_minimal);
             }
             

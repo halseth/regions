@@ -15,6 +15,7 @@ using namespace std;
 #include "enumerate_inner.hpp"
 #include "InnerRegion.hpp"
 #include "store_sign.h"
+#include <stdlib.h>
 
 void generate_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int endpoint1, int endpoint2) {
     
