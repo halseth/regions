@@ -11,6 +11,7 @@
 #include <lemon/connectivity.h>
 #include <stdlib.h>
 #include <fstream>
+using namespace std;
 #include "BaseRegion.h"
 
 BaseRegion::BaseRegion(int boundarySize){
@@ -278,6 +279,75 @@ void BaseRegion::getSignature(std::vector<int> &signature){
             signature.push_back(this->signature(X, S));
         }
     }
+}
+
+std::string BaseRegion::getFormattedSignature(){
+    if (getBoundarySize() != 6) {
+        std::cout << "ERROR: only works for regular 6regions";
+        exit(0);
+    }
+    
+    std::stringstream ss;
+    // Hardcoded upper and bottom path
+    ss << 4 << " " << 0 << " " << 1 << " " << 2 << " " << 3 << endl;
+    ss << 4 << " " << 0 << " " << 5 << " " << 4 << " " << 3 << endl;
+    
+    vector<string> inputs;
+    for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
+        for(int x_set = 0; x_set <= std::pow(2, Boundary.size())-1; x_set++){
+            if((s_set & x_set) != 0) continue; // overlaps
+            
+            stringstream input;
+            std::vector<int> X;
+            std::vector<int> S;
+            
+            for(int i = 0; i < Boundary.size(); i++){
+                if(s_set & (1 << i)) S.push_back(i);
+                if(x_set & (1 << i)) X.push_back(i);
+            }
+            
+            // Check that N[X] and S boundary disjoint
+            bool valid = true;
+            for (int i = 0; i < S.size(); i++) {
+                int s = S[i];
+                for (int j = 0; j < X.size(); j++) {
+                    int x = X[j];
+                    if ((s+1)%6 == x || (s-1+6)%6 == x) {
+                        valid = false;
+                    }
+                }
+            }
+            if (!valid) {
+                continue;
+            }
+            
+            input << X.size() << " ";
+            for (int i = 0; i < X.size(); i++) {
+                input << X[i] << " ";
+            }
+            input << endl;
+            
+            input << S.size() << " ";
+            for (int i = 0; i < S.size(); i++) {
+                input << S[i] << " ";
+            }
+            input << endl;
+            
+            
+            input << this->signature(X, S) << endl;
+            
+            inputs.push_back(input.str());
+            
+            if (X.size() == 1 && X[0] == 4 && S.size() == 3 && S[0] == 0 && S[1] == 1 && S[2] == 2) {
+                cout << "here " << this->signature(X, S) << endl;
+            }
+        }
+    }
+    ss << inputs.size() << endl;
+    for (int i = 0; i < inputs.size(); i++) {
+        ss << inputs[i];
+    }
+    return ss.str();
 }
 
 void BaseRegion::printRegion(){

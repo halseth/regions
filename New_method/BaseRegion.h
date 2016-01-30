@@ -68,6 +68,8 @@ public:
     
     virtual void test();
     
+    std::string getFormattedSignature();
+    
 };
 
 
