@@ -28,9 +28,9 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
 void generate_4hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
                            const vector<BaseRegion> &regions_3hat_with_edge,
                            const vector<BaseRegion> &regions_3hat_without_edge,
-                           const vector<BaseRegion> &inner_2regions,
-                           const vector<BaseRegion> &inner_3regions,
-                           const vector<BaseRegion> &inner_4regions,
+                           const vector<BaseRegion> &inner_2hat_regions,
+                           const vector<BaseRegion> &inner_3hat_regions,
+                           const vector<BaseRegion> &inner_4hat_regions,
                            bool with_bc_edge,
                            bool with_ad_edge
                            );

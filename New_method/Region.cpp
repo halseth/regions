@@ -14,7 +14,16 @@ Region::Region(int boundarySize, int endpoint1, int endpoint2) : BaseRegion(boun
 }
 
 bool Region::isValid(){
-    bool valid = BaseRegion::isValid();
+    // Is planar
+    bool valid = isPlanar();
+    
+    // Is connected
+    valid &= isConnected();
+    
+    // Has all boundary edges
+    for (int i = 0; i < getBoundarySize(); i++) {
+        valid &= isAdjacent(i, (i+1) % getBoundarySize());
+    }
     
     // All vertices (internal and boundary) must be dominated by the two endpoints
     for (int i = 0; i < getSize(); i++) {

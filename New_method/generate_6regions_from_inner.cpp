@@ -494,7 +494,9 @@ void generate_from_inner6(map<vector<int>,BaseRegion> &signature_minimal,
                           const vector<BaseRegion> &outer_4regions_without_edge,
                           int upper_right_size,
                           int lower_left_size,
-                          int lower_right_size
+                          int lower_right_size,
+                          int max_between_edge_up,
+                          int max_between_edge_down
                                ) {
     
     cout << "Starting generate_from_inner6. Outer: " << 3 << "-"<< upper_right_size<<"-"<< lower_left_size<< "-"<< lower_right_size << endl;
@@ -549,134 +551,156 @@ void generate_from_inner6(map<vector<int>,BaseRegion> &signature_minimal,
                 for (vector<BaseRegion>::const_iterator it_upper_right = upper_right.begin(); it_upper_right != upper_right.end(); it_upper_right++) {
                     for (vector<BaseRegion>::const_iterator it_lower_left = lower_left.begin(); it_lower_left != lower_left.end(); it_lower_left++) {
                         for (vector<BaseRegion>::const_iterator it_lower_right = lower_right.begin(); it_lower_right != lower_right.end(); it_lower_right++) {
-                            Region R2(R);
                             
-                            R2.addLabelToNode(0, a);
-                            R2.addLabelToNode(1, b);
-                            R2.addLabelToNode(2, c);
-                            R2.addLabelToNode(3, d);
-                            R2.addLabelToNode(4, e);
-                            R2.addLabelToNode(5, f);
-                            R2.addLabelToNode(6, inner_b);
-                            R2.addLabelToNode(7, inner_c);
-                            R2.addLabelToNode(8, inner_e);
-                            R2.addLabelToNode(9, inner_f);
-                            
-                            vector<BaseRegion*> toGlue;
-                            
-                            BaseRegion upper_left = *it_upper_left;
-                            upper_left.addLabelToNode(0, a);
-                            upper_left.addLabelToNode(1, b);
-                            upper_left.addLabelToNode(6, c);
-                            toGlue.push_back(&upper_left);
-                            
-                            BaseRegion upper_right = *it_upper_right;
-                            if (upper_right_size == 3) {
-                                upper_right.addLabelToNode(3, a);
-                                upper_right.addLabelToNode(2, b);
-                                upper_right.addLabelToNode(7, c);
-                            } else {
-                                upper_right.addLabelToNode(3, a);
-                                upper_right.addLabelToNode(2, b);
-                                upper_right.addLabelToNode(1, c);
-                                upper_right.addLabelToNode(7, d);
+                            for (int between_edge_up = 0; between_edge_up <= max_between_edge_up; between_edge_up++) {
+                                for (int between_edge_down = 0; between_edge_down <= max_between_edge_down; between_edge_down++) {
+                                    Region R2(R);
+                                    
+                                    if (between_edge_up == 1) {
+                                        R2.addEdge(b, inner_c);
+                                    }
+                                    if (between_edge_up == 2) {
+                                        R2.addEdge(c, inner_b);
+                                    }
+                                    
+                                    if (between_edge_down == 1) {
+                                        R2.addEdge(f, inner_e);
+                                    }
+                                    if (between_edge_down == 2) {
+                                        R2.addEdge(e, inner_f);
+                                    }
+                                    
+                                    
+                                    R2.addLabelToNode(0, a);
+                                    R2.addLabelToNode(1, b);
+                                    R2.addLabelToNode(2, c);
+                                    R2.addLabelToNode(3, d);
+                                    R2.addLabelToNode(4, e);
+                                    R2.addLabelToNode(5, f);
+                                    R2.addLabelToNode(6, inner_b);
+                                    R2.addLabelToNode(7, inner_c);
+                                    R2.addLabelToNode(8, inner_e);
+                                    R2.addLabelToNode(9, inner_f);
+                                    
+                                    vector<BaseRegion*> toGlue;
+                                    
+                                    BaseRegion upper_left = *it_upper_left;
+                                    upper_left.addLabelToNode(0, a);
+                                    upper_left.addLabelToNode(1, b);
+                                    upper_left.addLabelToNode(6, c);
+                                    toGlue.push_back(&upper_left);
+                                    
+                                    BaseRegion upper_right = *it_upper_right;
+                                    if (upper_right_size == 3) {
+                                        upper_right.addLabelToNode(3, a);
+                                        upper_right.addLabelToNode(2, b);
+                                        upper_right.addLabelToNode(7, c);
+                                    } else {
+                                        upper_right.addLabelToNode(3, a);
+                                        upper_right.addLabelToNode(2, b);
+                                        upper_right.addLabelToNode(1, c);
+                                        upper_right.addLabelToNode(7, d);
+                                    }
+                                    toGlue.push_back(&upper_right);
+                                    
+                                    BaseRegion lower_left = *it_lower_left;
+                                    if (lower_left_size == 3) {
+                                        lower_left.addLabelToNode(0, a);
+                                        lower_left.addLabelToNode(5, b);
+                                        lower_left.addLabelToNode(9, c);
+                                    } else {
+                                        lower_left.addLabelToNode(0, a);
+                                        lower_left.addLabelToNode(5, b);
+                                        lower_left.addLabelToNode(4, c);
+                                        lower_left.addLabelToNode(9, d);
+                                    }
+                                    toGlue.push_back(&lower_left);
+                                    
+                                    BaseRegion lower_right = *it_lower_right;
+                                    if (lower_right_size == 3) {
+                                        lower_right.addLabelToNode(3, a);
+                                        lower_right.addLabelToNode(4, b);
+                                        lower_right.addLabelToNode(8, c);
+                                    } else {
+                                        lower_right.addLabelToNode(3, a);
+                                        lower_right.addLabelToNode(4, b);
+                                        lower_right.addLabelToNode(5, c);
+                                        lower_right.addLabelToNode(8, d);
+                                    }
+                                    toGlue.push_back(&lower_right);
+                                    
+                                    R2.glue(toGlue);
+                                    
+                                    if (!R2.isAdjacent(inner_b, b)) {
+                                        cout << "b-inner_b not adj" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (upper_right_size == 4 && !R2.isAdjacent(inner_c, b)) {
+                                        cout << "b-inner_c not adj" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (upper_right_size == 3 && !R2.isAdjacent(inner_c, c)) {
+                                        cout << "c-inner_c not adj" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (lower_left_size == 3 && !R2.isAdjacent(inner_f, f)) {
+                                        cout << "f-inner_f not adj" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (lower_left_size == 4 && !R2.isAdjacent(inner_f, e)) {
+                                        cout << "e-inner_f not adj" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (lower_right_size == 3 && !R2.isAdjacent(inner_e, e)) {
+                                        cout << "e-inner_e not adj" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (lower_right_size == 4 && !R2.isAdjacent(inner_e, f)) {
+                                        cout << "f-inner_e not adj" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
+                                        cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)) {
+                                        cout << "R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)) {
+                                        cout << "R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)) {
+                                        cout << "R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)) {
+                                        cout << "R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    if (R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)) {
+                                        cout << "R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)" << endl;
+                                        exit(1);
+                                    }
+                                    
+                                    store_sign(R2, priv_signature_minimal);
+                                }
+                                
                             }
-                            toGlue.push_back(&upper_right);
                             
-                            BaseRegion lower_left = *it_lower_left;
-                            if (lower_left_size == 3) {
-                                lower_left.addLabelToNode(0, a);
-                                lower_left.addLabelToNode(5, b);
-                                lower_left.addLabelToNode(9, c);
-                            } else {
-                                lower_left.addLabelToNode(0, a);
-                                lower_left.addLabelToNode(5, b);
-                                lower_left.addLabelToNode(4, c);
-                                lower_left.addLabelToNode(9, d);
-                            }
-                            toGlue.push_back(&lower_left);
-                            
-                            BaseRegion lower_right = *it_lower_right;
-                            if (lower_right_size == 3) {
-                                lower_right.addLabelToNode(3, a);
-                                lower_right.addLabelToNode(4, b);
-                                lower_right.addLabelToNode(8, c);
-                            } else {
-                                lower_right.addLabelToNode(3, a);
-                                lower_right.addLabelToNode(4, b);
-                                lower_right.addLabelToNode(5, c);
-                                lower_right.addLabelToNode(8, d);
-                            }
-                            toGlue.push_back(&lower_right);
-                            
-                            R2.glue(toGlue);
-                            
-                            if (!R2.isAdjacent(inner_b, b)) {
-                                cout << "b-inner_b not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (upper_right_size == 4 && !R2.isAdjacent(inner_c, b)) {
-                                cout << "b-inner_c not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (upper_right_size == 3 && !R2.isAdjacent(inner_c, c)) {
-                                cout << "c-inner_c not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (lower_left_size == 3 && !R2.isAdjacent(inner_f, f)) {
-                                cout << "f-inner_f not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (lower_left_size == 4 && !R2.isAdjacent(inner_f, e)) {
-                                cout << "e-inner_f not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (lower_right_size == 3 && !R2.isAdjacent(inner_e, e)) {
-                                cout << "e-inner_e not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (lower_right_size == 4 && !R2.isAdjacent(inner_e, f)) {
-                                cout << "f-inner_e not adj" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)) {
-                                cout << "R2.isAdjacent(a, inner_b) != inner.isAdjacent(a, b)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)) {
-                                cout << "R2.isAdjacent(inner_c, inner_b) != inner.isAdjacent(c, b)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)) {
-                                cout << "R2.isAdjacent(inner_c, d) != inner.isAdjacent(c, d)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)) {
-                                cout << "R2.isAdjacent(d, inner_e) != inner.isAdjacent(d, e)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)) {
-                                cout << "R2.isAdjacent(inner_e, inner_f) != inner.isAdjacent(e, f)" << endl;
-                                exit(1);
-                            }
-                            
-                            if (R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)) {
-                                cout << "R2.isAdjacent(a, inner_f) != inner.isAdjacent(a, f)" << endl;
-                                exit(1);
-                            }
-                            
-                            store_sign(R2, priv_signature_minimal);
                         }
                     }
                 }
@@ -726,40 +750,42 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
         exit(1);
     }
     
-    int num = 0;
-    cout << "Checkpoint " << num++ << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
-                         4, 4, 3);
-    cout << "Checkpoint " << num++ << endl;
+                         4, 4, 3,
+                         0, 0);
+    cout << "Checkpoint 2-1" << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
-                         4, 3, 4);
-    cout << "Checkpoint " << num++ << endl;
+                         4, 3, 4,
+                         0, 0);
+    cout << "Checkpoint 2-2" << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
-                         4, 3, 3);
-    cout << "Checkpoint " << num++ << endl;
+                         4, 3, 3,
+                         0, 2);
+    cout << "Checkpoint 2-3" << endl;
     generate_from_inner6(signature_minimal,
                          inner_6regions, 
                          outer_non_dom_3regions_with_edge,
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
-                         3, 3, 3);
-    cout << "Checkpoint " << num++ << endl;
+                         3, 3, 3,
+                         1, 2);
+    cout << "Checkpoint 2-4" << endl;
     
     generate_from_inner5(signature_minimal,
                          inner_5regions, 
@@ -768,7 +794,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
                          4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-5" << endl;
     generate_from_inner5(signature_minimal,
                          inner_5regions, 
                          outer_non_dom_3regions_with_edge,
@@ -776,7 +802,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge, 
                          3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-6" << endl;
     
     generate_from_inner4(signature_minimal,
                          inner_4regions, 
@@ -784,7 +810,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-7" << endl;
     
     generate_from_inner4star(signature_minimal,
                              inner_4starregions, 
@@ -793,7 +819,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                              outer_non_dom_4regions_with_edge,
                              outer_non_dom_4regions_without_edge, 
                              4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-8" << endl;
     generate_from_inner4star(signature_minimal,
                              inner_4starregions, 
                              outer_non_dom_3regions_with_edge,
@@ -801,7 +827,7 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                              outer_non_dom_4regions_with_edge,
                              outer_non_dom_4regions_without_edge, 
                              3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-9" << endl;
     
     generate_from_inner3(signature_minimal,
                          inner_3regions, 
@@ -809,11 +835,11 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
                          outer_non_dom_3regions_without_edge,
                          outer_non_dom_4regions_with_edge,
                          outer_non_dom_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-10" << endl;
     
     generate_from_inner2(signature_minimal,
                          inner_2regions);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 2-11" << endl;
     
 }
 
@@ -838,39 +864,42 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
         exit(1);
     }
     
-    int num = 0;
     generate_from_inner6(signature_minimal, 
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
-                         4, 4, 3);
-    cout << "Checkpoint " << num++ << endl;
+                         4, 4, 3,
+                         0, 0);
+    cout << "Checkpoint 1-1" << endl;
     generate_from_inner6(signature_minimal,
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
-                         4, 3, 4);
-    cout << "Checkpoint " << num++ << endl;
+                         4, 3, 4,
+                         0, 0);
+    cout << "Checkpoint 1-2" << endl;
     generate_from_inner6(signature_minimal,
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
-                         4, 3, 3);
-    cout << "Checkpoint " << num++ << endl;
+                         4, 3, 3,
+                         0, 2);
+    cout << "Checkpoint 1-3" << endl;
     generate_from_inner6(signature_minimal,
                          empty_inner_6regions, 
                          outer_general_3regions_with_edge,
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
-                         3, 3, 3);
-    cout << "Checkpoint " << num++ << endl;
+                         3, 3, 3,
+                         1, 2);
+    cout << "Checkpoint 1-4" << endl;
     
     generate_from_inner5(signature_minimal,
                          empty_inner_5regions, 
@@ -879,7 +908,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
                          4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-5" << endl;
     generate_from_inner5(signature_minimal,
                          empty_inner_5regions, 
                          outer_general_3regions_with_edge,
@@ -887,7 +916,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge, 
                          3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-6" << endl;
     
     generate_from_inner4(signature_minimal,
                          empty_inner_4regions, 
@@ -895,7 +924,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-7" << endl;
     
     generate_from_inner4star(signature_minimal,
                              empty_inner_4starregions, 
@@ -904,7 +933,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                              outer_general_4regions_with_edge,
                              outer_general_4regions_without_edge, 
                              4);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-8" << endl;
     generate_from_inner4star(signature_minimal,
                              empty_inner_4starregions, 
                              outer_general_3regions_with_edge,
@@ -912,7 +941,7 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                              outer_general_4regions_with_edge,
                              outer_general_4regions_without_edge, 
                              3);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-9" << endl;
     
     generate_from_inner3(signature_minimal,
                          empty_inner_3regions, 
@@ -920,11 +949,11 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
                          outer_general_3regions_without_edge,
                          outer_general_4regions_with_edge,
                          outer_general_4regions_without_edge);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-10" << endl;
     
     generate_from_inner2(signature_minimal,
                          empty_inner_2regions);
-    cout << "Checkpoint " << num++ << endl;
+    cout << "Checkpoint 1-11" << endl;
     
 }
 
@@ -1283,9 +1312,12 @@ void generate_6regions_with_no_inner(map<vector<int>,BaseRegion> &signature_mini
                     exit(1);
                 }
                 
-                if (R2.isValid()) {
-                    store_sign(R2, priv_signature_minimal);
+                // Node must be dominated by an endpoint
+                if (!R2.isAdjacent(node, a) && !R2.isAdjacent(node, d)) {
+                    continue;
                 }
+                
+                store_sign(R2, priv_signature_minimal);
             }
             
             priv_current++;
@@ -1397,7 +1429,7 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(6);
+        Region sym(6,a,d);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }
@@ -1423,7 +1455,7 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
     
     for (int i = 0; i < regs.size(); i++) {
         
-        BaseRegion sym(6);
+        Region sym(6,a,d);
         for (int j = 0; j < sym.getSize(); j++) {
             sym.removeEdge(j, (j+1)%sym.getSize());
         }

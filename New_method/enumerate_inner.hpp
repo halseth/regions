@@ -13,5 +13,7 @@
 #include "Region.h"
 
 void generate_inner(std::map<std::vector<int>, BaseRegion> &sign_minimal, int size, int endpoint1, int endpoint2);
+void enumerate_inner_hat_regions(vector<BaseRegion> &hat_regions, int size, int endpoint1, int endpoint2);
+    
 
 #endif /* enumerate_inner_hpp */

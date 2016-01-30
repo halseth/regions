@@ -14,17 +14,13 @@ HatRegion::HatRegion(int boundarySize, int endpoint) : BaseRegion(boundarySize){
 }
 
 bool HatRegion::isValid(){
-    bool valid = BaseRegion::isValid();
-    if (!valid) {
-        return false;
-    }
+    // Is planar
+    bool valid = isPlanar();
+    
     // All internal vertices must be dominated by the endpoint
     for (int i = getBoundarySize(); i < getSize(); i++) {
         valid &= isAdjacent(i, endpoint);
     }
-//    if (!valid) {
-//        std::cout << "not dominating all" << std::endl;
-//    }
     return valid;
 }
 
