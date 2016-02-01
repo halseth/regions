@@ -775,42 +775,42 @@ void generate_6regions_from_nonempty_inner(map<vector<int>,BaseRegion> &signatur
         exit(1);
     }
     
-//    generate_from_inner6(signature_minimal,
-//                         inner_6regions, 
-//                         outer_non_dom_3regions_with_edge,
-//                         outer_non_dom_3regions_without_edge,
-//                         outer_non_dom_4regions_with_edge,
-//                         outer_non_dom_4regions_without_edge, 
-//                         4, 4, 3,
-//                         0, 0);
-//    cout << "Checkpoint 2-1" << endl;
-//    generate_from_inner6(signature_minimal,
-//                         inner_6regions, 
-//                         outer_non_dom_3regions_with_edge,
-//                         outer_non_dom_3regions_without_edge,
-//                         outer_non_dom_4regions_with_edge,
-//                         outer_non_dom_4regions_without_edge, 
-//                         4, 3, 4,
-//                         0, 0);
-//    cout << "Checkpoint 2-2" << endl;
-//    generate_from_inner6(signature_minimal,
-//                         inner_6regions, 
-//                         outer_non_dom_3regions_with_edge,
-//                         outer_non_dom_3regions_without_edge,
-//                         outer_non_dom_4regions_with_edge,
-//                         outer_non_dom_4regions_without_edge, 
-//                         4, 3, 3,
-//                         0, 2);
-//    cout << "Checkpoint 2-3" << endl;
-//    generate_from_inner6(signature_minimal,
-//                         inner_6regions, 
-//                         outer_non_dom_3regions_with_edge,
-//                         outer_non_dom_3regions_without_edge,
-//                         outer_non_dom_4regions_with_edge,
-//                         outer_non_dom_4regions_without_edge, 
-//                         3, 3, 3,
-//                         1, 2);
-//    cout << "Checkpoint 2-4" << endl;
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         4, 4, 3,
+                         0, 0);
+    cout << "Checkpoint 2-1" << endl;
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         4, 3, 4,
+                         0, 0);
+    cout << "Checkpoint 2-2" << endl;
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         4, 3, 3,
+                         0, 2);
+    cout << "Checkpoint 2-3" << endl;
+    generate_from_inner6(signature_minimal,
+                         inner_6regions, 
+                         outer_non_dom_3regions_with_edge,
+                         outer_non_dom_3regions_without_edge,
+                         outer_non_dom_4regions_with_edge,
+                         outer_non_dom_4regions_without_edge, 
+                         3, 3, 3,
+                         1, 2);
+    cout << "Checkpoint 2-4" << endl;
     
     generate_from_inner5(signature_minimal,
                          inner_5regions, 
@@ -889,42 +889,42 @@ void generate_6regions_from_empty_inner(map<vector<int>,BaseRegion> &signature_m
         exit(1);
     }
     
-//    generate_from_inner6(signature_minimal, 
-//                         empty_inner_6regions, 
-//                         outer_general_3regions_with_edge,
-//                         outer_general_3regions_without_edge,
-//                         outer_general_4regions_with_edge,
-//                         outer_general_4regions_without_edge, 
-//                         4, 4, 3,
-//                         0, 0);
-//    cout << "Checkpoint 1-1" << endl;
-//    generate_from_inner6(signature_minimal,
-//                         empty_inner_6regions, 
-//                         outer_general_3regions_with_edge,
-//                         outer_general_3regions_without_edge,
-//                         outer_general_4regions_with_edge,
-//                         outer_general_4regions_without_edge, 
-//                         4, 3, 4,
-//                         0, 0);
-//    cout << "Checkpoint 1-2" << endl;
-//    generate_from_inner6(signature_minimal,
-//                         empty_inner_6regions, 
-//                         outer_general_3regions_with_edge,
-//                         outer_general_3regions_without_edge,
-//                         outer_general_4regions_with_edge,
-//                         outer_general_4regions_without_edge, 
-//                         4, 3, 3,
-//                         0, 2);
-//    cout << "Checkpoint 1-3" << endl;
-//    generate_from_inner6(signature_minimal,
-//                         empty_inner_6regions, 
-//                         outer_general_3regions_with_edge,
-//                         outer_general_3regions_without_edge,
-//                         outer_general_4regions_with_edge,
-//                         outer_general_4regions_without_edge, 
-//                         3, 3, 3,
-//                         1, 2);
-//    cout << "Checkpoint 1-4" << endl;
+    generate_from_inner6(signature_minimal, 
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         4, 4, 3,
+                         0, 0);
+    cout << "Checkpoint 1-1" << endl;
+    generate_from_inner6(signature_minimal,
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         4, 3, 4,
+                         0, 0);
+    cout << "Checkpoint 1-2" << endl;
+    generate_from_inner6(signature_minimal,
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         4, 3, 3,
+                         0, 2);
+    cout << "Checkpoint 1-3" << endl;
+    generate_from_inner6(signature_minimal,
+                         empty_inner_6regions, 
+                         outer_general_3regions_with_edge,
+                         outer_general_3regions_without_edge,
+                         outer_general_4regions_with_edge,
+                         outer_general_4regions_without_edge, 
+                         3, 3, 3,
+                         1, 2);
+    cout << "Checkpoint 1-4" << endl;
     
     generate_from_inner5(signature_minimal,
                          empty_inner_5regions, 
@@ -1411,14 +1411,12 @@ void generate_6regions(map<vector<int>,BaseRegion> &signature_minimal,
         exit(1);
     }
     
-    load_region_map(signature_minimal, "6regions.txt");
-    
-//    generate_6regions_with_no_inner(signature_minimal,
-//                                    regions_3hat_with_edges, 
-//                                    regions_4hat_with_edges, 
-//                                    regions_5hat_with_edges, 
-//                                    regions_6hat_with_edges,
-//                                    regions_5);
+    generate_6regions_with_no_inner(signature_minimal,
+                                    regions_3hat_with_edges, 
+                                    regions_4hat_with_edges, 
+                                    regions_5hat_with_edges, 
+                                    regions_6hat_with_edges,
+                                    regions_5);
     
     generate_6regions_from_empty_inner(signature_minimal,
                                        empty_inner_2regions, 
