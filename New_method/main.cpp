@@ -162,6 +162,7 @@ int main(){
                           inner_4hat_regions,
                           false, false);
     store_region_map(regions_4hat_without_ad_bc_edges_map, "4hat_without_ad_bc_edges.txt");
+    
     vector<BaseRegion> regions_4hat_without_ad_bc_edges_vec;
     load_region_vector(regions_4hat_without_ad_bc_edges_vec, "4hat_without_ad_bc_edges.txt");
 
@@ -175,6 +176,7 @@ int main(){
                           regions_4hat_without_ad_bc_edges_vec,
                           true);
     store_region_map(regions_5hat_with_edges_map, "5hat_with_edges.txt");
+    
     vector<BaseRegion> regions_5hat_with_edges_vec;
     load_region_vector(regions_5hat_with_edges_vec, "5hat_with_edges.txt");
 
@@ -188,6 +190,7 @@ int main(){
                           regions_4hat_without_ad_bc_edges_vec,
                           false);
     store_region_map(regions_5hat_without_de_edge_map, "5hat_without_de_edge.txt");
+
     vector<BaseRegion> regions_5hat_without_de_edge_vec;
     load_region_vector(regions_5hat_without_de_edge_vec, "5hat_without_de_edge.txt");
 
@@ -199,6 +202,7 @@ int main(){
                           regions_5hat_with_edges_vec,
                           regions_5hat_without_de_edge_vec);
     store_region_map(regions_6hat_with_edges_map, "6hat_with_edges.txt");
+    
     vector<BaseRegion> regions_6hat_with_edges_vec;
     load_region_vector(regions_6hat_with_edges_vec, "6hat_with_edges.txt");
     
@@ -244,6 +248,7 @@ int main(){
                                  regions_3hat_with_edges_vec,
                                  regions_3hat_without_ac_edge_vec);
     store_region_map(regions_3_map, "3regions.txt");
+    
     vector<BaseRegion> regions_3_vec;
     load_region_vector(regions_3_vec, "3regions.txt");
 
@@ -260,6 +265,7 @@ int main(){
                                  regions_3hat_without_ac_edge_vec, 
                                  regions_4hat_with_edges_vec);
     store_region_map(regions_4_map, "4regions.txt");
+    
     vector<BaseRegion> regions_4_vec;
     load_region_vector(regions_4_vec, "4regions.txt");
 
@@ -275,6 +281,7 @@ int main(){
                                      regions_4hat_without_ad_edge_vec,
                                      regions_3_vec);
     store_region_map(regions_4star_map, "4star_regions.txt");
+    
     vector<BaseRegion> regions_4star_vec;
     load_region_vector(regions_4star_vec, "4star_regions.txt");
 
@@ -300,6 +307,7 @@ int main(){
                                  regions_3_vec,
                                  regions_4_vec);
     store_region_map(regions_5_map, "5regions.txt");
+    
     vector<BaseRegion> regions_5_vec;
     load_region_vector(regions_5_vec, "5regions.txt");
 
