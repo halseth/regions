@@ -16,6 +16,14 @@
 
 #define MAX_SIZE 32
 
+typedef enum {
+    Region6,
+    Region5,
+    Region4star,
+    Region4,
+    Region3,
+} RegionType;
+
 class BaseRegion {
 private:
     // Data
@@ -55,6 +63,7 @@ public:
     int getBoundarySize() const;
     
     void printRegion();
+    void printIvank();
     
     bool isEqual(const BaseRegion &b) const;
     
@@ -68,7 +77,7 @@ public:
     
     virtual void test();
     
-    std::string getFormattedSignature();
+    std::string getFormattedSignature(RegionType type);
     
 };
 

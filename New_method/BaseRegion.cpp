@@ -281,16 +281,30 @@ void BaseRegion::getSignature(std::vector<int> &signature){
     }
 }
 
-std::string BaseRegion::getFormattedSignature(){
-    if (getBoundarySize() != 6) {
-        std::cout << "ERROR: only works for regular 6regions";
-        exit(0);
-    }
+std::string BaseRegion::getFormattedSignature(RegionType type){
     
     std::stringstream ss;
+    
     // Hardcoded upper and bottom path
-    ss << 4 << " " << 0 << " " << 1 << " " << 2 << " " << 3 << endl;
-    ss << 4 << " " << 0 << " " << 5 << " " << 4 << " " << 3 << endl;
+    if (type == Region6) {
+        ss << 4 << " " << 0 << " " << 1 << " " << 2 << " " << 3 << endl;
+        ss << 4 << " " << 0 << " " << 5 << " " << 4 << " " << 3 << endl;
+    } else if (type == Region5) {
+        ss << 4 << " " << 0 << " " << 1 << " " << 2 << " " << 3 << endl;
+        ss << 3 << " " << 0 << " " << 4 << " " << 3 << endl;
+    } else if (type == Region4) {
+        ss << 3 << " " << 0 << " " << 1 << " " << 2 << endl;
+        ss << 3 << " " << 0 << " " << 3 << " " << 2 << endl;
+    } else if (type == Region4star) {
+        ss << 4 << " " << 0 << " " << 1 << " " << 2 << " " << 3 << endl;
+        ss << 2 << " " << 0 << " " << 3 << endl;
+    } else if (type == Region3) {
+        ss << 3 << " " << 0 << " " << 1 << " " << 2 << endl;
+        ss << 2 << " " << 0 << " " << 2 << endl;
+    } else {
+        cout <<"unknown type" << endl;
+        exit(1);
+    }
     
     vector<string> inputs;
     for(int s_set = 0; s_set <= std::pow(2,Boundary.size())-1; s_set++){
@@ -312,7 +326,7 @@ std::string BaseRegion::getFormattedSignature(){
                 int s = S[i];
                 for (int j = 0; j < X.size(); j++) {
                     int x = X[j];
-                    if ((s+1)%6 == x || (s-1+6)%6 == x) {
+                    if ((s+1)%Boundary.size() == x || (s-1+Boundary.size())%Boundary.size() == x) {
                         valid = false;
                     }
                 }
@@ -338,9 +352,9 @@ std::string BaseRegion::getFormattedSignature(){
             
             inputs.push_back(input.str());
             
-            if (X.size() == 1 && X[0] == 4 && S.size() == 3 && S[0] == 0 && S[1] == 1 && S[2] == 2) {
-                cout << "here " << this->signature(X, S) << endl;
-            }
+//            if (X.size() == 1 && X[0] == 4 && S.size() == 3 && S[0] == 0 && S[1] == 1 && S[2] == 2) {
+//                cout << "here " << this->signature(X, S) << endl;
+//            }
         }
     }
     ss << inputs.size() << endl;
@@ -359,6 +373,19 @@ void BaseRegion::printRegion(){
             }
         }
     }
+}
+
+// Prints graph on http://g.ivank.net/ format
+void BaseRegion::printIvank(){
+    std::cout << getSize()  << ":";
+    for(int i = 0; i < getSize(); i++){
+        for(int j = i+1; j < getSize(); j++){
+            if (isAdjacent(i, j)) {
+                std::cout << (i+1) << "-" << (j+1) << ",";
+            }
+        }
+    }
+    cout << endl;
 }
 
 void BaseRegion::test(){

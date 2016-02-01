@@ -82,7 +82,8 @@ int main(){
 //    R1.addEdge(node13, 3);
 //    R1.addEdge(node13, 4);
 //    R1.addEdge(node13, 5);
-//    
+//    R1.printIvank();
+//
 //    if (!R1.isValid()) {
 //        cout << "BAD" << endl;
 //        exit(1);
@@ -167,47 +168,47 @@ int main(){
 //    
 //    return 0;
     
-    Region check(6,a,d);
-    int node6 = check.addNode();
-    int node7 = check.addNode();
-    int node8 = check.addNode();
-    
-    check.addEdge(0, node6);
-    check.addEdge(0, node7);
-    check.addEdge(0, node8);
-    
-    check.addEdge(3, node6);
-    
-    check.addEdge(4, node7);
-    
-    check.addEdge(5, node7);
-    check.addEdge(5, node8);
-    
-    check.addEdge(node6, node7);
-    check.addEdge(node8, node7);
-    
-    vector<int> checkSign;
-    check.getSignature(checkSign);
-    
-    vector<BaseRegion> testvec;
-    load_region_vector(testvec, "6regions.txt");
-    
-    int num = 0;
-    for (int i = 0; i < testvec.size(); i++) {
-        if((++num)%100 == 0) cout << "num: " << num << endl;
-        BaseRegion reg = testvec[i];
-        vector<int> sign;
-        reg.getSignature(sign);
-        if (sign == checkSign) {
-            cout << "found sign" << endl;
-            reg.printRegion();
-            exit(1);
-        }
-    }
+//    Region check(6,a,d);
+//    int node6 = check.addNode();
+//    int node7 = check.addNode();
+//    int node8 = check.addNode();
+//    
+//    check.addEdge(0, node6);
+//    check.addEdge(0, node7);
+//    check.addEdge(0, node8);
+//    
+//    check.addEdge(3, node6);
+//    
+//    check.addEdge(4, node7);
+//    
+//    check.addEdge(5, node7);
+//    check.addEdge(5, node8);
+//    
+//    check.addEdge(node6, node7);
+//    check.addEdge(node8, node7);
+//    
+//    vector<int> checkSign;
+//    check.getSignature(checkSign);
+//    
+//    vector<BaseRegion> testvec;
+//    load_region_vector(testvec, "6regions.txt");
+//
+//    int num = 0;
+//    for (int i = 0; i < testvec.size(); i++) {
+//        if((++num)%100 == 0) cout << "num: " << num << endl;
+//        BaseRegion reg = testvec[i];
+//        vector<int> sign;
+//        reg.getSignature(sign);
+//        if (sign == checkSign) {
+//            cout << "found sign" << endl;
+//            reg.printRegion();
+//            exit(1);
+//        }
+//    }
     
 //    std::ofstream file;
 //    file.open("signatures.txt");
-    
+//    
 //    int cnt = 0;
 //    if (!file.is_open()) {
 //        std::cerr << "ERROR opening file " << std::endl;
@@ -217,14 +218,74 @@ int main(){
 //            BaseRegion R = testvec[i];
 //            
 //            
-//            file << R.getFormattedSignature() << std::endl;
+//            file << R.getFormattedSignature(Region6) << std::endl;
 //            cnt++;
-//            if (cnt == 11) {
-//                R.printRegion();
-//                cout << R.getFormattedSignature();
-//                exit(0);
-////                break;
+//            if (cnt % 100 == 0) {
+//                cout << cnt << endl;
 //            }
+////            if (cnt == 11) {
+////                R.printRegion();
+////                cout << R.getFormattedSignature();
+////                exit(0);
+//////                break;
+////            }
+//        }
+//        file.close();
+//        std::cout << "Done storing to file " << std::endl;
+//    }
+    
+    vector<BaseRegion> regions;
+    load_region_vector(regions, "6regions.txt");
+    
+//    std::ofstream file;
+//    file.open("size22.txt");
+    
+//    int cnt = 0;
+//    if (!file.is_open()) {
+//        std::cerr << "ERROR opening file " << std::endl;
+//        exit(0);
+//    } else {
+        for (int i = 0; i < regions.size(); i++) {
+            BaseRegion R = regions[i];
+            
+//            file << R.getSize() << std::endl;
+//            cnt++;
+//            if (cnt % 100 == 0) {
+//                cout << cnt << endl;
+//            }
+            
+            
+            if (R.getSize() == 14) {
+                R.printIvank();
+            }
+        }
+//        file.close();
+//        std::cout << "Done storing to file " << std::endl;
+//    }
+    
+//    std::ofstream file;
+//    file.open("signatures3.txt");
+//    
+//    int cnt = 0;
+//    if (!file.is_open()) {
+//        std::cerr << "ERROR opening file " << std::endl;
+//        exit(0);
+//    } else {
+//        for (int i = 0; i < regions.size(); i++) {
+//            BaseRegion R = regions[i];
+//            
+//            
+//            file << R.getFormattedSignature(Region3) << std::endl;
+//            cnt++;
+//            if (cnt % 100 == 0) {
+//                cout << cnt << endl;
+//            }
+//            //            if (cnt == 11) {
+//            //                R.printRegion();
+//            //                cout << R.getFormattedSignature();
+//            //                exit(0);
+//            ////                break;
+//            //            }
 //        }
 //        file.close();
 //        std::cout << "Done storing to file " << std::endl;
