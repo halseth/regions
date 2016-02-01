@@ -10,7 +10,6 @@
 #include "parallization.h"
 #include "generate_6regions_from_inner.hpp"
 #include "choose_regions.hpp"
-#include "store_region_map.h"
 #include <stdlib.h>
 
 
