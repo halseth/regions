@@ -30,7 +30,7 @@ void benchmark() {
     
     for(int i = 0; i < inner_regions.size(); i++){
         BaseRegion R = inner_regions[i];
-        store_sign_if_valid(R, signatures);
+//        store_sign_if_valid(R, signatures);
     }
     gettimeofday(&time, NULL);
     long endmillis = (time.tv_sec * 1000) + (time.tv_usec / 1000);

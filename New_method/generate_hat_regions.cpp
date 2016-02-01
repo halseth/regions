@@ -28,14 +28,13 @@ void generate_3hat_regions(map<vector<int>,BaseRegion> &signature_minimal,
         exit(1);
     }
     
-    // 5 is the max number of internal nodes
     HatRegion R(3,a);
     if (!with_ac_edge) {
         R.removeEdge(a, c);
     }
     
+    // 4 is the max number of internal nodes
     for (int num_internal_nodes = 0; num_internal_nodes<=4; num_internal_nodes++) {
-        cout << "num: " << num_internal_nodes << endl;
         HatRegion R1(R);
         
         int node = -1;

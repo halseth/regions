@@ -94,6 +94,8 @@ void generate_inner(map<vector<int>, BaseRegion> &sign_minimal, int size, int en
                     
                     for (int a_to_internal_edges = 0; a_to_internal_edges <= 0b1111; a_to_internal_edges++) {
                         
+                        // A vertex that is not an endpoint can only have edges to the two internal dominators.
+                        // The reason being if it to be a potential dominator, it would need to dominate all internal, but that would make a K_{2,3}
                         int max_b_edges = endpoint2 == b ? 0b1111 : 0b11;
                         for (int b_to_internal_edges = 0; b_to_internal_edges <= max_b_edges; b_to_internal_edges++) {
                             
