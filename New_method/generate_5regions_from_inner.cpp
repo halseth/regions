@@ -1113,7 +1113,7 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                   regions_3hat_without_ac_edge,
                                   regions_4hat_with_edges,
                                   regions_4hat_without_ad_edge, 
-                                  3, 1);
+                                  3, 0);
     generate_5regions_from_inner6(signature_minimal,
                                   empty_inner_6regions, 
                                   regions_3hat_with_edges,
@@ -1130,7 +1130,7 @@ void generate_5regions_from_inner(map<vector<int>,BaseRegion> &signature_minimal
                                   non_dom_regions_3hat_without_ac_edge,
                                   non_dom_regions_4hat_with_edges,
                                   non_dom_regions_4hat_without_ad_edge,
-                                  3, 1);
+                                  3, 0);
     generate_5regions_from_inner6(signature_minimal, 
                                   inner_6regions, 
                                   non_dom_regions_3hat_with_edges,

@@ -74,55 +74,61 @@ void enumerate_non_dominator_outer_4regions(vector<BaseRegion> &outer_non_dom_4r
                             int max_a_b_c_node = a_b_node == 0 && a_c_node == 0 && a_b_c_d_node == 0 && a_b_d_node == 0 ? 1 : 0;
                             for (int a_b_c_node = 0; a_b_c_node <= max_a_b_c_node; a_b_c_node++) {
                                 
-                                HatRegion R(4, a);
-                                
-                                if (a_b_node) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(b, node);
+                                int max_bd_edge = a_b_c_node == 0 && a_c_node == 0 && a_c_d_node == 0 && a_b_c_d_node == 0 ? 1 : 0;
+                                for (int bd_edge = 0; bd_edge <= max_bd_edge; bd_edge++) {
+                                    HatRegion R(4, a);
+                                    
+                                    if (a_b_node) {
+                                        int node = R.addNode();
+                                        R.addEdge(a, node);
+                                        R.addEdge(b, node);
+                                    }
+                                    
+                                    if (a_b_c_node) {
+                                        int node = R.addNode();
+                                        R.addEdge(a, node);
+                                        R.addEdge(b, node);
+                                        R.addEdge(c, node);
+                                    }
+                                    
+                                    if (a_c_d_node) {
+                                        int node = R.addNode();
+                                        R.addEdge(a, node);
+                                        R.addEdge(c, node);
+                                        R.addEdge(d, node);
+                                    }
+                                    
+                                    if (a_c_node) {
+                                        int node = R.addNode();
+                                        R.addEdge(a, node);
+                                        R.addEdge(c, node);
+                                    }
+                                    
+                                    if (a_b_d_node) {
+                                        int node = R.addNode();
+                                        R.addEdge(a, node);
+                                        R.addEdge(b, node);
+                                        R.addEdge(d, node);
+                                    }
+                                    
+                                    if (a_b_c_d_node) {
+                                        int node = R.addNode();
+                                        R.addEdge(a, node);
+                                        R.addEdge(b, node);
+                                        R.addEdge(c, node);
+                                        R.addEdge(d, node);
+                                    }
+                                    
+                                    if (bd_edge) {
+                                        R.addEdge(b, d);
+                                    }
+                                    
+                                    if (removeEdge) {
+                                        R.removeEdge(a, d);
+                                    }
+                                    
+                                    outer_non_dom_4regions.push_back(R);
                                 }
-                                
-                                if (a_b_c_node) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(b, node);
-                                    R.addEdge(c, node);
-                                }
-                                
-                                if (a_c_d_node) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(c, node);
-                                    R.addEdge(d, node);
-                                }
-                                
-                                if (a_c_node) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(c, node);
-                                }
-                                
-                                if (a_b_d_node) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(b, node);
-                                    R.addEdge(d, node);
-                                }
-                                
-                                if (a_b_c_d_node) {
-                                    int node = R.addNode();
-                                    R.addEdge(a, node);
-                                    R.addEdge(b, node);
-                                    R.addEdge(c, node);
-                                    R.addEdge(d, node);
-                                }
-                                
-                                if (removeEdge) {
-                                    R.removeEdge(a, d);
-                                }
-                                
-                                outer_non_dom_4regions.push_back(R);
-
                             }
                             
                         }
