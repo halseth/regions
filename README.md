@@ -8,7 +8,7 @@ Enumerates a signature minimal detached region for every signature, as described
 #Compile:
 For parallel build: 
 ```
-make paralell
+make parallel
 ```
 For single-threaded build:
 ```
@@ -17,4 +17,4 @@ make single
 
 #Output:
 If you don't want to use your days waiting for the program to finish running, the graphs it generates on a run is found in the folder 
-`generated_output/`. This contains lists of graphs on the format `b i v1 v2 v3 v4 ...`, where `b` is the boundary size of the region, `i` is the number of internal vertices, and the following are pairs of vertices having an edge between them. Note that vertices `0,1,...,b-1`` are the boundary vertices
+`generated_output/`. This contains lists of graphs on the format `b i v1 v2 v3 v4 ...`, where `b` is the boundary size of the region, `i` is the number of internal vertices, and the following are pairs of vertices having an edge between them. Note that vertices `0,1,...,b-1` are the boundary vertices
