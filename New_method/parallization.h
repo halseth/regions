@@ -9,14 +9,16 @@
 #ifndef parallization_h
 #define parallization_h
 
+// with OMP
+#ifdef PARALLEL
+#include <omp.h>
+#define THREAD_ID omp_get_thread_num()
+#define NUM_THREADS omp_get_num_threads()
+#elif
 // without OMP
 #define THREAD_ID 0
 #define NUM_THREADS 1
-
-// with OMP
-//#include <omp.h>
-//#define THREAD_ID omp_get_thread_num()
-//#define NUM_THREADS omp_get_num_threads()
+#endif
 
 
 #endif /* parallization_h */
