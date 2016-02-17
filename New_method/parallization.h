@@ -14,7 +14,7 @@
 #include <omp.h>
 #define THREAD_ID omp_get_thread_num()
 #define NUM_THREADS omp_get_num_threads()
-#elif
+#else
 // without OMP
 #define THREAD_ID 0
 #define NUM_THREADS 1
